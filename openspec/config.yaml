@@ -1,0 +1,56 @@
+# OpenSpec / SDD configuration for wc-schedule
+# This file declares how Spec-Driven Development artifacts are stored
+# and which conventions apply to this project.
+
+project:
+  name: wc-schedule
+  description: >
+    SPA for FIFA World Cup 2026 showing matches of the day, a featured
+    section (countdown to next match or live indicator), and PWA local
+    notifications fired 15 minutes before each match.
+  owner: jrodrigopuca@gmail.com
+
+artifact_store:
+  mode: openspec
+  root: ./openspec
+
+paths:
+  changes: ./openspec/changes
+  specs: ./openspec/specs
+  conventions: ./openspec/conventions.md
+
+stack:
+  language: typescript
+  framework: vue@3
+  bundler: vite
+  styling: css-modules
+  pwa: vite-plugin-pwa
+  deployment:
+    target: github-pages
+    branch: gh-pages
+  data:
+    source: football-data.org
+    pipeline: github-actions
+    artifact: ./public/data/matches.json
+    history: ./public/data/history/
+    # Tournament-aware refresh policy — see specs/data-source.md §6
+    refresh:
+      tournament: 24h    # kickoff to final, inclusive
+      near: 48h          # 30 days before kickoff to 7 days after final
+      off: no-op         # outside both windows the workflow is a no-op
+    history_retention: 7 # most recent snapshots kept in history/
+
+sdd:
+  workflow:
+    - proposal
+    - specs
+    - design
+    - tasks
+    - apply
+    - verify
+    - archive
+  rules:
+    proposal_required_before_specs: true
+    specs_and_design_can_run_in_parallel: true
+    tasks_requires_specs_and_design: true
+    verify_recommended_before_archive: true

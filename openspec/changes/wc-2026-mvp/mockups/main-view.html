@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>WC Schedule — Mockup · Upcoming Today + Live</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  /* ── Tokens · LIGHT (default) ─────────────────────────────── */
+  :root {
+    --bg-page:        #F6F5F0;
+    --bg-card:        #FFFFFF;
+    --bg-featured:    #0F172A;
+    --bg-pill:        #F1F5F9;
+    --bg-toggle:      #FFFFFF;
+
+    --text-strong:    #0F172A;
+    --text-base:      #1F2937;
+    --text-muted:     #64748B;
+    --text-inverse:   #FFFFFF;
+    --text-inverse-muted: #94A3B8;
+
+    --accent:         #16A34A;
+    --accent-soft:    #DCFCE7;
+    --accent-strong:  #14532D;
+    --live:           #EF4444;
+    --live-soft:      #FEE2E2;
+    --live-strong:    #991B1B;
+
+    --border:         #E5E7EB;
+    --border-strong:  #CBD5E1;
+    --ring-flag:      rgba(255, 255, 255, 0.18);
+    --ring-flag-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+
+    --shadow-sm:      0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-md:      0 8px 24px rgba(15, 23, 42, 0.06);
+    --shadow-lg:      0 20px 50px rgba(15, 23, 42, 0.12);
+
+    --radius-sm:      10px;
+    --radius-md:      16px;
+    --radius-lg:      24px;
+    --radius-pill:    999px;
+
+    --font-display:   'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+
+    color-scheme: light;
+  }
+
+  /* ── Tokens · DARK (respect OS pref unless user picked light) ─ */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg-page:        #0A0A0F;
+      --bg-card:        #16161D;
+      --bg-featured:    #1C1C26;
+      --bg-pill:        #1F1F28;
+      --bg-toggle:      #1C1C26;
+
+      --text-strong:    #F8FAFC;
+      --text-base:      #E2E8F0;
+      --text-muted:     #94A3B8;
+      --text-inverse:   #FFFFFF;
+      --text-inverse-muted: #94A3B8;
+
+      --accent:         #22C55E;
+      --accent-soft:    rgba(34, 197, 94, 0.15);
+      --accent-strong:  #4ADE80;
+      --live:           #F87171;
+      --live-soft:      rgba(248, 113, 113, 0.15);
+      --live-strong:    #FCA5A5;
+
+      --border:         #27272F;
+      --border-strong:  #3A3A45;
+      --ring-flag:      rgba(255, 255, 255, 0.12);
+      --ring-flag-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+
+      --shadow-sm:      0 1px 2px rgba(0, 0, 0, 0.25);
+      --shadow-md:      0 8px 24px rgba(0, 0, 0, 0.3);
+      --shadow-lg:      0 20px 50px rgba(0, 0, 0, 0.5);
+
+      color-scheme: dark;
+    }
+  }
+
+  /* ── Tokens · DARK (manual override) ──────────────────────── */
+  :root[data-theme="dark"] {
+    --bg-page:        #0A0A0F;
+    --bg-card:        #16161D;
+    --bg-featured:    #1C1C26;
+    --bg-pill:        #1F1F28;
+    --bg-toggle:      #1C1C26;
+
+    --text-strong:    #F8FAFC;
+    --text-base:      #E2E8F0;
+    --text-muted:     #94A3B8;
+    --text-inverse:   #FFFFFF;
+    --text-inverse-muted: #94A3B8;
+
+    --accent:         #22C55E;
+    --accent-soft:    rgba(34, 197, 94, 0.15);
+    --accent-strong:  #4ADE80;
+    --live:           #F87171;
+    --live-soft:      rgba(248, 113, 113, 0.15);
+    --live-strong:    #FCA5A5;
+
+    --border:         #27272F;
+    --border-strong:  #3A3A45;
+    --ring-flag:      rgba(255, 255, 255, 0.12);
+    --ring-flag-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+
+    --shadow-sm:      0 1px 2px rgba(0, 0, 0, 0.25);
+    --shadow-md:      0 8px 24px rgba(0, 0, 0, 0.3);
+    --shadow-lg:      0 20px 50px rgba(0, 0, 0, 0.5);
+
+    color-scheme: dark;
+  }
+
+  /* ── Reset ────────────────────────────────────────────────── */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--bg-page);
+    font-family: var(--font-display);
+    color: var(--text-base);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    transition: background-color 200ms ease;
+  }
+
+  /* ── Theme toggle (floating top-right) ────────────────────── */
+  .theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg-toggle);
+    color: var(--text-base);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    padding: 8px 14px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: transform 120ms ease, box-shadow 120ms ease, background 200ms ease;
+  }
+  .theme-toggle:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+  .theme-toggle svg { width: 14px; height: 14px; }
+  .theme-toggle .theme-toggle__sun { display: inline; }
+  .theme-toggle .theme-toggle__moon { display: none; }
+  :root[data-theme="dark"] .theme-toggle .theme-toggle__sun,
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .theme-toggle .theme-toggle__sun { display: none; }
+    :root:not([data-theme="light"]) .theme-toggle .theme-toggle__moon { display: inline; }
+  }
+  :root[data-theme="dark"] .theme-toggle .theme-toggle__sun { display: none; }
+  :root[data-theme="dark"] .theme-toggle .theme-toggle__moon { display: inline; }
+
+  /* ── Desktop stage / mobile reset ─────────────────────────── */
+  body {
+    display: flex;
+    gap: 56px;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 56px 24px;
+    flex-wrap: wrap;
+  }
+
+  .stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .stage__label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .device {
+    width: 390px;
+    background: var(--bg-page);
+    border-radius: 40px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    position: relative;
+    transition: background-color 200ms ease, border-color 200ms ease;
+  }
+
+  @media (max-width: 600px) {
+    body { padding: 64px 0 0; gap: 0; flex-direction: column; }
+    .stage__label { display: none; }
+    .device {
+      width: 100%;
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+    }
+  }
+
+  .app {
+    padding: 28px 22px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* ── Header ───────────────────────────────────────────────── */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .brand__mark {
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
+    display: grid; place-items: center;
+    color: white;
+    font-weight: 800;
+    font-size: 15px;
+    box-shadow: var(--shadow-sm);
+  }
+  .brand__text {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text-strong);
+    letter-spacing: -0.01em;
+  }
+  .brand__text small {
+    display: block;
+    font-weight: 500;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.02em;
+  }
+  .header__date {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: capitalize;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    border-radius: var(--radius-pill);
+  }
+
+  /* ── Featured card · DERBY treatment ──────────────────────── */
+  .featured {
+    background:
+      radial-gradient(circle at 18% 50%, var(--team-a-glow, rgba(108, 175, 245, 0.30)) 0%, transparent 45%),
+      radial-gradient(circle at 82% 50%, var(--team-b-glow, rgba(193, 39, 45, 0.30)) 0%, transparent 45%),
+      var(--bg-featured);
+    color: var(--text-inverse);
+    border-radius: var(--radius-lg);
+    padding: 28px 22px 22px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .featured__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent-strong);
+    margin-bottom: 22px;
+    position: relative;
+  }
+  .featured__eyebrow::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 999px;
+  }
+
+  /* The derby tableau: flag · vs · flag */
+  .derby {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+  }
+  .team__flag {
+    width: 88px; height: 88px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.04);
+    display: grid;
+    place-items: center;
+    box-shadow:
+      inset 0 0 0 2px var(--ring-flag),
+      var(--ring-flag-shadow);
+    position: relative;
+  }
+  .team__flag img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .team__flag::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.20);
+    pointer-events: none;
+  }
+  .team__name {
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--text-inverse);
+  }
+
+  /* VS stamp */
+  .vs {
+    display: grid;
+    place-items: center;
+    align-self: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    border: 1.5px solid rgba(255, 255, 255, 0.20);
+    background: rgba(255, 255, 255, 0.04);
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    color: var(--text-inverse);
+    font-style: italic;
+    margin-top: -22px; /* lift it so it visually sits between flags */
+  }
+
+  /* Countdown */
+  .countdown {
+    text-align: center;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .countdown__label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-inverse-muted);
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .countdown__value {
+    font-size: 54px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 2px;
+    color: var(--text-inverse);
+  }
+  .countdown__sep {
+    color: var(--text-inverse-muted);
+    font-weight: 500;
+    padding: 0 2px;
+  }
+
+  .featured__meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    font-size: 12px;
+    color: var(--text-inverse-muted);
+    font-weight: 500;
+    position: relative;
+    flex-wrap: wrap;
+  }
+  .featured__meta span { display: inline-flex; align-items: center; gap: 6px; }
+  .dot {
+    width: 3px; height: 3px;
+    background: var(--text-inverse-muted);
+    border-radius: 999px;
+  }
+
+  /* Notification CTA */
+  .cta-notify {
+    margin-top: 20px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: var(--text-inverse);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 13px 16px;
+    border-radius: 14px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 120ms ease, transform 120ms ease;
+    position: relative;
+    backdrop-filter: blur(8px);
+  }
+  .cta-notify:hover {
+    background: rgba(255,255,255,0.10);
+    transform: translateY(-1px);
+  }
+  .cta-notify svg { width: 14px; height: 14px; }
+
+  /* ── Featured · LIVE variant ──────────────────────────────── */
+  .featured--live {
+    background:
+      radial-gradient(circle at 18% 50%, var(--team-a-glow, rgba(108, 175, 245, 0.25)) 0%, transparent 45%),
+      radial-gradient(circle at 82% 50%, var(--team-b-glow, rgba(193, 39, 45, 0.25)) 0%, transparent 45%),
+      radial-gradient(circle at 50% -10%, rgba(239, 68, 68, 0.35) 0%, transparent 55%),
+      var(--bg-featured);
+  }
+  .featured--live .featured__eyebrow { color: var(--live-strong); }
+  .featured--live .featured__eyebrow::before {
+    background: var(--live);
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+  .live-score {
+    text-align: center;
+    margin-bottom: 18px;
+    position: relative;
+  }
+  .live-score__label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-inverse-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .live-score__value {
+    font-size: 56px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    color: var(--text-inverse);
+    display: inline-flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+  .live-score__value .dash {
+    color: var(--text-inverse-muted);
+    font-weight: 500;
+  }
+  .live-score__minute {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 12px;
+    background: rgba(239, 68, 68, 0.18);
+    color: var(--live-strong);
+    border-radius: 999px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ── Section heading ─────────────────────────────────────── */
+  .section-title {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 0 4px;
+  }
+  .section-title h2 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-strong);
+    letter-spacing: -0.01em;
+  }
+  .section-title__count {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  /* ── Match list ──────────────────────────────────────────── */
+  .matches { display: flex; flex-direction: column; gap: 10px; }
+
+  .match {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 16px 18px;
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    align-items: center;
+    gap: 14px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 120ms ease, box-shadow 120ms ease, background 200ms ease;
+  }
+  .match:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .match__time {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+  .match__time strong {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-strong);
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .match__time span {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .match__teams {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+  }
+  .match__row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-base);
+  }
+  .match__row .mini-flag {
+    width: 24px; height: 24px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: var(--bg-pill);
+    flex-shrink: 0;
+    box-shadow: inset 0 0 0 1px var(--border);
+  }
+  .match__row .mini-flag img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .match__row .score {
+    margin-left: auto;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-strong);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .badge--next {
+    background: var(--accent-soft);
+    color: var(--accent-strong);
+  }
+  .badge--scheduled {
+    background: var(--bg-pill);
+    color: var(--text-muted);
+  }
+  .badge--live {
+    background: var(--live-soft);
+    color: var(--live-strong);
+    position: relative;
+  }
+  .badge--live::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--live);
+    border-radius: 999px;
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.5; transform: scale(0.85); }
+  }
+
+  .footer-hint {
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+    padding-top: 8px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Theme toggle -->
+<button class="theme-toggle" type="button" aria-label="Cambiar tema">
+  <svg class="theme-toggle__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="4"/>
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+  </svg>
+  <svg class="theme-toggle__moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </svg>
+  <span class="theme-toggle__label">Tema</span>
+</button>
+
+<!-- ─────────────────────────────────────────────────────────── -->
+<!-- STAGE 1 — UPCOMING TODAY (countdown to next match)          -->
+<!-- ─────────────────────────────────────────────────────────── -->
+<div class="stage">
+  <div class="stage__label">Estado · Upcoming today</div>
+  <div class="device">
+    <div class="app">
+
+      <header class="header">
+        <div class="brand">
+          <div class="brand__mark">26</div>
+          <div class="brand__text">
+            WC Schedule
+            <small>Mundial 2026</small>
+          </div>
+        </div>
+        <div class="header__date">jue · 18 jun</div>
+      </header>
+
+      <!-- Argentina (celeste) vs Marruecos (rojo) -->
+      <section class="featured" style="--team-a-glow: rgba(108, 175, 245, 0.32); --team-b-glow: rgba(193, 39, 45, 0.32);">
+        <div class="featured__eyebrow">Próximo partido</div>
+
+        <div class="derby">
+          <div class="team">
+            <div class="team__flag">
+              <img src="https://hatscripts.github.io/circle-flags/flags/ar.svg" alt="Bandera de Argentina" />
+            </div>
+            <div class="team__name">Argentina</div>
+          </div>
+          <div class="vs">VS</div>
+          <div class="team">
+            <div class="team__flag">
+              <img src="https://hatscripts.github.io/circle-flags/flags/ma.svg" alt="Bandera de Marruecos" />
+            </div>
+            <div class="team__name">Marruecos</div>
+          </div>
+        </div>
+
+        <div class="countdown">
+          <div class="countdown__label">Falta</div>
+          <div class="countdown__value">
+            <span>02</span><span class="countdown__sep">:</span><span>34</span><span class="countdown__sep">:</span><span>15</span>
+          </div>
+        </div>
+
+        <div class="featured__meta">
+          <span>19:00 hora local</span>
+          <span class="dot"></span>
+          <span>Grupo C</span>
+          <span class="dot"></span>
+          <span>MetLife Stadium</span>
+        </div>
+
+        <button class="cta-notify" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+          </svg>
+          Avisame 15 min antes
+        </button>
+      </section>
+
+      <div class="section-title">
+        <h2>Partidos de hoy</h2>
+        <span class="section-title__count">4 partidos</span>
+      </div>
+
+      <ul class="matches">
+        <li class="match">
+          <div class="match__time"><strong>12:00</strong><span>Fase grupos</span></div>
+          <div class="match__teams">
+            <div class="match__row"><div class="mini-flag"><img src="https://hatscripts.github.io/circle-flags/flags/mx.svg" alt="México" /></div>México</div>
+            <div class="match__row"><div class="mini-flag"><img src="https://hatscripts.github.io/circle-flags/flags/jp.svg" alt="Japón" /></div>Japón</div>
+          </div>
+          <span class="badge badge--scheduled">Programado</span>
+        </li>
+
+        <li class="match">
+          <div class="match__time"><strong>15:00</strong><span>Fase grupos</span></div>
+          <div class="match__teams">
+            <div class="match__row"><div class="mini-flag"><img src="https://hatscripts.github.io/circle-flags/flags/ca.svg" alt="Canadá" /></div>Canadá</div>
+            <div class="match__row"><div class="mini-flag"><img src="https://hatscripts.github.io/circle-flags/flags/ch.svg" alt="Suiza" /></div>Suiza</div>
+          </div>
+          <span class="badge badge--scheduled">Programado</span>
+        </li>
+
+        <li class="match">
+          <div class="match__time"><strong>19:00</strong><span>Fase grupos</span></div>
+          <div class="match__teams">
+            <div class="match__row"><div class="mini-flag"><img src="https://hatscripts.github.io/circle-flags/flags/ar.svg" alt="Argentina" /></div>Argentina</div>
+            <div class="match__row"><div class="mini-flag"><img src="https://hatscripts.github.io/circle-flags/flags/ma.svg" alt="Marruecos" /></div>Marruecos</div>
+          </div>
+          <span class="badge badge--next">Siguiente</span>
+        </li>
+
+        <li class="match">
+          <div class="match__time"><strong>22:00</strong><span>Fase grupos</span></div>
+          <div class="match__teams">
+            <div class="match__row"><div class="mini-flag"><img src="https://hatscripts.github.io/circle-flags/flags/br.svg" alt="Brasil" /></div>Brasil</div>
+            <div class="match__row"><div class="mini-flag"><img src="https://hatscripts.github.io/circle-flags/flags/cm.svg" alt="Camerún" /></div>Camerún</div>
+          </div>
+          <span class="badge badge--scheduled">Programado</span>
+        </li>
+      </ul>
+
+      <p class="footer-hint">Datos actualizados hace 2 h · Funciona offline</p>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────────────────────────────────────────────── -->
+<!-- STAGE 2 — LIVE SINGLE (one match in progress)               -->
+<!-- ─────────────────────────────────────────────────────────── -->
+<div class="stage">
+  <div class="stage__label">Estado · Live single</div>
+  <div class="device">
+    <div class="app">
+
+      <header class="header">
+        <div class="brand">
+          <div class="brand__mark">26</div>
+          <div class="brand__text">
+            WC Schedule
+            <small>Mundial 2026</small>
+          </div>
+        </div>
+        <div class="header__date">jue · 18 jun</div>
+      </header>
+
+      <section class="featured featured--live" style="--team-a-glow: rgba(108, 175, 245, 0.28); --team-b-glow: rgba(193, 39, 45, 0.32);">
+        <div class="featured__eyebrow">En vivo</div>
+
+        <div class="derby">
+          <div class="team">
+            <div class="team__flag">
+              <img src="https://hatscripts.github.io/circle-flags/flags/ar.svg" alt="Bandera de Argentina" />
+            </div>
+            <div class="team__name">Argentina</div>
+          </div>
+          <div class="vs">VS</div>
+          <div class="team">
+            <div class="team__flag">
+              <img src="https://hatscripts.github.io/circle-flags/flags/ma.svg" alt="Bandera de Marruecos" />
+            </div>
+            <div class="team__name">Marruecos</div>
+          </div>
+        </div>
+
+        <div class="live-score">
+          <div class="live-score__label">Marcador</div>
+          <div class="live-score__value">
+            <span>2</span><span class="dash">—</span><span>1</span>
+          </div>
+          <div class="live-score__minute">67' · segundo tiempo</div>
+        </div>
+
+        <div class="featured__meta">
+          <span>Inició 19:00</span>
+          <span class="dot"></span>
+          <span>Grupo C</span>
+          <span class="dot"></span>
+          <span>MetLife Stadium</span>
+        </div>
+      </section>
+
+      <div class="section-title">
+        <h2>Partidos de hoy</h2>
+        <span class="section-title__count">4 partidos</span>
+      </div>
+
+      <ul class="matches">
+        <li class="match">
+          <div class="match__time"><strong>12:00</strong><span>Finalizado</span></div>
+          <div class="match__teams">
+            <div class="match__row"><div class="mini-flag"><img src="https://hatscripts.github.io/circle-flags/flags/mx.svg" alt="México" /></div>México <span class="score">1</span></div>
+            <div class="match__row"><div class="mini-flag"><img src="https://hatscripts.github.io/circle-flags/flags/jp.svg" alt="Japón" /></div>Japón <span class="score">0</span></div>
+          </div>
+          <span class="badge badge--scheduled">Final</span>
+        </li>
+
+        <li class="match">
+          <div class="match__time"><strong>15:00</strong><span>Finalizado</span></div>
+          <div class="match__teams">
+            <div class="match__row"><div class="mini-flag"><img src="https://hatscripts.github.io/circle-flags/flags/ca.svg" alt="Canadá" /></div>Canadá <span class="score">2</span></div>
+            <div class="match__row"><div class="mini-flag"><img src="https://hatscripts.github.io/circle-flags/flags/ch.svg" alt="Suiza" /></div>Suiza <span class="score">2</span></div>
+          </div>
+          <span class="badge badge--scheduled">Final</span>
+        </li>
+
+        <li class="match">
+          <div class="match__time"><strong>19:00</strong><span>Fase grupos</span></div>
+          <div class="match__teams">
+            <div class="match__row"><div class="mini-flag"><img src="https://hatscripts.github.io/circle-flags/flags/ar.svg" alt="Argentina" /></div>Argentina <span class="score">2</span></div>
+            <div class="match__row"><div class="mini-flag"><img src="https://hatscripts.github.io/circle-flags/flags/ma.svg" alt="Marruecos" /></div>Marruecos <span class="score">1</span></div>
+          </div>
+          <span class="badge badge--live">En vivo</span>
+        </li>
+
+        <li class="match">
+          <div class="match__time"><strong>22:00</strong><span>Fase grupos</span></div>
+          <div class="match__teams">
+            <div class="match__row"><div class="mini-flag"><img src="https://hatscripts.github.io/circle-flags/flags/br.svg" alt="Brasil" /></div>Brasil</div>
+            <div class="match__row"><div class="mini-flag"><img src="https://hatscripts.github.io/circle-flags/flags/cm.svg" alt="Camerún" /></div>Camerún</div>
+          </div>
+          <span class="badge badge--scheduled">Programado</span>
+        </li>
+      </ul>
+
+      <p class="footer-hint">Datos actualizados hace 2 h · Funciona offline</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    const root = document.documentElement;
+    const toggle = document.querySelector('.theme-toggle');
+    const saved = localStorage.getItem('wc-theme');
+    if (saved === 'dark' || saved === 'light') {
+      root.setAttribute('data-theme', saved);
+    }
+    toggle.addEventListener('click', function () {
+      const current =
+        root.getAttribute('data-theme') ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      const next = current === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      localStorage.setItem('wc-theme', next);
+    });
+  })();
+</script>
+
+</body>
+</html>
