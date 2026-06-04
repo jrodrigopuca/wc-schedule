@@ -5,7 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:manual": "VITE_DATA_SOURCE=manual vite",
+    "dev:remote": "VITE_DATA_SOURCE=remote vite",
     "build": "vue-tsc -b && vite build",
+    "build:manual": "VITE_DATA_SOURCE=manual vue-tsc -b && vite build",
+    "build:remote": "VITE_DATA_SOURCE=remote vue-tsc -b && vite build",
     "preview": "vite preview",
     "type-check": "vue-tsc --noEmit",
     "lint": "eslint .",
