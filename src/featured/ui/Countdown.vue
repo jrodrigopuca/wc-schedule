@@ -1,15 +1,18 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useCountdown } from '@/featured/composables/useCountdown'
+import { useI18n } from '@/shared/i18n/useI18n'
 
 const props = defineProps<{ targetMs: number }>()
 
 const { remaining } = useCountdown(() => props.targetMs)
+const { t } = useI18n()
 
 const DAY_MS = 86_400_000
 
 interface CountdownParts {
-  readonly days: string | null
+  readonly days: number | null
+  readonly daysDisplay: string | null
   readonly hours: string
   readonly minutes: string
   readonly seconds: string
@@ -24,7 +27,8 @@ const parts = computed<CountdownParts>(() => {
   const minutes = Math.floor((totalSeconds % 3600) / 60)
   const seconds = totalSeconds % 60
   return {
-    days: dayCount !== null ? pad(dayCount) : null,
+    days: dayCount,
+    daysDisplay: dayCount !== null ? pad(dayCount) : null,
     hours: pad(hours),
     minutes: pad(minutes),
     seconds: pad(seconds),
@@ -34,7 +38,7 @@ const parts = computed<CountdownParts>(() => {
 const ariaText = computed(() => {
   const { days, hours, minutes, seconds } = parts.value
   return days !== null
-    ? `${days} días, ${hours}:${minutes}:${seconds}`
+    ? `${t('time.daysCount', { n: days })}, ${hours}:${minutes}:${seconds}`
     : `${hours}:${minutes}:${seconds}`
 })
 
@@ -45,8 +49,8 @@ function pad(n: number): string {
 
 <template>
   <output :class="$style.countdown" aria-live="polite" :aria-label="ariaText">
-    <template v-if="parts.days !== null">
-      <span :class="$style.value">{{ parts.days }}</span>
+    <template v-if="parts.daysDisplay !== null">
+      <span :class="$style.value">{{ parts.daysDisplay }}</span>
       <span :class="$style.sep"> · </span>
     </template>
     <span :class="$style.value">{{ parts.hours }}</span>

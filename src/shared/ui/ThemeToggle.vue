@@ -54,7 +54,6 @@ function toggle(): void {
     >
       <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
     </svg>
-    <span :class="$style.label">Tema</span>
   </button>
 </template>
 
@@ -94,9 +93,5 @@ function toggle(): void {
 .icon {
   width: 14px;
   height: 14px;
-}
-
-.label {
-  line-height: 1;
 }
 </style>

@@ -31,7 +31,7 @@ A small installable PWA that, on open, shows:
 - **Prominent team identity** in the featured slot — circular flag medallions, country names, and a soft tint of each team's colors — to evoke the feeling of a derby rather than a generic schedule entry.
 - **Bilingual UI (Spanish + English).** Locale is auto-detected from `navigator.language` on first load; the user can override via a UI toggle, and the override persists in `localStorage`. Clearing the override returns to browser-driven detection.
 
-There is no login, no settings beyond install/notification permission, theme override, and language override, and no second screen. The app is one route.
+There is no login and no settings beyond install/notification permission, theme override, and language override. The main app is a single route (`/`); a secondary `/preview` route exposes a component gallery for QA, design review, and onboarding.
 
 ## 4. Goals
 
@@ -43,6 +43,7 @@ There is no login, no settings beyond install/notification permission, theme ove
 - Stay correct across timezones without server-side rendering.
 - Adapt the visual presentation to the user's OS color-scheme preference (light/dark), with a manual override that persists.
 - Support Spanish and English UI, with auto-detection from the browser locale and a persistent manual override.
+- Provide a permanent component gallery at `/preview` to keep design / QA / dev review fast.
 
 ## 5. Non-goals (out of scope for MVP)
 
@@ -54,6 +55,7 @@ There is no login, no settings beyond install/notification permission, theme ove
 - Languages beyond Spanish and English for MVP.
 - Configurable notification lead time (locked at 15 minutes for MVP).
 - Bespoke per-team theming beyond the soft background-color tint used in the featured slot.
+- Full Storybook-style component documentation tooling — the in-app gallery covers the MVP need.
 
 ## 6. Constraints
 

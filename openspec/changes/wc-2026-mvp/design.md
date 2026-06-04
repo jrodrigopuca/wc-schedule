@@ -1263,6 +1263,7 @@ export type MessageKey =
   | "match.badge.finished"
   | "match.badge.postponed"
   | "match.badge.next"
+  | "match.group"
   | "stage.group"
   | "stage.roundOf32"
   | "stage.roundOf16"
@@ -1279,7 +1280,21 @@ export type MessageKey =
   | "locale.toggle.toEs"
   | "locale.toggle.toEn"
   | "footer.lastUpdate"
-  | "footer.offline";
+  | "footer.offline"
+  | "time.daysCount"
+  | "nav.openGallery"
+  | "nav.backToMain"
+  | "preview.page.title"
+  | "preview.page.intro"
+  | "preview.featured.liveSingle.description"
+  | "preview.featured.liveMultiple.description"
+  | "preview.featured.upcomingToday.description"
+  | "preview.featured.upcomingFuture.description"
+  | "preview.featured.tournamentOver.description"
+  | "preview.section.matchCard"
+  | "preview.section.countdown"
+  | "preview.main.placeholder.title"
+  | "preview.main.placeholder.body";
 
 export const MESSAGES: Record<Locale, Record<MessageKey, string>> = {
   es: {
@@ -1298,6 +1313,7 @@ export const MESSAGES: Record<Locale, Record<MessageKey, string>> = {
     "match.badge.finished":            "Final",
     "match.badge.postponed":           "Postergado",
     "match.badge.next":                "Siguiente",
+    "match.group":                     "Grupo {letter}",
     "stage.group":                     "Fase de grupos",
     "stage.roundOf32":                 "Dieciseisavos",
     "stage.roundOf16":                 "Octavos",
@@ -1315,6 +1331,20 @@ export const MESSAGES: Record<Locale, Record<MessageKey, string>> = {
     "locale.toggle.toEn":              "Cambiar a inglés",
     "footer.lastUpdate":               "Datos actualizados hace {time}",
     "footer.offline":                  "Funciona offline",
+    "time.daysCount":                  "{n} días",
+    "nav.openGallery":                 "Galería de componentes",
+    "nav.backToMain":                  "Volver al inicio",
+    "preview.page.title":              "Galería de componentes",
+    "preview.page.intro":              "Vista de todos los estados de los componentes en un solo lugar.",
+    "preview.featured.liveSingle.description":     "Un partido se está jugando",
+    "preview.featured.liveMultiple.description":   "Varios partidos en simultáneo",
+    "preview.featured.upcomingToday.description":  "Próximo partido del día",
+    "preview.featured.upcomingFuture.description": "Próximo partido en otro día",
+    "preview.featured.tournamentOver.description": "El Mundial terminó",
+    "preview.section.matchCard":       "Tarjeta de partido en cada estado",
+    "preview.section.countdown":       "Cuenta regresiva aislada",
+    "preview.main.placeholder.title":  "Próximamente",
+    "preview.main.placeholder.body":   "La app principal aparece acá cuando se complete el batch B-2.",
   },
   en: {
     "featured.eyebrow.upcomingToday": "Next match",
@@ -1332,6 +1362,7 @@ export const MESSAGES: Record<Locale, Record<MessageKey, string>> = {
     "match.badge.finished":            "Final",
     "match.badge.postponed":           "Postponed",
     "match.badge.next":                "Next",
+    "match.group":                     "Group {letter}",
     "stage.group":                     "Group stage",
     "stage.roundOf32":                 "Round of 32",
     "stage.roundOf16":                 "Round of 16",
@@ -1349,6 +1380,20 @@ export const MESSAGES: Record<Locale, Record<MessageKey, string>> = {
     "locale.toggle.toEn":              "Switch to English",
     "footer.lastUpdate":               "Data updated {time} ago",
     "footer.offline":                  "Works offline",
+    "time.daysCount":                  "{n} days",
+    "nav.openGallery":                 "Component gallery",
+    "nav.backToMain":                  "Back to main",
+    "preview.page.title":              "Component gallery",
+    "preview.page.intro":              "All component states in one place.",
+    "preview.featured.liveSingle.description":     "One match in progress",
+    "preview.featured.liveMultiple.description":   "Multiple matches in progress",
+    "preview.featured.upcomingToday.description":  "Next match today",
+    "preview.featured.upcomingFuture.description": "Next match on another day",
+    "preview.featured.tournamentOver.description": "The World Cup is over",
+    "preview.section.matchCard":       "Match card in each state",
+    "preview.section.countdown":       "Standalone countdown",
+    "preview.main.placeholder.title":  "Coming soon",
+    "preview.main.placeholder.body":   "The main app appears here once batch B-2 lands.",
   },
 };
 ```

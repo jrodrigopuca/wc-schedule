@@ -12,11 +12,7 @@ import Countdown from '@/featured/ui/Countdown.vue'
 const props = defineProps<{ state: FeaturedState; now: number }>()
 const emit = defineEmits<{ 'cta-click': [] }>()
 
-const { current, t, country } = useI18n()
-
-// "Grupo {X}" / "Group {X}" — fixture word, not a copy string per se.
-// Mirrors the per-locale split without adding a dedicated MessageKey.
-const groupLabel = computed(() => (current.value === 'en' ? 'Group' : 'Grupo'))
+const { t, country } = useI18n()
 
 // Stage → message key. Keeping the mapping local for now; if a second view
 // needs it we lift it to `src/matches/i18n/stage-labels.ts`.
@@ -96,7 +92,7 @@ function metaParts(match: Match, withDate: boolean): readonly string[] {
     parts.push(`${localTime} ${localTimeLabel}`)
   }
   if (match.group !== undefined) {
-    parts.push(`${groupLabel.value} ${match.group}`)
+    parts.push(t('match.group', { letter: match.group }))
   } else {
     parts.push(stageLabelFor(match))
   }
@@ -152,7 +148,7 @@ function onCtaClick(): void {
         <span>{{ stageLabelFor(state.match) }}</span>
         <template v-if="state.match.group !== undefined">
           <span :class="$style.dot" />
-          <span>{{ groupLabel }} {{ state.match.group }}</span>
+          <span>{{ t('match.group', { letter: state.match.group }) }}</span>
         </template>
         <template v-if="state.match.venue !== undefined">
           <span :class="$style.dot" />
