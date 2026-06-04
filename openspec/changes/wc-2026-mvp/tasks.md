@@ -67,7 +67,7 @@ The five tasks below block the largest fan-out of downstream work. Prioritize th
 
 | ID | Title | Ref | Acceptance | Deps | Tests | Est |
 |---|---|---|---|---|---|---|
-| T4.1 | Hand-curated fixture dataset | `specs/data-source.md` §3.1, §4, `design.md` §4 | `src/shared/fixture/matches.fixture.json` contains ~48 matches covering: a full group-stage day (multiple kickoffs in one day), a single-live scenario, a multi-live scenario (two simultaneous kickoffs), an empty-day, a known future date for `upcoming-future`, and one knockout (e.g. `round-of-16`). All `utcKickoff` values are ISO with `Z`. Imported via `import.meta.glob` or static `import` from `manual-source.ts`. | T2.2 | unit: parsing the fixture through `matchListSchema` succeeds (golden test). | M |
+| T4.1 | Hand-curated fixture dataset | `specs/data-source.md` §3.1, §4, `design.md` §4 | `src/shared/fixture/matches.fixture.json` contains ~48 matches covering: a full group-stage day (multiple kickoffs in one day), a single-live scenario, a multi-live scenario (two simultaneous kickoffs), an empty-day, a known future date for `upcoming-future`, and at least one knockout from each stage (`round-of-32`, `round-of-16`, etc. — WC 2026 is 48 teams, so `round-of-32` MUST be present). All `utcKickoff` values are ISO with `Z`. Imported via `import.meta.glob` or static `import` from `manual-source.ts`. | T2.2 | unit: parsing the fixture through `matchListSchema` succeeds (golden test). | M |
 
 ### Phase 5 — Featured state machine
 
