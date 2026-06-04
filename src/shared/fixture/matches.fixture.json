@@ -1,0 +1,432 @@
+[
+  {
+    "id": "wc2026-g-a-01",
+    "utcKickoff": "2026-06-11T20:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "A",
+    "teamA": { "iso": "mx", "name": "México" },
+    "teamB": { "iso": "ar", "name": "Argentina" },
+    "venue": { "city": "Ciudad de México", "country": "México" }
+  },
+  {
+    "id": "wc2026-g-a-02",
+    "utcKickoff": "2026-06-11T23:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "A",
+    "teamA": { "iso": "jp", "name": "Japón" },
+    "teamB": { "iso": "sn", "name": "Senegal" },
+    "venue": { "city": "Guadalajara", "country": "México" }
+  },
+  {
+    "id": "wc2026-g-b-01",
+    "utcKickoff": "2026-06-12T19:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "B",
+    "teamA": { "iso": "ca", "name": "Canadá" },
+    "teamB": { "iso": "ch", "name": "Suiza" },
+    "venue": { "city": "Toronto", "country": "Canadá" }
+  },
+  {
+    "id": "wc2026-g-b-02",
+    "utcKickoff": "2026-06-12T22:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "B",
+    "teamA": { "iso": "co", "name": "Colombia" },
+    "teamB": { "iso": "kr", "name": "Corea del Sur" },
+    "venue": { "city": "Vancouver", "country": "Canadá" }
+  },
+  {
+    "id": "wc2026-g-c-01",
+    "utcKickoff": "2026-06-13T19:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "C",
+    "teamA": { "iso": "us", "name": "Estados Unidos" },
+    "teamB": { "iso": "pl", "name": "Polonia" },
+    "venue": { "city": "Los Ángeles", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-g-c-02",
+    "utcKickoff": "2026-06-13T22:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "C",
+    "teamA": { "iso": "ng", "name": "Nigeria" },
+    "teamB": { "iso": "nz", "name": "Nueva Zelanda" },
+    "venue": { "city": "Atlanta", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-g-d-01",
+    "utcKickoff": "2026-06-14T19:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "D",
+    "teamA": { "iso": "br", "name": "Brasil" },
+    "teamB": { "iso": "ma", "name": "Marruecos" },
+    "venue": { "city": "Miami", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-g-d-02",
+    "utcKickoff": "2026-06-14T22:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "D",
+    "teamA": { "iso": "au", "name": "Australia" },
+    "teamB": { "iso": "ec", "name": "Ecuador" },
+    "venue": { "city": "Houston", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-g-e-01",
+    "utcKickoff": "2026-06-15T19:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "E",
+    "teamA": { "iso": "es", "name": "España" },
+    "teamB": { "iso": "tn", "name": "Túnez" },
+    "venue": { "city": "Nueva York", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-g-e-02",
+    "utcKickoff": "2026-06-15T22:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "E",
+    "teamA": { "iso": "uy", "name": "Uruguay" },
+    "teamB": { "iso": "iq", "name": "Irak" },
+    "venue": { "city": "Filadelfia", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-g-f-01",
+    "utcKickoff": "2026-06-16T19:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "F",
+    "teamA": { "iso": "fr", "name": "Francia" },
+    "teamB": { "iso": "cr", "name": "Costa Rica" },
+    "venue": { "city": "Boston", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-g-f-02",
+    "utcKickoff": "2026-06-16T22:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "F",
+    "teamA": { "iso": "sa", "name": "Arabia Saudita" },
+    "teamB": { "iso": "ci", "name": "Costa de Marfil" },
+    "venue": { "city": "Kansas City", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-g-g-01",
+    "utcKickoff": "2026-06-17T19:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "G",
+    "teamA": { "iso": "de", "name": "Alemania" },
+    "teamB": { "iso": "pa", "name": "Panamá" },
+    "venue": { "city": "Seattle", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-g-g-02",
+    "utcKickoff": "2026-06-17T22:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "G",
+    "teamA": { "iso": "eg", "name": "Egipto" },
+    "teamB": { "iso": "uz", "name": "Uzbekistán" },
+    "venue": { "city": "Dallas", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-g-h-01",
+    "utcKickoff": "2026-06-18T19:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "H",
+    "teamA": { "iso": "pt", "name": "Portugal" },
+    "teamB": { "iso": "qa", "name": "Catar" },
+    "venue": { "city": "San Francisco", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-g-h-02",
+    "utcKickoff": "2026-06-18T22:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "H",
+    "teamA": { "iso": "cm", "name": "Camerún" },
+    "teamB": { "iso": "jo", "name": "Jordania" },
+    "venue": { "city": "Monterrey", "country": "México" }
+  },
+  {
+    "id": "wc2026-g-i-01",
+    "utcKickoff": "2026-06-19T19:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "I",
+    "teamA": { "iso": "be", "name": "Bélgica" },
+    "teamB": { "iso": "gh", "name": "Ghana" },
+    "venue": { "city": "Atlanta", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-g-i-02",
+    "utcKickoff": "2026-06-19T22:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "I",
+    "teamA": { "iso": "py", "name": "Paraguay" },
+    "teamB": { "iso": "cv", "name": "Cabo Verde" },
+    "venue": { "city": "Houston", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-g-j-01",
+    "utcKickoff": "2026-06-20T19:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "J",
+    "teamA": { "iso": "nl", "name": "Países Bajos" },
+    "teamB": { "iso": "ir", "name": "Irán" },
+    "venue": { "city": "Nueva York", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-g-j-02",
+    "utcKickoff": "2026-06-20T22:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "J",
+    "teamA": { "iso": "dz", "name": "Argelia" },
+    "teamB": { "iso": "hn", "name": "Honduras" },
+    "venue": { "city": "Filadelfia", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-g-k-01",
+    "utcKickoff": "2026-06-21T19:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "K",
+    "teamA": { "iso": "it", "name": "Italia" },
+    "teamB": { "iso": "za", "name": "Sudáfrica" },
+    "venue": { "city": "Boston", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-g-k-02",
+    "utcKickoff": "2026-06-21T22:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "K",
+    "teamA": { "iso": "no", "name": "Noruega" },
+    "teamB": { "iso": "ve", "name": "Venezuela" },
+    "venue": { "city": "Kansas City", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-g-l-01",
+    "utcKickoff": "2026-06-22T19:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "L",
+    "teamA": { "iso": "cz", "name": "República Checa" },
+    "teamB": { "iso": "cl", "name": "Chile" },
+    "venue": { "city": "Seattle", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-g-l-02",
+    "utcKickoff": "2026-06-22T22:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "L",
+    "teamA": { "iso": "tr", "name": "Turquía" },
+    "teamB": { "iso": "ye", "name": "Yemen" },
+    "venue": { "city": "Dallas", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-g-a-03",
+    "utcKickoff": "2026-06-23T18:00:00Z",
+    "status": "finished",
+    "stage": "group",
+    "group": "A",
+    "teamA": { "iso": "mx", "name": "México" },
+    "teamB": { "iso": "jp", "name": "Japón" },
+    "score": { "home": 2, "away": 1 },
+    "venue": { "city": "Ciudad de México", "country": "México" }
+  },
+  {
+    "id": "wc2026-g-a-04",
+    "utcKickoff": "2026-06-23T18:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "A",
+    "teamA": { "iso": "ar", "name": "Argentina" },
+    "teamB": { "iso": "sn", "name": "Senegal" },
+    "venue": { "city": "Guadalajara", "country": "México" }
+  },
+  {
+    "id": "wc2026-g-a-05",
+    "utcKickoff": "2026-06-23T21:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "A",
+    "teamA": { "iso": "mx", "name": "México" },
+    "teamB": { "iso": "sn", "name": "Senegal" },
+    "venue": { "city": "Ciudad de México", "country": "México" }
+  },
+  {
+    "id": "wc2026-g-b-03",
+    "utcKickoff": "2026-06-24T19:00:00Z",
+    "status": "finished",
+    "stage": "group",
+    "group": "B",
+    "teamA": { "iso": "ca", "name": "Canadá" },
+    "teamB": { "iso": "co", "name": "Colombia" },
+    "score": { "home": 1, "away": 1 },
+    "venue": { "city": "Toronto", "country": "Canadá" }
+  },
+  {
+    "id": "wc2026-g-c-03",
+    "utcKickoff": "2026-06-25T19:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "C",
+    "teamA": { "iso": "us", "name": "Estados Unidos" },
+    "teamB": { "iso": "ng", "name": "Nigeria" },
+    "venue": { "city": "Los Ángeles", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-g-d-03",
+    "utcKickoff": "2026-06-26T19:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "D",
+    "teamA": { "iso": "br", "name": "Brasil" },
+    "teamB": { "iso": "au", "name": "Australia" },
+    "venue": { "city": "Miami", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-g-e-03",
+    "utcKickoff": "2026-06-27T19:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "E",
+    "teamA": { "iso": "es", "name": "España" },
+    "teamB": { "iso": "uy", "name": "Uruguay" },
+    "venue": { "city": "Nueva York", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-g-f-03",
+    "utcKickoff": "2026-06-28T19:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "F",
+    "teamA": { "iso": "fr", "name": "Francia" },
+    "teamB": { "iso": "sa", "name": "Arabia Saudita" },
+    "venue": { "city": "Boston", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-r32-01",
+    "utcKickoff": "2026-07-01T19:00:00Z",
+    "status": "scheduled",
+    "stage": "round-of-32",
+    "teamA": { "iso": "ar", "name": "Argentina" },
+    "teamB": { "iso": "ch", "name": "Suiza" },
+    "venue": { "city": "Ciudad de México", "country": "México" }
+  },
+  {
+    "id": "wc2026-r32-02",
+    "utcKickoff": "2026-07-01T22:00:00Z",
+    "status": "scheduled",
+    "stage": "round-of-32",
+    "teamA": { "iso": "br", "name": "Brasil" },
+    "teamB": { "iso": "kr", "name": "Corea del Sur" },
+    "venue": { "city": "Miami", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-r32-03",
+    "utcKickoff": "2026-07-02T19:00:00Z",
+    "status": "scheduled",
+    "stage": "round-of-32",
+    "teamA": { "iso": "fr", "name": "Francia" },
+    "teamB": { "iso": "ng", "name": "Nigeria" },
+    "venue": { "city": "Boston", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-r32-04",
+    "utcKickoff": "2026-07-02T22:00:00Z",
+    "status": "scheduled",
+    "stage": "round-of-32",
+    "teamA": { "iso": "es", "name": "España" },
+    "teamB": { "iso": "ma", "name": "Marruecos" },
+    "venue": { "city": "Nueva York", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-r16-01",
+    "utcKickoff": "2026-07-06T19:00:00Z",
+    "status": "scheduled",
+    "stage": "round-of-16",
+    "teamA": { "iso": "ar", "name": "Argentina" },
+    "teamB": { "iso": "us", "name": "Estados Unidos" },
+    "venue": { "city": "Los Ángeles", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-r16-02",
+    "utcKickoff": "2026-07-06T22:00:00Z",
+    "status": "scheduled",
+    "stage": "round-of-16",
+    "teamA": { "iso": "br", "name": "Brasil" },
+    "teamB": { "iso": "de", "name": "Alemania" },
+    "venue": { "city": "Dallas", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-qf-01",
+    "utcKickoff": "2026-07-10T19:00:00Z",
+    "status": "scheduled",
+    "stage": "quarter-final",
+    "teamA": { "iso": "ar", "name": "Argentina" },
+    "teamB": { "iso": "fr", "name": "Francia" },
+    "venue": { "city": "Atlanta", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-qf-02",
+    "utcKickoff": "2026-07-11T19:00:00Z",
+    "status": "scheduled",
+    "stage": "quarter-final",
+    "teamA": { "iso": "br", "name": "Brasil" },
+    "teamB": { "iso": "es", "name": "España" },
+    "venue": { "city": "Houston", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-sf-01",
+    "utcKickoff": "2026-07-14T22:00:00Z",
+    "status": "scheduled",
+    "stage": "semi-final",
+    "teamA": { "iso": "ar", "name": "Argentina" },
+    "teamB": { "iso": "br", "name": "Brasil" },
+    "venue": { "city": "Dallas", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-sf-02",
+    "utcKickoff": "2026-07-15T22:00:00Z",
+    "status": "scheduled",
+    "stage": "semi-final",
+    "teamA": { "iso": "fr", "name": "Francia" },
+    "teamB": { "iso": "es", "name": "España" },
+    "venue": { "city": "Atlanta", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-tp-01",
+    "utcKickoff": "2026-07-18T19:00:00Z",
+    "status": "scheduled",
+    "stage": "third-place",
+    "teamA": { "iso": "br", "name": "Brasil" },
+    "teamB": { "iso": "es", "name": "España" },
+    "venue": { "city": "Miami", "country": "Estados Unidos" }
+  },
+  {
+    "id": "wc2026-final",
+    "utcKickoff": "2026-07-19T19:00:00Z",
+    "status": "scheduled",
+    "stage": "final",
+    "teamA": { "iso": "ar", "name": "Argentina" },
+    "teamB": { "iso": "fr", "name": "Francia" },
+    "venue": { "city": "Nueva York", "country": "Estados Unidos" }
+  }
+]
