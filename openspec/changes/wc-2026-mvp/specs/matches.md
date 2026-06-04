@@ -80,6 +80,26 @@ a state that conflicts with a time-derived state (e.g. a match marked
 source's state MUST win; time-derived state is only a fallback when
 no explicit state is provided.
 
+### 5.1 Score rendering rules in the list
+
+The list of today's matches MUST follow these rules for any score
+field carried in the underlying data:
+
+- For a match whose resolved state is `live`, the list row MUST
+  render the localized "live" badge (see `i18n.md` for the
+  `match.badge.live` key) and MUST NOT render a score, even if the
+  payload carries one from a prior snapshot. The daily-refresh
+  pipeline cannot honestly report in-flight scores; surfacing one
+  would mislead the user about its freshness.
+- For a match whose resolved state is `finished`, the list row MUST
+  render the final score when the payload carries one. The score
+  appears in the list (not in the featured slot) because the daily
+  refresh CAN backfill finished-match scores once the match has
+  concluded — those numbers are by-then authoritative, not in-flight.
+- For `scheduled`, `postponed`, or any state where a score is not
+  semantically meaningful, the list row MUST NOT render a score
+  block.
+
 ## 6. Zero-match-today behavior
 
 When the application's list of matches contains no entries for the
@@ -100,6 +120,8 @@ local "today":
 - Pre-match reminders → `notifications.md`
 - Where match data comes from and how stale it may be → `data-source.md`
 - Install / offline behavior → `pwa.md`
+- Localization of state badges, stage labels, list title/count/empty
+  copy, and CTA labels → `i18n.md`
 
 ## 8. Acceptance criteria (Given/When/Then)
 
@@ -175,3 +197,30 @@ local "today":
 - **Then** the data source's `scheduled` state MUST be used (the
   source is authoritative for explicit state); UI MAY surface the
   inconsistency but MUST NOT silently reclassify
+
+### AC-11: Live row hides score
+
+- **Given** a match in today's list resolves to state `live`
+- **And** the underlying payload carries a `score` field (e.g.
+  `{ home: 1, away: 0 }` from a prior daily snapshot)
+- **When** the list row renders
+- **Then** the row MUST display the localized "live" badge (see
+  `i18n.md` key `match.badge.live`)
+- **And** the row MUST NOT render the score in any visible or
+  assistive-tech-accessible form
+
+### AC-12: Finished row shows score
+
+- **Given** a match in today's list resolves to state `finished`
+- **And** the underlying payload carries a `score` field with the
+  final result
+- **When** the list row renders
+- **Then** the row MUST render the localized "final" badge (key
+  `match.badge.finished`) AND the score
+
+### AC-13: Scheduled row has no score block
+
+- **Given** a match in today's list resolves to state `scheduled`
+- **When** the list row renders
+- **Then** the row MUST NOT render any score block (no zero-zero
+  placeholder, no dash)

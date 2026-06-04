@@ -129,12 +129,13 @@
     transition: background-color 200ms ease;
   }
 
-  /* ── Theme toggle (floating top-right) ────────────────────── */
+  /* ── Header toggles (in-header, NOT floating) ─────────────── */
+  .header-toggles {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
   .theme-toggle {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 100;
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -164,6 +165,50 @@
   }
   :root[data-theme="dark"] .theme-toggle .theme-toggle__sun { display: none; }
   :root[data-theme="dark"] .theme-toggle .theme-toggle__moon { display: inline; }
+
+  /* Locale toggle (ES / EN segmented pill). */
+  .locale-toggle {
+    display: inline-flex;
+    align-items: center;
+    background: var(--bg-toggle);
+    color: var(--text-base);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    padding: 3px;
+    box-shadow: var(--shadow-sm);
+    font-family: inherit;
+  }
+  .locale-toggle__segment {
+    appearance: none;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: 5px 12px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    cursor: pointer;
+    line-height: 1;
+    transition: background 160ms ease, color 160ms ease;
+  }
+  .locale-toggle__segment.is-active {
+    background: var(--bg-pill);
+    color: var(--text-strong);
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Live text replaces the old live-score block. Centered, single line. */
+  .live-text {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text-inverse);
+    margin: 12px 0 22px;
+    line-height: 1.2;
+  }
 
   /* ── Desktop stage / mobile reset ─────────────────────────── */
   body {
@@ -224,6 +269,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
   }
   .brand {
     display: flex;
@@ -634,18 +681,6 @@
 </head>
 <body>
 
-<!-- Theme toggle -->
-<button class="theme-toggle" type="button" aria-label="Cambiar tema">
-  <svg class="theme-toggle__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="12" cy="12" r="4"/>
-    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
-  </svg>
-  <svg class="theme-toggle__moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-  </svg>
-  <span class="theme-toggle__label">Tema</span>
-</button>
-
 <!-- ─────────────────────────────────────────────────────────── -->
 <!-- STAGE 1 — UPCOMING TODAY (countdown to next match)          -->
 <!-- ─────────────────────────────────────────────────────────── -->
@@ -662,7 +697,22 @@
             <small>Mundial 2026</small>
           </div>
         </div>
-        <div class="header__date">jue · 18 jun</div>
+        <div class="header-toggles">
+          <div class="locale-toggle" role="group" aria-label="Cambiar a inglés">
+            <button class="locale-toggle__segment is-active" type="button" data-locale="es" aria-pressed="true" aria-label="Cambiar a español">ES</button>
+            <button class="locale-toggle__segment" type="button" data-locale="en" aria-pressed="false" aria-label="Cambiar a inglés">EN</button>
+          </div>
+          <button class="theme-toggle" type="button" aria-label="Cambiar a modo oscuro">
+            <svg class="theme-toggle__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+            </svg>
+            <svg class="theme-toggle__moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            <span class="theme-toggle__label">Tema</span>
+          </button>
+        </div>
       </header>
 
       <!-- Argentina (celeste) vs Marruecos (rojo) -->
@@ -773,7 +823,22 @@
             <small>Mundial 2026</small>
           </div>
         </div>
-        <div class="header__date">jue · 18 jun</div>
+        <div class="header-toggles">
+          <div class="locale-toggle" role="group" aria-label="Cambiar a inglés">
+            <button class="locale-toggle__segment is-active" type="button" data-locale="es" aria-pressed="true" aria-label="Cambiar a español">ES</button>
+            <button class="locale-toggle__segment" type="button" data-locale="en" aria-pressed="false" aria-label="Cambiar a inglés">EN</button>
+          </div>
+          <button class="theme-toggle" type="button" aria-label="Cambiar a modo oscuro">
+            <svg class="theme-toggle__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+            </svg>
+            <svg class="theme-toggle__moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            <span class="theme-toggle__label">Tema</span>
+          </button>
+        </div>
       </header>
 
       <section class="featured featured--live" style="--team-a-glow: rgba(108, 175, 245, 0.28); --team-b-glow: rgba(193, 39, 45, 0.32);">
@@ -795,16 +860,10 @@
           </div>
         </div>
 
-        <div class="live-score">
-          <div class="live-score__label">Marcador</div>
-          <div class="live-score__value">
-            <span>2</span><span class="dash">—</span><span>1</span>
-          </div>
-          <div class="live-score__minute">67' · segundo tiempo</div>
-        </div>
+        <p class="live-text">Se está jugando ahora</p>
 
         <div class="featured__meta">
-          <span>Inició 19:00</span>
+          <span>Fase de grupos</span>
           <span class="dot"></span>
           <span>Grupo C</span>
           <span class="dot"></span>
@@ -839,8 +898,8 @@
         <li class="match">
           <div class="match__time"><strong>19:00</strong><span>Fase grupos</span></div>
           <div class="match__teams">
-            <div class="match__row"><div class="mini-flag"><img src="https://hatscripts.github.io/circle-flags/flags/ar.svg" alt="Argentina" /></div>Argentina <span class="score">2</span></div>
-            <div class="match__row"><div class="mini-flag"><img src="https://hatscripts.github.io/circle-flags/flags/ma.svg" alt="Marruecos" /></div>Marruecos <span class="score">1</span></div>
+            <div class="match__row"><div class="mini-flag"><img src="https://hatscripts.github.io/circle-flags/flags/ar.svg" alt="Argentina" /></div>Argentina</div>
+            <div class="match__row"><div class="mini-flag"><img src="https://hatscripts.github.io/circle-flags/flags/ma.svg" alt="Marruecos" /></div>Marruecos</div>
           </div>
           <span class="badge badge--live">En vivo</span>
         </li>
@@ -861,20 +920,45 @@
 </div>
 
 <script>
+  // Theme toggle wiring — applies to every .theme-toggle on the page.
   (function () {
     const root = document.documentElement;
-    const toggle = document.querySelector('.theme-toggle');
+    const toggles = document.querySelectorAll('.theme-toggle');
     const saved = localStorage.getItem('wc-theme');
     if (saved === 'dark' || saved === 'light') {
       root.setAttribute('data-theme', saved);
     }
-    toggle.addEventListener('click', function () {
-      const current =
-        root.getAttribute('data-theme') ||
-        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-      const next = current === 'dark' ? 'light' : 'dark';
-      root.setAttribute('data-theme', next);
-      localStorage.setItem('wc-theme', next);
+    toggles.forEach(function (toggle) {
+      toggle.addEventListener('click', function () {
+        const current =
+          root.getAttribute('data-theme') ||
+          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        const next = current === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        localStorage.setItem('wc-theme', next);
+      });
+    });
+  })();
+
+  // Locale toggle wiring — purely visual for the mockup: clicking a segment
+  // flips the .is-active class on every .locale-toggle on the page so both
+  // stage previews stay in sync. No string-replacement happens here; the
+  // mockup's copy is static and lives in the markup above.
+  (function () {
+    const groups = document.querySelectorAll('.locale-toggle');
+    groups.forEach(function (group) {
+      const segments = group.querySelectorAll('.locale-toggle__segment');
+      segments.forEach(function (seg) {
+        seg.addEventListener('click', function () {
+          document.querySelectorAll('.locale-toggle').forEach(function (g) {
+            g.querySelectorAll('.locale-toggle__segment').forEach(function (s) {
+              const active = s.getAttribute('data-locale') === seg.getAttribute('data-locale');
+              s.classList.toggle('is-active', active);
+              s.setAttribute('aria-pressed', active ? 'true' : 'false');
+            });
+          });
+        });
+      });
     });
   })();
 </script>

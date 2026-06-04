@@ -23,6 +23,10 @@ function stubMatchMedia(initialMatches: boolean): void {
   vi.stubGlobal('matchMedia', () => mq)
 }
 
+function stubNavigatorEs(): void {
+  vi.stubGlobal('navigator', { language: 'es-AR', languages: ['es-AR'] })
+}
+
 async function mountThemeToggle(): Promise<ReturnType<typeof mount>> {
   vi.resetModules()
   const mod = await import('@/shared/ui/ThemeToggle.vue')
@@ -44,6 +48,7 @@ describe('ThemeToggle', () => {
 
   it('flips light → dark on click and updates <html data-theme>', async () => {
     stubMatchMedia(false)
+    stubNavigatorEs()
     const wrapper = await mountThemeToggle()
 
     expect(wrapper.attributes('aria-label')).toBe('Cambiar a modo oscuro')
@@ -57,6 +62,7 @@ describe('ThemeToggle', () => {
 
   it('flips dark → light on click and updates <html data-theme>', async () => {
     stubMatchMedia(true)
+    stubNavigatorEs()
     const wrapper = await mountThemeToggle()
 
     expect(wrapper.attributes('aria-label')).toBe('Cambiar a modo claro')

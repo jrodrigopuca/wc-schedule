@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from '@/shared/i18n/useI18n'
 import { useTheme } from '@/shared/theme/useTheme'
 
 const { current, setTheme } = useTheme()
+const { t } = useI18n()
 
 const isDark = computed(() => current.value === 'dark')
 
-const ariaLabel = computed(() => (isDark.value ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'))
+const ariaLabel = computed(() =>
+  isDark.value ? t('theme.toggle.toLight') : t('theme.toggle.toDark'),
+)
 
 function toggle(): void {
   setTheme(isDark.value ? 'light' : 'dark')

@@ -16,6 +16,11 @@ The featured slot MUST be in exactly one of the following states at
 any moment:
 
 - **live-single** — exactly one match is currently in its live window.
+  The slot communicates that the match is in progress via a TEXTUAL
+  in-progress indicator (see `i18n.md` for the localized string), the
+  eyebrow label, and the derby tableau. The slot MUST NOT render a
+  score — the daily-refresh pipeline cannot honestly report in-flight
+  scores; see `data-source.md` §freshness.
 - **live-multiple** — two or more matches are simultaneously in their
   live windows.
 - **upcoming-today** — no matches are live; at least one match
@@ -46,9 +51,13 @@ These states MUST be mutually exclusive and collectively exhaustive.
 
 - **Selected match**: the single match currently in its live window.
 - **Display contract**: the slot MUST show team identifiers, the
-  competition stage, the local kickoff time, and a clear "live"
-  indicator. The slot MUST NOT display a score (the data source is
-  not real-time; see `data-source.md` §freshness).
+  competition stage, the local kickoff time, a clear "live" eyebrow
+  label, and a TEXTUAL in-progress indicator (see `i18n.md` for the
+  exact localized string). The slot MUST NOT display a score: the
+  daily-refresh pipeline cannot honestly source in-flight scores
+  (see `data-source.md` §freshness). If the underlying match payload
+  happens to carry a `score` field from a prior snapshot, the
+  renderer MUST ignore it for the duration of the live window.
 
 ### 4.2 live-multiple
 
@@ -148,6 +157,21 @@ slot must convey — not a CSS specification. Implementation choices
 (exact sizes, palettes, animation, image sources) belong in
 `design.md`.
 
+### 7.0 In-progress indicator (live-single only)
+
+In `live-single`, the slot MUST present a TEXTUAL in-progress
+indicator (the localized string from `i18n.md` keyed by
+`featured.live.text`) alongside the eyebrow label and the derby
+tableau. The slot MUST NOT display a score, a clock, or any
+fabricated minute-mark — none of those values can be sourced honestly
+from the daily-refresh pipeline. The text indicator is the sole
+piece of "live progression" information the slot exposes.
+
+Typographic treatment of the in-progress text MUST be consistent
+with other featured-slot primary content (same family and weight
+class as the country names / countdown), so users perceive it as
+informational rather than as a banner or alert.
+
 ### 7.1 Team identity in two-team states
 
 States `live-single`, `upcoming-today`, and `upcoming-future` show
@@ -209,6 +233,8 @@ In the two-team states (§7.1):
   `data-source.md`
 - Theme behavior and contrast guarantees that constrain the halo
   tint → `theming.md`
+- Localization of the eyebrow label, in-progress text, stage names,
+  and CTA copy → `i18n.md`
 
 ## 9. Acceptance criteria (Given/When/Then)
 
@@ -217,8 +243,10 @@ In the two-team states (§7.1):
 - **Given** exactly one match has been in its live window for 20 minutes
 - **When** the user opens the app
 - **Then** the slot MUST be in `live-single`, showing that match's
-  teams, stage, local kickoff time, and a live indicator
-- **And** the slot MUST NOT show a score
+  teams, stage, local kickoff time, the live eyebrow label, and the
+  localized in-progress text indicator (per `i18n.md`)
+- **And** the slot MUST NOT show a score, a match clock, or any
+  numeric minute mark
 
 ### AC-2: live-multiple
 
@@ -337,3 +365,14 @@ In the two-team states (§7.1):
 - **And** mini medallions MUST be visually consistent with the
   featured medallions (same shape and border treatment, scaled
   down)
+
+### AC-16: data-carried score is ignored when slot is live-single
+
+- **Given** the resolved featured state is `live-single`
+- **And** the underlying match payload carries a `score` field from
+  a prior daily-refresh snapshot
+- **When** the slot renders
+- **Then** the renderer MUST NOT display the carried score in any
+  form (no number, no scoreline, no aria-label that exposes it)
+- **And** the only "live progression" cue the slot exposes MUST be
+  the localized in-progress text indicator per §7.0

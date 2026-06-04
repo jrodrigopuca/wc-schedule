@@ -159,7 +159,7 @@ export interface Match {
   readonly group?: string;               // "A".."L" only for group stage
   readonly home: Team;
   readonly away: Team;
-  readonly score?: Score;                // present only when live/finished
+  readonly score?: Score;                // data may carry one; UI renders ONLY when status === "finished" (see §14.8)
   readonly venue?: { city: string; country: string };
 }
 ```
@@ -888,7 +888,7 @@ Every open question from proposal §9, with a decision, reasoning, and rejected 
 
 **Decision**: **static summary card**. The `multi-live` state renders a single card: "Hay N partidos en vivo — mirá la lista", with the list below acting as the detail surface.
 
-**Reasoning**: cycling carousels in a sports context create flicker, disrupt the "answer the question in one glance" goal, and complicate accessibility (focus management, screen reader churn). The list already provides per-match scores; duplicating the cycling adds nothing.
+**Reasoning**: cycling carousels in a sports context create flicker, disrupt the "answer the question in one glance" goal, and complicate accessibility (focus management, screen reader churn). The list below already surfaces every live match with its localized live badge — duplicating that information in a cycling featured card adds nothing. (Note: live scores are NOT shown in either surface; see §14.8 and `matches.md` §5.1 for the rationale.)
 
 **Rejected**: cycling carousel (UX cost > value), splitting the featured slot into N mini-cards (breaks the visual hierarchy on small screens).
 
@@ -1210,6 +1210,375 @@ const haloStyle = computed(() => ({
 ### 14.7 Multi-live state
 
 **No derby tableau** for `multi-live`. The featured slot collapses into a single summary card ("Hay N partidos en vivo — mirá la lista") with an aggregated visual treatment — see the `featured.md` spec for the exact composition. Rationale already in §12.4: cycling carousels and split mini-cards both lose more than they gain.
+
+### 14.8 live-single in-progress indicator (text, no score)
+
+In the `live-single` state the featured card MUST display the localized in-progress text (`t('featured.live.text')`) centered in the slot's primary content area. NO score block, NO match clock, NO fabricated minute mark. Visual contract:
+
+- **Typographic treatment**: same family and weight class as the other featured-slot primary content (country names, countdown). This signals the text is informational content, not a banner.
+- **Surrounding context**: the eyebrow label (top, `t('featured.eyebrow.live')`) and the derby tableau (medallions + country names + VS stamp) remain as in `upcoming-today` / `upcoming-future`. Liveness is communicated by the combination of:
+  1. The eyebrow shifting from "Próximo partido" / "Next match" to "En vivo" / "Live".
+  2. The countdown disappearing.
+  3. The localized in-progress text appearing in the slot where the countdown used to live.
+- **What is explicitly NOT rendered**: a score block, a `0-0` placeholder, a dash, a "live" minute counter, or any number that could be mistaken for in-flight game data. The renderer MUST defensively ignore `match.score` while the state is `live-single` even if the field is present in the payload (it may be a stale snapshot from a prior daily refresh).
+
+Rationale (also captured in `proposal.md` §5 non-goals and `featured.md` §4.1): the daily-refresh pipeline cannot honestly source real-time scores; surfacing one would mislead the user about its freshness. The text indicator is the correct trade-off given the architecture.
+
+The list view (`MatchCard`) follows the same rule for `live` rows — badge only, no score — and DOES render the score for `finished` rows once the next daily refresh backfills it. See `matches.md` §5.1.
+
+---
+
+## 17. i18n strategy
+
+> Numbering note: this section is labelled §17 (not §15) because the
+> Testing strategy (§15) and Risks (§16) sections were already
+> stable references from `tasks.md`. Adding the i18n strategy with
+> a fresh number avoided cascading renumbering across the project.
+> Thematically, i18n belongs alongside Theming (§13) and Visual
+> identity (§14); it appears here in the file for that reason.
+
+The i18n layer answers three questions: (1) which locale does the user get on first paint, (2) how does an override survive reload, and (3) how do we keep every string and every country name reachable through a single typed map. The implementation lives in `src/shared/i18n/`.
+
+### 17.1 Token / source-of-truth
+
+A typed `MESSAGES` map keyed by locale and by `MessageKey`. The `MessageKey` union is the closed enumeration of every user-facing string; missing keys are compile-time errors.
+
+```ts
+// src/shared/i18n/messages.ts
+export type Locale = "es" | "en";
+
+export type MessageKey =
+  | "featured.eyebrow.upcomingToday"
+  | "featured.eyebrow.upcomingFuture"
+  | "featured.eyebrow.live"
+  | "featured.live.text"
+  | "featured.multiLive.title"
+  | "featured.multiLive.hint"
+  | "featured.tournamentOver.title"
+  | "featured.tournamentOver.subtitle"
+  | "featured.meta.localTime"
+  | "featured.cta.notify"
+  | "match.badge.scheduled"
+  | "match.badge.live"
+  | "match.badge.finished"
+  | "match.badge.postponed"
+  | "match.badge.next"
+  | "stage.group"
+  | "stage.roundOf32"
+  | "stage.roundOf16"
+  | "stage.quarterFinal"
+  | "stage.semiFinal"
+  | "stage.thirdPlace"
+  | "stage.final"
+  | "list.title"
+  | "list.count"
+  | "list.empty"
+  | "header.subtitle"
+  | "theme.toggle.toDark"
+  | "theme.toggle.toLight"
+  | "locale.toggle.toEs"
+  | "locale.toggle.toEn"
+  | "footer.lastUpdate"
+  | "footer.offline";
+
+export const MESSAGES: Record<Locale, Record<MessageKey, string>> = {
+  es: {
+    "featured.eyebrow.upcomingToday": "Próximo partido",
+    "featured.eyebrow.upcomingFuture": "Próximo partido",
+    "featured.eyebrow.live":           "En vivo",
+    "featured.live.text":              "Se está jugando ahora",
+    "featured.multiLive.title":        "Hay {n} partidos en vivo",
+    "featured.multiLive.hint":         "Mirá la lista abajo",
+    "featured.tournamentOver.title":   "El Mundial 2026 ha terminado",
+    "featured.tournamentOver.subtitle":"Hasta la próxima edición",
+    "featured.meta.localTime":         "hora local",
+    "featured.cta.notify":             "Avisame 15 min antes",
+    "match.badge.scheduled":           "Programado",
+    "match.badge.live":                "En vivo",
+    "match.badge.finished":            "Final",
+    "match.badge.postponed":           "Postergado",
+    "match.badge.next":                "Siguiente",
+    "stage.group":                     "Fase de grupos",
+    "stage.roundOf32":                 "Dieciseisavos",
+    "stage.roundOf16":                 "Octavos",
+    "stage.quarterFinal":              "Cuartos de final",
+    "stage.semiFinal":                 "Semifinales",
+    "stage.thirdPlace":                "Tercer puesto",
+    "stage.final":                     "Final",
+    "list.title":                      "Partidos de hoy",
+    "list.count":                      "{n} partidos",
+    "list.empty":                      "No hay partidos hoy",
+    "header.subtitle":                 "Mundial 2026",
+    "theme.toggle.toDark":             "Cambiar a modo oscuro",
+    "theme.toggle.toLight":            "Cambiar a modo claro",
+    "locale.toggle.toEs":              "Cambiar a español",
+    "locale.toggle.toEn":              "Cambiar a inglés",
+    "footer.lastUpdate":               "Datos actualizados hace {time}",
+    "footer.offline":                  "Funciona offline",
+  },
+  en: {
+    "featured.eyebrow.upcomingToday": "Next match",
+    "featured.eyebrow.upcomingFuture": "Next match",
+    "featured.eyebrow.live":           "Live",
+    "featured.live.text":              "Playing now",
+    "featured.multiLive.title":        "{n} matches live now",
+    "featured.multiLive.hint":         "See the list below",
+    "featured.tournamentOver.title":   "The 2026 World Cup is over",
+    "featured.tournamentOver.subtitle":"Until next time",
+    "featured.meta.localTime":         "local time",
+    "featured.cta.notify":             "Remind me 15 min before",
+    "match.badge.scheduled":           "Scheduled",
+    "match.badge.live":                "Live",
+    "match.badge.finished":            "Final",
+    "match.badge.postponed":           "Postponed",
+    "match.badge.next":                "Next",
+    "stage.group":                     "Group stage",
+    "stage.roundOf32":                 "Round of 32",
+    "stage.roundOf16":                 "Round of 16",
+    "stage.quarterFinal":              "Quarter-finals",
+    "stage.semiFinal":                 "Semi-finals",
+    "stage.thirdPlace":                "Third place",
+    "stage.final":                     "Final",
+    "list.title":                      "Today's matches",
+    "list.count":                      "{n} matches",
+    "list.empty":                      "No matches today",
+    "header.subtitle":                 "World Cup 2026",
+    "theme.toggle.toDark":             "Switch to dark mode",
+    "theme.toggle.toLight":            "Switch to light mode",
+    "locale.toggle.toEs":              "Switch to Spanish",
+    "locale.toggle.toEn":              "Switch to English",
+    "footer.lastUpdate":               "Data updated {time} ago",
+    "footer.offline":                  "Works offline",
+  },
+};
+```
+
+The `Record<Locale, Record<MessageKey, string>>` shape forces both locales to be complete and exhaustive. Adding a `MessageKey` without providing both translations is a TypeScript error.
+
+### 17.2 Detection: `readLocaleFromBrowser()`
+
+```ts
+// src/shared/i18n/detect.ts
+import type { Locale } from "./messages";
+
+const SUPPORTED: readonly Locale[] = ["es", "en"];
+
+function parsePrefix(tag: string | undefined): Locale | null {
+  if (!tag) return null;
+  const prefix = tag.toLowerCase().split("-")[0];
+  return SUPPORTED.includes(prefix as Locale) ? (prefix as Locale) : null;
+}
+
+export function readLocaleFromBrowser(): Locale {
+  if (typeof navigator === "undefined") return "es";
+
+  const primary = parsePrefix(navigator.language);
+  if (primary !== null) return primary;
+
+  const list = navigator.languages ?? [];
+  for (const tag of list) {
+    const match = parsePrefix(tag);
+    if (match !== null) return match;
+  }
+
+  return "es"; // default fallback
+}
+```
+
+Rules:
+- `navigator.language` wins when it parses to a supported prefix.
+- `navigator.languages` (the ordered preference list) is consulted only if the primary is unsupported.
+- Default fallback is `"es"`.
+
+### 17.3 Storage: `localStorage.wc-locale`
+
+Mirrors the theme storage pattern (`design.md` §13.3). One key, one value of type `Locale | null`.
+
+```ts
+// src/shared/i18n/storage.ts
+import type { Locale } from "./messages";
+
+const KEY = "wc-locale";
+
+export function readStoredLocale(): Locale | null {
+  try {
+    const raw = localStorage.getItem(KEY);
+    return raw === "es" || raw === "en" ? raw : null;
+  } catch { return null; }
+}
+
+export function writeStoredLocale(locale: Locale): void {
+  try { localStorage.setItem(KEY, locale); } catch { /* noop */ }
+}
+
+export function clearStoredLocale(): void {
+  try { localStorage.removeItem(KEY); } catch { /* noop */ }
+}
+```
+
+The key is namespaced (`wc-locale`) to mirror `wc-theme`. Absence means "follow browser detection".
+
+### 17.4 Interpolation
+
+A tiny `interpolate(template, params?)` helper for `{n}`-style placeholders. No framework, no AST — a single `replace` call.
+
+```ts
+// src/shared/i18n/interpolate.ts
+export type InterpolateParams = Readonly<Record<string, string | number>>;
+
+export function interpolate(template: string, params?: InterpolateParams): string {
+  if (!params) return template;
+  return template.replace(/\{(\w+)\}/g, (match, key: string) => {
+    const value = params[key];
+    return value === undefined ? match : String(value);
+  });
+}
+```
+
+Used by `t()` whenever a key contains a `{x}` token (e.g. `list.count: "{n} partidos"`). Missing params leave the placeholder verbatim — a developer-visible signal that something was forgotten.
+
+### 17.5 Composable: `useI18n()`
+
+Module-scoped singleton (no Pinia, per conventions §3). Mirrors the `useTheme()` pattern exactly.
+
+```ts
+// src/shared/i18n/use-i18n.ts
+import { ref, computed } from "vue";
+import {
+  MESSAGES,
+  type Locale,
+  type MessageKey,
+} from "./messages";
+import {
+  readStoredLocale,
+  writeStoredLocale,
+  clearStoredLocale,
+} from "./storage";
+import { readLocaleFromBrowser } from "./detect";
+import { interpolate, type InterpolateParams } from "./interpolate";
+import { COUNTRY_NAMES } from "./country-names";
+
+// Module-scoped singleton — initialized synchronously at module load
+// so the first render reads the correct locale (no flicker).
+const stored = ref<Locale | null>(readStoredLocale());
+const detected = ref<Locale>(readLocaleFromBrowser());
+
+const current = computed<Locale>(() => stored.value ?? detected.value);
+
+function t(key: MessageKey, params?: InterpolateParams): string {
+  const table = MESSAGES[current.value];
+  const template = table[key];
+  if (template === undefined) {
+    // Defensive: in-source callers are type-checked, but a dynamic
+    // call could still miss. Return the key itself per spec §7.
+    console.warn(`[i18n] missing key: ${key}`);
+    return key;
+  }
+  return interpolate(template, params);
+}
+
+function country(iso: string): string | null {
+  const table = COUNTRY_NAMES[current.value];
+  return table[iso.toLowerCase()] ?? null;
+}
+
+function setLocale(locale: Locale): void {
+  stored.value = locale;
+  writeStoredLocale(locale);
+  document.documentElement.setAttribute("lang", locale);
+}
+
+function clearOverride(): void {
+  stored.value = null;
+  clearStoredLocale();
+  document.documentElement.setAttribute("lang", current.value);
+}
+
+export interface UseI18n {
+  readonly current: Readonly<typeof current>;
+  t: typeof t;
+  country: typeof country;
+  setLocale: typeof setLocale;
+  clearOverride: typeof clearOverride;
+}
+
+export function useI18n(): UseI18n {
+  return { current, t, country, setLocale, clearOverride };
+}
+```
+
+Notes:
+- The `stored` and `detected` refs are initialized at module load — synchronous — so the first call to `t()` from a component template returns the correct locale on the first render. No `onMounted` race.
+- `setLocale` and `clearOverride` imperatively update `<html lang>` for screen-reader pronunciation. The composition root MAY also set `<html lang>` once at boot from `current.value`.
+- `country(iso)` returns `null` for unknown ISOs; callers do `country(iso) ?? team.name` to honor `i18n.md` §4.1.
+
+### 17.6 Country names: `COUNTRY_NAMES`
+
+A second typed map, separate from `MESSAGES` because:
+- The key space is unbounded (any ISO-alpha-2 code that may appear in the data).
+- The lookup is not type-checked the same way (a missing entry is acceptable; we fall back to `team.name`).
+
+```ts
+// src/shared/i18n/country-names.ts
+import type { Locale } from "./messages";
+
+export const COUNTRY_NAMES: Readonly<Record<Locale, Readonly<Record<string, string>>>> = {
+  es: {
+    ar: "Argentina",
+    br: "Brasil",
+    mx: "México",
+    us: "Estados Unidos",
+    ca: "Canadá",
+    ma: "Marruecos",
+    jp: "Japón",
+    // ... ~48 entries, one per WC 2026 country
+  },
+  en: {
+    ar: "Argentina",
+    br: "Brazil",
+    mx: "Mexico",
+    us: "United States",
+    ca: "Canada",
+    ma: "Morocco",
+    jp: "Japan",
+    // ... ~48 entries
+  },
+};
+```
+
+Resolution rule, enforced by callers: `country(iso) ?? team.name`. The data field is the safety net for unknown ISOs. See `i18n.md` AC-10.
+
+### 17.7 Rejected alternative — vue-i18n
+
+`vue-i18n` is the canonical Vue 3 i18n library. It supports pluralization, number/date formatting, lazy locale loading, and SFC `<i18n>` blocks. For an app with ~32 keys, two locales, and zero plural-rule complexity, it is overkill:
+
+- Bundle weight: vue-i18n core is ~10KB gzipped before any messages; our entire i18n module here is <100 lines.
+- Conceptual surface: pluralization rules, `$t` injection, message compilation, scope inheritance — none of these solve a problem we have.
+- Type-safety: vue-i18n's TS story is improving but still relies on declaration-merging tricks; a hand-rolled `Record<Locale, Record<MessageKey, string>>` is type-safe at the language level.
+
+We reject vue-i18n for MVP. If the locale list grows past 5, or if plural rules become a real concern (currently they don't — none of the 32 keys have plural variants beyond `{n}` interpolation), we can revisit.
+
+### 17.8 Type sketches summary
+
+```ts
+// Public types
+export type Locale = "es" | "en";
+
+export type MessageKey =
+  | "featured.eyebrow.upcomingToday"
+  | /* ... 31 more ... */
+  | "footer.offline";
+
+export interface UseI18n {
+  readonly current: ComputedRef<Locale>;
+  t(key: MessageKey, params?: Readonly<Record<string, string | number>>): string;
+  country(iso: string): string | null;
+  setLocale(locale: Locale): void;
+  clearOverride(): void;
+}
+```
+
+Consumers import `useI18n` and call `const { t, country } = useI18n()` in their `<script setup>`. The composable's singleton state means switching locale in one component re-renders every other component on the same tick.
 
 ---
 
