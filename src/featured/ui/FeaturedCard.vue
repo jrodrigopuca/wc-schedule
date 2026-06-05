@@ -48,7 +48,7 @@ const rootStyle = computed<HaloStyle>(() => {
     case 'live-multiple':
       return neutralHalo('var(--live-soft)')
     case 'tournament-over':
-      return neutralHalo('var(--text-inverse-muted)')
+      return neutralHalo('var(--text-muted)')
     default:
       return assertNever(props.state)
   }
@@ -240,39 +240,59 @@ function onCtaClick(): void {
   background:
     radial-gradient(
       circle at 18% 50%,
-      color-mix(in srgb, var(--team-a-glow, transparent) 32%, transparent) 0%,
+      color-mix(
+          in srgb,
+          var(--team-a-glow, transparent) calc(var(--halo-opacity) * 100%),
+          transparent
+        )
+        0%,
       transparent 45%
     ),
     radial-gradient(
       circle at 82% 50%,
-      color-mix(in srgb, var(--team-b-glow, transparent) 32%, transparent) 0%,
+      color-mix(
+          in srgb,
+          var(--team-b-glow, transparent) calc(var(--halo-opacity) * 100%),
+          transparent
+        )
+        0%,
       transparent 45%
     ),
     var(--bg-featured);
-  color: var(--text-inverse);
+  color: var(--text-on-featured);
   border-radius: var(--radius-lg);
   padding: 28px 22px 22px;
   position: relative;
   overflow: hidden;
   box-shadow: var(--shadow-md);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  border: 1px solid color-mix(in srgb, var(--text-on-featured) 6%, transparent);
 }
 
 .featuredLive {
   background:
     radial-gradient(
       circle at 18% 50%,
-      color-mix(in srgb, var(--team-a-glow, transparent) 25%, transparent) 0%,
+      color-mix(
+          in srgb,
+          var(--team-a-glow, transparent) calc(var(--halo-opacity) * 100%),
+          transparent
+        )
+        0%,
       transparent 45%
     ),
     radial-gradient(
       circle at 82% 50%,
-      color-mix(in srgb, var(--team-b-glow, transparent) 25%, transparent) 0%,
+      color-mix(
+          in srgb,
+          var(--team-b-glow, transparent) calc(var(--halo-opacity) * 100%),
+          transparent
+        )
+        0%,
       transparent 45%
     ),
     radial-gradient(
       circle at 50% -10%,
-      color-mix(in srgb, var(--live) 35%, transparent) 0%,
+      color-mix(in srgb, var(--live) 30%, transparent) 0%,
       transparent 55%
     ),
     var(--bg-featured);
@@ -330,7 +350,7 @@ function onCtaClick(): void {
   height: 88px;
   border-radius: var(--radius-pill);
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.04);
+  background: color-mix(in srgb, var(--text-on-featured) 4%, transparent);
   display: grid;
   place-items: center;
   box-shadow:
@@ -361,7 +381,7 @@ function onCtaClick(): void {
   letter-spacing: 0.04em;
   text-transform: uppercase;
   text-align: center;
-  color: var(--text-inverse);
+  color: var(--text-on-featured);
 }
 
 .vs {
@@ -371,12 +391,12 @@ function onCtaClick(): void {
   width: 44px;
   height: 44px;
   border-radius: var(--radius-pill);
-  border: 1.5px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.04);
+  border: 1.5px solid color-mix(in srgb, var(--text-on-featured) 20%, transparent);
+  background: color-mix(in srgb, var(--text-on-featured) 4%, transparent);
   font-size: 13px;
   font-weight: 900;
   letter-spacing: 0.06em;
-  color: var(--text-inverse);
+  color: var(--text-on-featured);
   font-style: italic;
   margin-top: -22px;
 }
@@ -393,7 +413,7 @@ function onCtaClick(): void {
   justify-content: center;
   gap: 14px;
   font-size: 12px;
-  color: var(--text-inverse-muted);
+  color: var(--text-on-featured-muted);
   font-weight: 500;
   position: relative;
   flex-wrap: wrap;
@@ -408,16 +428,16 @@ function onCtaClick(): void {
 .dot {
   width: 3px;
   height: 3px;
-  background: var(--text-inverse-muted);
+  background: var(--text-on-featured-muted);
   border-radius: var(--radius-pill);
 }
 
 .cta {
   margin-top: 20px;
   width: 100%;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  color: var(--text-inverse);
+  background: color-mix(in srgb, var(--text-on-featured) 6%, transparent);
+  border: 1px solid color-mix(in srgb, var(--text-on-featured) 14%, transparent);
+  color: var(--text-on-featured);
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
@@ -436,7 +456,8 @@ function onCtaClick(): void {
 }
 
 .cta:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: color-mix(in srgb, var(--text-on-featured) 10%, transparent);
+  border-color: color-mix(in srgb, var(--text-on-featured) 18%, transparent);
   transform: translateY(-1px);
 }
 
@@ -455,7 +476,7 @@ function onCtaClick(): void {
   font-size: 22px;
   font-weight: 700;
   letter-spacing: -0.01em;
-  color: var(--text-inverse);
+  color: var(--text-on-featured);
   margin: 12px 0 22px;
   line-height: 1.2;
 }
@@ -469,13 +490,13 @@ function onCtaClick(): void {
   font-size: 26px;
   font-weight: 800;
   letter-spacing: -0.02em;
-  color: var(--text-inverse);
+  color: var(--text-on-featured);
   margin-bottom: 6px;
 }
 
 .multiSub {
   font-size: 13px;
-  color: var(--text-inverse-muted);
+  color: var(--text-on-featured-muted);
   font-weight: 500;
 }
 
@@ -488,13 +509,13 @@ function onCtaClick(): void {
   font-size: 22px;
   font-weight: 800;
   letter-spacing: -0.01em;
-  color: var(--text-inverse);
+  color: var(--text-on-featured);
   margin-bottom: 6px;
 }
 
 .terminalSub {
   font-size: 13px;
-  color: var(--text-inverse-muted);
+  color: var(--text-on-featured-muted);
   font-weight: 500;
 }
 

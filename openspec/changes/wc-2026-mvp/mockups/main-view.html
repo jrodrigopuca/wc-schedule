@@ -12,7 +12,7 @@
   :root {
     --bg-page:        #F6F5F0;
     --bg-card:        #FFFFFF;
-    --bg-featured:    #0F172A;
+    --bg-featured:    #FFFFFF;
     --bg-pill:        #F1F5F9;
     --bg-toggle:      #FFFFFF;
 
@@ -21,6 +21,8 @@
     --text-muted:     #64748B;
     --text-inverse:   #FFFFFF;
     --text-inverse-muted: #94A3B8;
+    --text-on-featured: #0F172A;
+    --text-on-featured-muted: #64748B;
 
     --accent:         #16A34A;
     --accent-soft:    #DCFCE7;
@@ -33,6 +35,9 @@
     --border-strong:  #CBD5E1;
     --ring-flag:      rgba(255, 255, 255, 0.18);
     --ring-flag-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+
+    --halo-opacity:           0.18;
+    --matchcard-halo-opacity: 0.08;
 
     --shadow-sm:      0 1px 2px rgba(15, 23, 42, 0.04);
     --shadow-md:      0 8px 24px rgba(15, 23, 42, 0.06);
@@ -62,6 +67,8 @@
       --text-muted:     #94A3B8;
       --text-inverse:   #FFFFFF;
       --text-inverse-muted: #94A3B8;
+      --text-on-featured: #FFFFFF;
+      --text-on-featured-muted: #94A3B8;
 
       --accent:         #22C55E;
       --accent-soft:    rgba(34, 197, 94, 0.15);
@@ -74,6 +81,9 @@
       --border-strong:  #3A3A45;
       --ring-flag:      rgba(255, 255, 255, 0.12);
       --ring-flag-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+
+      --halo-opacity:           0.32;
+      --matchcard-halo-opacity: 0.14;
 
       --shadow-sm:      0 1px 2px rgba(0, 0, 0, 0.25);
       --shadow-md:      0 8px 24px rgba(0, 0, 0, 0.3);
@@ -96,6 +106,8 @@
     --text-muted:     #94A3B8;
     --text-inverse:   #FFFFFF;
     --text-inverse-muted: #94A3B8;
+    --text-on-featured: #FFFFFF;
+    --text-on-featured-muted: #94A3B8;
 
     --accent:         #22C55E;
     --accent-soft:    rgba(34, 197, 94, 0.15);
@@ -108,6 +120,9 @@
     --border-strong:  #3A3A45;
     --ring-flag:      rgba(255, 255, 255, 0.12);
     --ring-flag-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+
+    --halo-opacity:           0.32;
+    --matchcard-halo-opacity: 0.14;
 
     --shadow-sm:      0 1px 2px rgba(0, 0, 0, 0.25);
     --shadow-md:      0 8px 24px rgba(0, 0, 0, 0.3);
@@ -205,7 +220,7 @@
     font-size: 22px;
     font-weight: 700;
     letter-spacing: -0.01em;
-    color: var(--text-inverse);
+    color: var(--text-on-featured);
     margin: 12px 0 22px;
     line-height: 1.2;
   }
@@ -314,16 +329,20 @@
   /* ── Featured card · DERBY treatment ──────────────────────── */
   .featured {
     background:
-      radial-gradient(circle at 18% 50%, var(--team-a-glow, rgba(108, 175, 245, 0.30)) 0%, transparent 45%),
-      radial-gradient(circle at 82% 50%, var(--team-b-glow, rgba(193, 39, 45, 0.30)) 0%, transparent 45%),
+      radial-gradient(circle at 18% 50%,
+        color-mix(in srgb, var(--team-a-glow, transparent) calc(var(--halo-opacity) * 100%), transparent) 0%,
+        transparent 45%),
+      radial-gradient(circle at 82% 50%,
+        color-mix(in srgb, var(--team-b-glow, transparent) calc(var(--halo-opacity) * 100%), transparent) 0%,
+        transparent 45%),
       var(--bg-featured);
-    color: var(--text-inverse);
+    color: var(--text-on-featured);
     border-radius: var(--radius-lg);
     padding: 28px 22px 22px;
     position: relative;
     overflow: hidden;
     box-shadow: var(--shadow-md);
-    border: 1px solid rgba(255, 255, 255, 0.04);
+    border: 1px solid color-mix(in srgb, var(--text-on-featured) 6%, transparent);
   }
 
   .featured__eyebrow {
@@ -365,7 +384,7 @@
     width: 88px; height: 88px;
     border-radius: 999px;
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.04);
+    background: color-mix(in srgb, var(--text-on-featured) 4%, transparent);
     display: grid;
     place-items: center;
     box-shadow:
@@ -392,7 +411,7 @@
     letter-spacing: 0.04em;
     text-transform: uppercase;
     text-align: center;
-    color: var(--text-inverse);
+    color: var(--text-on-featured);
   }
 
   /* VS stamp */
@@ -403,12 +422,12 @@
     width: 44px;
     height: 44px;
     border-radius: 999px;
-    border: 1.5px solid rgba(255, 255, 255, 0.20);
-    background: rgba(255, 255, 255, 0.04);
+    border: 1.5px solid color-mix(in srgb, var(--text-on-featured) 20%, transparent);
+    background: color-mix(in srgb, var(--text-on-featured) 4%, transparent);
     font-size: 13px;
     font-weight: 900;
     letter-spacing: 0.06em;
-    color: var(--text-inverse);
+    color: var(--text-on-featured);
     font-style: italic;
     margin-top: -22px; /* lift it so it visually sits between flags */
   }
@@ -422,7 +441,7 @@
   .countdown__label {
     font-size: 11px;
     font-weight: 600;
-    color: var(--text-inverse-muted);
+    color: var(--text-on-featured-muted);
     letter-spacing: 0.10em;
     text-transform: uppercase;
     margin-bottom: 6px;
@@ -436,10 +455,10 @@
     display: inline-flex;
     align-items: baseline;
     gap: 2px;
-    color: var(--text-inverse);
+    color: var(--text-on-featured);
   }
   .countdown__sep {
-    color: var(--text-inverse-muted);
+    color: var(--text-on-featured-muted);
     font-weight: 500;
     padding: 0 2px;
   }
@@ -450,7 +469,7 @@
     justify-content: center;
     gap: 14px;
     font-size: 12px;
-    color: var(--text-inverse-muted);
+    color: var(--text-on-featured-muted);
     font-weight: 500;
     position: relative;
     flex-wrap: wrap;
@@ -458,7 +477,7 @@
   .featured__meta span { display: inline-flex; align-items: center; gap: 6px; }
   .dot {
     width: 3px; height: 3px;
-    background: var(--text-inverse-muted);
+    background: var(--text-on-featured-muted);
     border-radius: 999px;
   }
 
@@ -466,9 +485,9 @@
   .cta-notify {
     margin-top: 20px;
     width: 100%;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    color: var(--text-inverse);
+    background: color-mix(in srgb, var(--text-on-featured) 6%, transparent);
+    border: 1px solid color-mix(in srgb, var(--text-on-featured) 14%, transparent);
+    color: var(--text-on-featured);
     font-family: inherit;
     font-size: 13px;
     font-weight: 600;
@@ -484,7 +503,8 @@
     backdrop-filter: blur(8px);
   }
   .cta-notify:hover {
-    background: rgba(255,255,255,0.10);
+    background: color-mix(in srgb, var(--text-on-featured) 10%, transparent);
+    border-color: color-mix(in srgb, var(--text-on-featured) 18%, transparent);
     transform: translateY(-1px);
   }
   .cta-notify svg { width: 14px; height: 14px; }
@@ -492,9 +512,15 @@
   /* ── Featured · LIVE variant ──────────────────────────────── */
   .featured--live {
     background:
-      radial-gradient(circle at 18% 50%, var(--team-a-glow, rgba(108, 175, 245, 0.25)) 0%, transparent 45%),
-      radial-gradient(circle at 82% 50%, var(--team-b-glow, rgba(193, 39, 45, 0.25)) 0%, transparent 45%),
-      radial-gradient(circle at 50% -10%, rgba(239, 68, 68, 0.35) 0%, transparent 55%),
+      radial-gradient(circle at 18% 50%,
+        color-mix(in srgb, var(--team-a-glow, transparent) calc(var(--halo-opacity) * 100%), transparent) 0%,
+        transparent 45%),
+      radial-gradient(circle at 82% 50%,
+        color-mix(in srgb, var(--team-b-glow, transparent) calc(var(--halo-opacity) * 100%), transparent) 0%,
+        transparent 45%),
+      radial-gradient(circle at 50% -10%,
+        color-mix(in srgb, var(--live) 30%, transparent) 0%,
+        transparent 55%),
       var(--bg-featured);
   }
   .featured--live .featured__eyebrow { color: var(--live-strong); }
@@ -510,7 +536,7 @@
   .live-score__label {
     font-size: 11px;
     font-weight: 600;
-    color: var(--text-inverse-muted);
+    color: var(--text-on-featured-muted);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     margin-bottom: 6px;
@@ -521,13 +547,13 @@
     letter-spacing: -0.04em;
     font-variant-numeric: tabular-nums;
     line-height: 1;
-    color: var(--text-inverse);
+    color: var(--text-on-featured);
     display: inline-flex;
     align-items: baseline;
     gap: 16px;
   }
   .live-score__value .dash {
-    color: var(--text-inverse-muted);
+    color: var(--text-on-featured-muted);
     font-weight: 500;
   }
   .live-score__minute {
@@ -566,7 +592,14 @@
   .matches { display: flex; flex-direction: column; gap: 10px; }
 
   .match {
-    background: var(--bg-card);
+    background:
+      radial-gradient(circle at 0% 50%,
+        color-mix(in srgb, var(--team-a-glow, transparent) calc(var(--matchcard-halo-opacity) * 100%), transparent) 0%,
+        transparent 45%),
+      radial-gradient(circle at 100% 50%,
+        color-mix(in srgb, var(--team-b-glow, transparent) calc(var(--matchcard-halo-opacity) * 100%), transparent) 0%,
+        transparent 45%),
+      var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     padding: 16px 18px;
@@ -716,7 +749,7 @@
       </header>
 
       <!-- Argentina (celeste) vs Marruecos (rojo) -->
-      <section class="featured" style="--team-a-glow: rgba(108, 175, 245, 0.32); --team-b-glow: rgba(193, 39, 45, 0.32);">
+      <section class="featured" style="--team-a-glow: #6CB4EE; --team-b-glow: #C1272D;">
         <div class="featured__eyebrow">Próximo partido</div>
 
         <div class="derby">
@@ -765,7 +798,7 @@
       </div>
 
       <ul class="matches">
-        <li class="match">
+        <li class="match" style="--team-a-glow: #006847; --team-b-glow: #BC002D;">
           <div class="match__time"><strong>12:00</strong><span>Fase grupos</span></div>
           <div class="match__teams">
             <div class="match__row"><div class="mini-flag"><img src="https://hatscripts.github.io/circle-flags/flags/mx.svg" alt="México" /></div>México</div>
@@ -774,7 +807,7 @@
           <span class="badge badge--scheduled">Programado</span>
         </li>
 
-        <li class="match">
+        <li class="match" style="--team-a-glow: #FF0000; --team-b-glow: #DA291C;">
           <div class="match__time"><strong>15:00</strong><span>Fase grupos</span></div>
           <div class="match__teams">
             <div class="match__row"><div class="mini-flag"><img src="https://hatscripts.github.io/circle-flags/flags/ca.svg" alt="Canadá" /></div>Canadá</div>
@@ -783,7 +816,7 @@
           <span class="badge badge--scheduled">Programado</span>
         </li>
 
-        <li class="match">
+        <li class="match" style="--team-a-glow: #6CB4EE; --team-b-glow: #C1272D;">
           <div class="match__time"><strong>19:00</strong><span>Fase grupos</span></div>
           <div class="match__teams">
             <div class="match__row"><div class="mini-flag"><img src="https://hatscripts.github.io/circle-flags/flags/ar.svg" alt="Argentina" /></div>Argentina</div>
@@ -792,7 +825,7 @@
           <span class="badge badge--next">Siguiente</span>
         </li>
 
-        <li class="match">
+        <li class="match" style="--team-a-glow: #FFDF00; --team-b-glow: #007A5E;">
           <div class="match__time"><strong>22:00</strong><span>Fase grupos</span></div>
           <div class="match__teams">
             <div class="match__row"><div class="mini-flag"><img src="https://hatscripts.github.io/circle-flags/flags/br.svg" alt="Brasil" /></div>Brasil</div>
@@ -841,7 +874,7 @@
         </div>
       </header>
 
-      <section class="featured featured--live" style="--team-a-glow: rgba(108, 175, 245, 0.28); --team-b-glow: rgba(193, 39, 45, 0.32);">
+      <section class="featured featured--live" style="--team-a-glow: #6CB4EE; --team-b-glow: #C1272D;">
         <div class="featured__eyebrow">En vivo</div>
 
         <div class="derby">
@@ -877,7 +910,7 @@
       </div>
 
       <ul class="matches">
-        <li class="match">
+        <li class="match" style="--team-a-glow: #006847; --team-b-glow: #BC002D;">
           <div class="match__time"><strong>12:00</strong><span>Finalizado</span></div>
           <div class="match__teams">
             <div class="match__row"><div class="mini-flag"><img src="https://hatscripts.github.io/circle-flags/flags/mx.svg" alt="México" /></div>México <span class="score">1</span></div>
@@ -886,7 +919,7 @@
           <span class="badge badge--scheduled">Final</span>
         </li>
 
-        <li class="match">
+        <li class="match" style="--team-a-glow: #FF0000; --team-b-glow: #DA291C;">
           <div class="match__time"><strong>15:00</strong><span>Finalizado</span></div>
           <div class="match__teams">
             <div class="match__row"><div class="mini-flag"><img src="https://hatscripts.github.io/circle-flags/flags/ca.svg" alt="Canadá" /></div>Canadá <span class="score">2</span></div>
@@ -895,7 +928,7 @@
           <span class="badge badge--scheduled">Final</span>
         </li>
 
-        <li class="match">
+        <li class="match" style="--team-a-glow: #6CB4EE; --team-b-glow: #C1272D;">
           <div class="match__time"><strong>19:00</strong><span>Fase grupos</span></div>
           <div class="match__teams">
             <div class="match__row"><div class="mini-flag"><img src="https://hatscripts.github.io/circle-flags/flags/ar.svg" alt="Argentina" /></div>Argentina</div>
@@ -904,7 +937,7 @@
           <span class="badge badge--live">En vivo</span>
         </li>
 
-        <li class="match">
+        <li class="match" style="--team-a-glow: #FFDF00; --team-b-glow: #007A5E;">
           <div class="match__time"><strong>22:00</strong><span>Fase grupos</span></div>
           <div class="match__teams">
             <div class="match__row"><div class="mini-flag"><img src="https://hatscripts.github.io/circle-flags/flags/br.svg" alt="Brasil" /></div>Brasil</div>

@@ -2,7 +2,7 @@
 :root {
   --bg-page: #f6f5f0;
   --bg-card: #ffffff;
-  --bg-featured: #0f172a;
+  --bg-featured: #ffffff;
   --bg-pill: #f1f5f9;
   --bg-toggle: #ffffff;
 
@@ -11,6 +11,8 @@
   --text-muted: #64748b;
   --text-inverse: #ffffff;
   --text-inverse-muted: #94a3b8;
+  --text-on-featured: #0f172a;
+  --text-on-featured-muted: #64748b;
 
   --accent: #16a34a;
   --accent-soft: #dcfce7;
@@ -23,6 +25,9 @@
   --border-strong: #cbd5e1;
   --ring-flag: rgba(255, 255, 255, 0.18);
   --ring-flag-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+
+  --halo-opacity: 0.18;
+  --matchcard-halo-opacity: 0.08;
 
   --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
   --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.06);
@@ -53,6 +58,8 @@
     --text-muted: #94a3b8;
     --text-inverse: #ffffff;
     --text-inverse-muted: #94a3b8;
+    --text-on-featured: #ffffff;
+    --text-on-featured-muted: #94a3b8;
 
     --accent: #22c55e;
     --accent-soft: rgba(34, 197, 94, 0.15);
@@ -65,6 +72,9 @@
     --border-strong: #3a3a45;
     --ring-flag: rgba(255, 255, 255, 0.12);
     --ring-flag-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+
+    --halo-opacity: 0.32;
+    --matchcard-halo-opacity: 0.14;
 
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
     --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.3);
@@ -87,6 +97,8 @@
   --text-muted: #94a3b8;
   --text-inverse: #ffffff;
   --text-inverse-muted: #94a3b8;
+  --text-on-featured: #ffffff;
+  --text-on-featured-muted: #94a3b8;
 
   --accent: #22c55e;
   --accent-soft: rgba(34, 197, 94, 0.15);
@@ -99,6 +111,9 @@
   --border-strong: #3a3a45;
   --ring-flag: rgba(255, 255, 255, 0.12);
   --ring-flag-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+
+  --halo-opacity: 0.32;
+  --matchcard-halo-opacity: 0.14;
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.3);

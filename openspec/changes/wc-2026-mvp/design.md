@@ -933,7 +933,7 @@ Tokens are CSS custom properties defined exactly once for each theme. The light 
   /* light tokens — see mockup main-view.html for the canonical palette */
   --bg-page:        #F6F5F0;
   --bg-card:        #FFFFFF;
-  --bg-featured:    #0F172A;
+  --bg-featured:    #FFFFFF;
   /* ...all light-mode tokens... */
   color-scheme: light;
 }
@@ -962,6 +962,27 @@ Tokens are CSS custom properties defined exactly once for each theme. The light 
 `:root:not([data-theme="light"])` inside the media query is the key guard: it lets a user who's on a dark OS but explicitly picked light still get the light theme. The three states are: no attribute (follow OS), `data-theme="light"` (force light), `data-theme="dark"` (force dark).
 
 The `color-scheme` CSS property is declared **per theme** so browser-rendered chrome (scrollbars, native form controls, autofill backgrounds) follows the picked theme rather than the OS preference.
+
+#### Featured-surface tokens (theme-aware)
+
+The featured slot is the visual centerpiece of the app. Earlier iterations used a single dark slate (`#0F172A`) for `--bg-featured` in BOTH themes, which produced a heavy, monolithic block on the light page (`#F6F5F0`) — especially in `/preview` where five FeaturedCards stack. Common sport-app UX (ESPN, FotMob, OneFootball) shows light featured surfaces in light mode. We mirror that by making `--bg-featured` theme-aware:
+
+| Token                       | Light                    | Dark      | Used by                                                                  |
+| --------------------------- | ------------------------ | --------- | ------------------------------------------------------------------------ |
+| `--bg-featured`             | `#FFFFFF`                | `#1C1C26` | FeaturedCard background base (under the derby radial halos)              |
+| `--text-on-featured`        | `#0F172A` (slate-900)    | `#FFFFFF` | Country names, countdown, live text, CTA copy, multi/terminal headlines  |
+| `--text-on-featured-muted`  | `#64748B` (slate-500)    | `#94A3B8` | Featured meta row, dot separators, countdown separators, CTA secondaries |
+| `--halo-opacity`            | `0.18`                   | `0.32`    | Per-team radial-gradient stop on the featured background (via `color-mix`) |
+| `--matchcard-halo-opacity`  | `0.08`                   | `0.14`    | Per-team radial-gradient stop on each MatchCard (§14.9)                    |
+
+Notes:
+
+- `--text-inverse` and `--text-inverse-muted` are KEPT — they remain the right primitive for "white text on an always-dark surface" (tooltips, future overlays, the brand mark gradient). The new `--text-on-featured*` tokens decouple "the text color the featured card needs" from "white" so the featured surface can flip with the theme.
+- WCAG AA on body text:
+  - Light: slate-900 (`#0F172A`) on `#FFFFFF` ≈ 16:1, slate-500 (`#64748B`) on `#FFFFFF` ≈ 6:1 — both pass AA.
+  - Dark: `#FFFFFF` on `#1C1C26` ≈ 14:1, `#94A3B8` on `#1C1C26` ≈ 5.6:1 — both pass AA.
+- Opacity tokens scale the team-color halos so derbies remain readable across themes (saturated team colors like Brazil yellow or Argentina celeste would otherwise overpower text on white). The featured `--halo-opacity` is lower in light (0.18) than dark (0.32) because saturated colors render perceptually stronger over white. See §14.4 for rationale.
+- The LIVE-state extra red glow on the featured surface stays at a fixed 30% opacity (`color-mix(in srgb, var(--live) 30%, transparent)`) in BOTH themes — the LIVE signal MUST remain perceptually salient regardless of theme.
 
 ### 13.2 Pre-paint decision (no FOUC)
 
@@ -1133,21 +1154,31 @@ Mini medallions (in the matches list): 24px diameter, same circular shape, with 
 
 ### 14.4 Derby halo
 
-The featured background is a stack of two radial gradients on top of the base dark token:
+The featured background is a stack of two radial gradients on top of the base surface token. The team-color tints are passed as bare hex colors via two CSS custom properties; their on-card opacity is centrally controlled by the theme-aware `--halo-opacity` token (§13.1) via `color-mix`:
 
 ```css
 .featured {
   background:
-    radial-gradient(circle at 18% 50%, var(--team-a-glow, rgba(108, 175, 245, 0.30)) 0%, transparent 45%),
-    radial-gradient(circle at 82% 50%, var(--team-b-glow, rgba(193, 39, 45, 0.30)) 0%, transparent 45%),
+    radial-gradient(circle at 18% 50%,
+      color-mix(in srgb, var(--team-a-glow, transparent) calc(var(--halo-opacity) * 100%), transparent) 0%,
+      transparent 45%),
+    radial-gradient(circle at 82% 50%,
+      color-mix(in srgb, var(--team-b-glow, transparent) calc(var(--halo-opacity) * 100%), transparent) 0%,
+      transparent 45%),
     var(--bg-featured);
 }
 ```
 
 - Left halo (`18% 50%`) is tinted by team A's primary color.
 - Right halo (`82% 50%`) is tinted by team B's primary color.
-- Tints are passed in as CSS custom properties (`--team-a-glow`, `--team-b-glow`) on the element style attribute, resolved from the lookup table (§14.6).
-- Defaults (`var(..., rgba(...))`) cover the edge case where a team's primary color is missing from the table — the halo still renders with neutral generic tints.
+- Tints are passed in as CSS custom properties (`--team-a-glow`, `--team-b-glow`) on the element style attribute, resolved from the lookup table (§14.6). They are bare hex colors — opacity is applied via the `--halo-opacity` token, not baked into the value.
+- Defaults (`var(..., transparent)`) cover the edge case where the custom property is unset — the halo gracefully degrades to the base `--bg-featured`.
+- `--halo-opacity` is theme-driven: `0.18` in light, `0.32` in dark. Saturated team colors over white read perceptually stronger than over dark slate, so the light-mode halo is intentionally dialed down to keep WCAG AA contrast on body text.
+
+Rejected alternatives:
+
+- **Fixed cross-theme opacity (e.g. 0.30 in both)**: looked correct in dark but team colors saturated on the new white featured surface — yellow, red, and celeste all bled into the text area and pushed slate-500 meta copy under AA. The opacity token decouples this concern from the surface choice.
+- **Per-color manual tuning (a different opacity per ISO)**: high maintenance, table grows unboundedly. The two-bucket (light/dark) opacity covers the common case; outlier flags (Brazil yellow, white-derived) are flagged in §16 risks.
 
 ### 14.5 Typography & "VS" stamp
 
@@ -1225,6 +1256,37 @@ In the `live-single` state the featured card MUST display the localized in-progr
 Rationale (also captured in `proposal.md` §5 non-goals and `featured.md` §4.1): the daily-refresh pipeline cannot honestly source real-time scores; surfacing one would mislead the user about its freshness. The text indicator is the correct trade-off given the architecture.
 
 The list view (`MatchCard`) follows the same rule for `live` rows — badge only, no score — and DOES render the score for `finished` rows once the next daily refresh backfills it. See `matches.md` §5.1.
+
+### 14.9 MatchCard team-color halo
+
+The list view rows are visually generic: a neutral `--bg-card` background, a border, and badges. Stacked under a light featured card the entire match list reads as one undifferentiated block. The fix carries the derby identity from the featured slot down into each row in a much more restrained form — a subtle two-edge halo of each team's primary color over the base card surface.
+
+- Each `MatchCard` sets `--team-a-glow` and `--team-b-glow` as inline CSS custom properties on its root `<li>`, resolved via `resolveGlow(iso)` from `src/shared/flags/team-colors.ts` (same lookup the FeaturedCard uses).
+- The background composes TWO radial gradients (one anchored at `0% 50%` for team A, one at `100% 50%` for team B) over the existing `--bg-card` token:
+
+```css
+.match {
+  background:
+    radial-gradient(circle at 0% 50%,
+      color-mix(in srgb, var(--team-a-glow, transparent) calc(var(--matchcard-halo-opacity) * 100%), transparent) 0%,
+      transparent 45%),
+    radial-gradient(circle at 100% 50%,
+      color-mix(in srgb, var(--team-b-glow, transparent) calc(var(--matchcard-halo-opacity) * 100%), transparent) 0%,
+      transparent 45%),
+    var(--bg-card);
+}
+```
+
+- Opacity is theme-driven via the new `--matchcard-halo-opacity` token (§13.1): `0.08` light, `0.14` dark. These are roughly half the featured values because the list rows are denser, and an even moderate tint here cumulatively dominates the column.
+- The gradients fade to `transparent` at 45% — the center of each row (where the team names, time, and badge live) is essentially neutral, preserving text contrast against `--bg-card`.
+- The team colors "bleed in" from the edges. Effect: the row visually inherits each team's identity at the flag-medallion side without compromising legibility.
+
+Rejected alternatives:
+
+- **Solid colored left border** (e.g. a 4px slab of team A's color): too aggressive at scale (the eye reads a list of saturated bars rather than a list of matches), and only carries one team's color per row.
+- **Full background tint** of the row in a mixed team color: kills text contrast on body copy, especially for high-luminance teams (Brazil yellow, white-derived flags).
+- **Per-team accent badges next to the country name**: visually noisy in a long list, redundant with the flag medallion, and breaks the existing `.badge` semantic (which already encodes status).
+- **Single-edge halo with a blended color** (e.g. one gradient mixing both teams): obscures which color belongs to which team; the two-edge composition is the cheapest way to keep that signal.
 
 ---
 

@@ -3,9 +3,12 @@ import { computed } from 'vue'
 import type { Match, Stage } from '@/matches/domain/match'
 import { resolveState } from '@/matches/domain/resolve-state'
 import { resolveFlag } from '@/shared/flags/resolve'
+import { resolveGlow } from '@/shared/flags/team-colors'
 import type { MessageKey } from '@/shared/i18n/types'
 import { useI18n } from '@/shared/i18n/useI18n'
 import { formatTime } from '@/shared/time/format'
+
+type HaloStyle = { [K in `--${string}`]: string }
 
 const props = defineProps<{ match: Match; now: number }>()
 
@@ -56,12 +59,18 @@ const badge = computed<BadgeDescriptor | null>(() => {
 const ariaLabel = computed(
   () => `${teamAName.value} vs ${teamBName.value}, ${kickoffLocal.value}, ${stageLabel.value}`,
 )
+
+const haloStyle = computed<HaloStyle>(() => ({
+  '--team-a-glow': resolveGlow(props.match.teamA.iso),
+  '--team-b-glow': resolveGlow(props.match.teamB.iso),
+}))
 </script>
 
 <template>
   <li
     v-if="match.status !== 'cancelled' && badge !== null"
     :class="$style.match"
+    :style="haloStyle"
     :aria-label="ariaLabel"
   >
     <div :class="$style.time">
@@ -92,7 +101,28 @@ const ariaLabel = computed(
 
 <style module>
 .match {
-  background: var(--bg-card);
+  background:
+    radial-gradient(
+      circle at 0% 50%,
+      color-mix(
+          in srgb,
+          var(--team-a-glow, transparent) calc(var(--matchcard-halo-opacity) * 100%),
+          transparent
+        )
+        0%,
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 100% 50%,
+      color-mix(
+          in srgb,
+          var(--team-b-glow, transparent) calc(var(--matchcard-halo-opacity) * 100%),
+          transparent
+        )
+        0%,
+      transparent 45%
+    ),
+    var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: 16px 18px;

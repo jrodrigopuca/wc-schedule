@@ -71,15 +71,15 @@ function pad(n: number): string {
   letter-spacing: -0.04em;
   font-variant-numeric: tabular-nums;
   line-height: 1;
-  color: var(--text-inverse);
+  color: var(--text-on-featured);
 }
 
 .value {
-  color: var(--text-inverse);
+  color: var(--text-on-featured);
 }
 
 .sep {
-  color: var(--text-inverse-muted);
+  color: var(--text-on-featured-muted);
   font-weight: 500;
   padding: 0 2px;
 }

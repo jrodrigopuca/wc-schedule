@@ -94,6 +94,23 @@ describe('MatchCard', () => {
     expect(wrapper.text()).toContain('Desconocido')
   })
 
+  it('sets per-team CSS custom properties on the root element for the halo', () => {
+    const derbyMatch: Match = {
+      ...baseMatch,
+      teamA: { iso: 'ar', name: 'Argentina' },
+      teamB: { iso: 'br', name: 'Brasil' },
+    }
+    const wrapper = mount(MatchCard, { props: { match: derbyMatch, now: NOW } })
+    const style = wrapper.find('li').attributes('style') ?? ''
+    expect(style).toMatch(/--team-a-glow:\s*[^;]+/)
+    expect(style).toMatch(/--team-b-glow:\s*[^;]+/)
+    // Each property must be set to a non-empty value (a hex color from resolveGlow).
+    const aMatch = style.match(/--team-a-glow:\s*([^;]+)/)
+    const bMatch = style.match(/--team-b-glow:\s*([^;]+)/)
+    expect(aMatch?.[1]?.trim()).toBeTruthy()
+    expect(bMatch?.[1]?.trim()).toBeTruthy()
+  })
+
   it('exposes an aria-label that summarizes both teams and kickoff', () => {
     const wrapper = mount(MatchCard, { props: { match: baseMatch, now: NOW } })
     const label = wrapper.find('li').attributes('aria-label')
