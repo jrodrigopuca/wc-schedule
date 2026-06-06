@@ -1319,7 +1319,6 @@ export type MessageKey =
   | "featured.tournamentOver.title"
   | "featured.tournamentOver.subtitle"
   | "featured.meta.localTime"
-  | "featured.cta.notify"
   | "match.badge.scheduled"
   | "match.badge.live"
   | "match.badge.finished"
@@ -1355,8 +1354,16 @@ export type MessageKey =
   | "preview.featured.tournamentOver.description"
   | "preview.section.matchCard"
   | "preview.section.countdown"
+  | "preview.section.matchesList"
   | "preview.main.placeholder.title"
-  | "preview.main.placeholder.body";
+  | "preview.main.placeholder.body"
+  | "notifications.cta.idle"
+  | "notifications.cta.requesting"
+  | "notifications.cta.granted"
+  | "notifications.cta.denied.title"
+  | "notifications.cta.denied.hint"
+  | "data.stale.history"
+  | "data.stale.fixture";
 
 export const MESSAGES: Record<Locale, Record<MessageKey, string>> = {
   es: {
@@ -1369,7 +1376,6 @@ export const MESSAGES: Record<Locale, Record<MessageKey, string>> = {
     "featured.tournamentOver.title":   "El Mundial 2026 ha terminado",
     "featured.tournamentOver.subtitle":"Hasta la próxima edición",
     "featured.meta.localTime":         "hora local",
-    "featured.cta.notify":             "Avisame 15 min antes",
     "match.badge.scheduled":           "Programado",
     "match.badge.live":                "En vivo",
     "match.badge.finished":            "Final",
@@ -1405,8 +1411,16 @@ export const MESSAGES: Record<Locale, Record<MessageKey, string>> = {
     "preview.featured.tournamentOver.description": "El Mundial terminó",
     "preview.section.matchCard":       "Tarjeta de partido en cada estado",
     "preview.section.countdown":       "Cuenta regresiva aislada",
+    "preview.section.matchesList":     "Listado de partidos",
     "preview.main.placeholder.title":  "Próximamente",
     "preview.main.placeholder.body":   "La app principal aparece acá cuando se complete el batch B-2.",
+    "notifications.cta.idle":          "Avisame 15 min antes",
+    "notifications.cta.requesting":    "Solicitando permiso…",
+    "notifications.cta.granted":       "✓ Avisos activos",
+    "notifications.cta.denied.title":  "Avisos bloqueados",
+    "notifications.cta.denied.hint":   "Activá los avisos del navegador para recibirlos",
+    "data.stale.history":              "Mostrando datos guardados",
+    "data.stale.fixture":              "Mostrando datos de respaldo",
   },
   en: {
     "featured.eyebrow.upcomingToday": "Next match",
@@ -1418,7 +1432,6 @@ export const MESSAGES: Record<Locale, Record<MessageKey, string>> = {
     "featured.tournamentOver.title":   "The 2026 World Cup is over",
     "featured.tournamentOver.subtitle":"Until next time",
     "featured.meta.localTime":         "local time",
-    "featured.cta.notify":             "Remind me 15 min before",
     "match.badge.scheduled":           "Scheduled",
     "match.badge.live":                "Live",
     "match.badge.finished":            "Final",
@@ -1454,8 +1467,16 @@ export const MESSAGES: Record<Locale, Record<MessageKey, string>> = {
     "preview.featured.tournamentOver.description": "The World Cup is over",
     "preview.section.matchCard":       "Match card in each state",
     "preview.section.countdown":       "Standalone countdown",
+    "preview.section.matchesList":     "Matches list",
     "preview.main.placeholder.title":  "Coming soon",
     "preview.main.placeholder.body":   "The main app appears here once batch B-2 lands.",
+    "notifications.cta.idle":          "Remind me 15 min before",
+    "notifications.cta.requesting":    "Requesting permission…",
+    "notifications.cta.granted":       "✓ Notifications enabled",
+    "notifications.cta.denied.title":  "Notifications blocked",
+    "notifications.cta.denied.hint":   "Enable notifications in your browser to receive them",
+    "data.stale.history":              "Showing saved data",
+    "data.stale.fixture":              "Showing fallback data",
   },
 };
 ```

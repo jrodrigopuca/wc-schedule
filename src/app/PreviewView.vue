@@ -11,6 +11,8 @@ import type { Match } from '@/matches/domain/match'
 import FeaturedCard from '@/featured/ui/FeaturedCard.vue'
 import Countdown from '@/featured/ui/Countdown.vue'
 import MatchCard from '@/matches/ui/MatchCard.vue'
+import MatchesList from '@/matches/ui/MatchesList.vue'
+import EnableNotificationsButton from '@/notifications/ui/EnableNotificationsButton.vue'
 import { useI18n } from '@/shared/i18n/useI18n'
 import { useRoute } from '@/app/router'
 import { getNow } from '@/shared/time/now'
@@ -90,6 +92,26 @@ const sampleMatches = computed<readonly Match[]>(() => {
 // Standalone countdown target ~30 minutes from now.
 const standaloneCountdownTarget = computed(() => now.value + 30 * 60 * 1000)
 
+// MatchesList sample: shift 4 fixture matches to TODAY at different hours so
+// the today-filter renders them. Mix statuses for visual variety.
+const matchesListSample = computed<readonly Match[]>(() => {
+  const a = fixtureById.value['wc2026-g-a-01']
+  const b = fixtureById.value['wc2026-g-b-01']
+  const c = fixtureById.value['wc2026-g-c-01']
+  const d = fixtureById.value['wc2026-g-d-01']
+  if (a === undefined || b === undefined || c === undefined || d === undefined) return []
+  const startOfTodayLocal = new Date(now.value)
+  startOfTodayLocal.setHours(0, 0, 0, 0)
+  const base = startOfTodayLocal.getTime()
+  const at = (hour: number): string => new Date(base + hour * 3600 * 1000).toISOString()
+  return [
+    { ...clone(a), utcKickoff: at(12), status: 'finished', score: { home: 1, away: 0 } },
+    { ...clone(b), utcKickoff: at(15), status: 'finished', score: { home: 2, away: 2 } },
+    { ...clone(c), utcKickoff: at(19), status: 'scheduled' },
+    { ...clone(d), utcKickoff: at(22), status: 'scheduled' },
+  ]
+})
+
 function backToMain(event: Event): void {
   event.preventDefault()
   navigate('main')
@@ -110,7 +132,11 @@ function backToMain(event: Event): void {
           {{ t('preview.featured.upcomingToday.description') }}
         </p>
       </div>
-      <FeaturedCard :state="upcomingTodayState" :now="now" />
+      <FeaturedCard :state="upcomingTodayState" :now="now">
+        <template #notify-cta>
+          <EnableNotificationsButton />
+        </template>
+      </FeaturedCard>
     </section>
 
     <section :class="$style.section">
@@ -120,7 +146,11 @@ function backToMain(event: Event): void {
           {{ t('preview.featured.liveSingle.description') }}
         </p>
       </div>
-      <FeaturedCard :state="liveSingleState" :now="now" />
+      <FeaturedCard :state="liveSingleState" :now="now">
+        <template #notify-cta>
+          <EnableNotificationsButton />
+        </template>
+      </FeaturedCard>
     </section>
 
     <section :class="$style.section">
@@ -140,7 +170,11 @@ function backToMain(event: Event): void {
           {{ t('preview.featured.upcomingFuture.description') }}
         </p>
       </div>
-      <FeaturedCard :state="upcomingFutureState" :now="now" />
+      <FeaturedCard :state="upcomingFutureState" :now="now">
+        <template #notify-cta>
+          <EnableNotificationsButton />
+        </template>
+      </FeaturedCard>
     </section>
 
     <section :class="$style.section">
@@ -165,6 +199,14 @@ function backToMain(event: Event): void {
       <ul :class="$style.matchList">
         <MatchCard v-for="match in sampleMatches" :key="match.id" :match="match" :now="now" />
       </ul>
+    </section>
+
+    <section :class="$style.section">
+      <div :class="$style.sectionHeader">
+        <code :class="$style.sectionId">MatchesList · today</code>
+        <p :class="$style.sectionDescription">{{ t('preview.section.matchesList') }}</p>
+      </div>
+      <MatchesList :matches="matchesListSample" :now="now" />
     </section>
 
     <section :class="$style.section">

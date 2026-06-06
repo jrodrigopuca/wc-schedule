@@ -92,7 +92,6 @@ describe('FeaturedCard', () => {
     expect(wrapper.text()).toContain('Marruecos')
     expect(wrapper.text()).toContain('VS')
     expect(wrapper.text()).toContain('Grupo C')
-    expect(wrapper.text()).toContain('Avisame 15 min antes')
   })
 
   it('upcoming-future — prepends a relative date in meta', () => {
@@ -130,15 +129,26 @@ describe('FeaturedCard', () => {
     expect(styleAttr).toContain('--team-b-glow')
   })
 
-  it('emits cta-click when the CTA button is pressed (non-terminal variant)', async () => {
+  it('renders the notify-cta slot content in non-terminal variants', () => {
     const state: FeaturedState = {
       kind: 'upcoming-today',
       match: sampleMatch,
       msUntilKickoff: 0,
     }
-    const wrapper = mount(FeaturedCard, { props: { state, now: NOW } })
-    await wrapper.find('button').trigger('click')
-    expect(wrapper.emitted('cta-click')).toHaveLength(1)
+    const wrapper = mount(FeaturedCard, {
+      props: { state, now: NOW },
+      slots: { 'notify-cta': '<div data-testid="slot-stub">stub</div>' },
+    })
+    expect(wrapper.find('[data-testid="slot-stub"]').exists()).toBe(true)
+  })
+
+  it('does NOT render the notify-cta slot in tournament-over', () => {
+    const state: FeaturedState = { kind: 'tournament-over' }
+    const wrapper = mount(FeaturedCard, {
+      props: { state, now: NOW },
+      slots: { 'notify-cta': '<div data-testid="slot-stub">stub</div>' },
+    })
+    expect(wrapper.find('[data-testid="slot-stub"]').exists()).toBe(false)
   })
 
   it('renders without errors when mounted under data-theme="dark"', () => {

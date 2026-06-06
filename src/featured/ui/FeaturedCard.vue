@@ -10,7 +10,6 @@ import { formatRelativeDay, formatTime } from '@/shared/time/format'
 import Countdown from '@/featured/ui/Countdown.vue'
 
 const props = defineProps<{ state: FeaturedState; now: number }>()
-const emit = defineEmits<{ 'cta-click': [] }>()
 
 const { t, country } = useI18n()
 
@@ -82,6 +81,10 @@ function stageLabelFor(match: Match): string {
   return t(STAGE_KEYS[match.stage])
 }
 
+defineSlots<{
+  'notify-cta'(): unknown
+}>()
+
 function metaParts(match: Match, withDate: boolean): readonly string[] {
   const parts: string[] = []
   const localTime = formatTime(match.utcKickoff)
@@ -98,10 +101,6 @@ function metaParts(match: Match, withDate: boolean): readonly string[] {
   }
   if (match.venue !== undefined) parts.push(match.venue.city)
   return parts
-}
-
-function onCtaClick(): void {
-  emit('cta-click')
 }
 </script>
 
@@ -154,6 +153,10 @@ function onCtaClick(): void {
           <span :class="$style.dot" />
           <span>{{ state.match.venue.city }}</span>
         </template>
+      </div>
+
+      <div :class="$style.ctaSlot">
+        <slot name="notify-cta" />
       </div>
     </template>
 
@@ -209,21 +212,9 @@ function onCtaClick(): void {
         </template>
       </div>
 
-      <button :class="$style.cta" type="button" @click="onCtaClick">
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-          <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-        </svg>
-        {{ t('featured.cta.notify') }}
-      </button>
+      <div :class="$style.ctaSlot">
+        <slot name="notify-cta" />
+      </div>
     </template>
 
     <template v-else-if="state.kind === 'tournament-over'">
@@ -432,43 +423,11 @@ function onCtaClick(): void {
   border-radius: var(--radius-pill);
 }
 
-.cta {
+.ctaSlot {
   margin-top: 20px;
-  width: 100%;
-  background: color-mix(in srgb, var(--text-on-featured) 6%, transparent);
-  border: 1px solid color-mix(in srgb, var(--text-on-featured) 14%, transparent);
-  color: var(--text-on-featured);
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  padding: 13px 16px;
-  border-radius: 14px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition:
-    background 120ms ease,
-    transform 120ms ease;
-  position: relative;
-  backdrop-filter: blur(8px);
-}
-
-.cta:hover {
-  background: color-mix(in srgb, var(--text-on-featured) 10%, transparent);
-  border-color: color-mix(in srgb, var(--text-on-featured) 18%, transparent);
-  transform: translateY(-1px);
-}
-
-.cta:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-.cta svg {
-  width: 14px;
-  height: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 
 .liveText {

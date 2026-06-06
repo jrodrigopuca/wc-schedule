@@ -1,10 +1,11 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
 import MainView from '@/app/MainView.vue'
 import { useI18n } from '@/shared/i18n/useI18n'
 import {
   __parkMatchesAtIdleForTests,
   __reloadMatchesForTests,
+  __resetMatchesForTests,
 } from '@/matches/composables/useMatches'
 
 describe('MainView (smoke)', () => {
@@ -15,34 +16,39 @@ describe('MainView (smoke)', () => {
 
   afterEach(() => {
     useI18n().clearOverride()
+    vi.unstubAllEnvs()
+    __resetMatchesForTests()
   })
 
   it('renders the loading copy when status is idle (pre-load)', () => {
-    // Park the singleton at 'idle' BEFORE mounting — earlier tests in the
-    // run may have driven it to 'ready', so we need an explicit reset to
-    // assert the pre-load surface. The MainView template renders the same
-    // 'message' branch for both 'idle' and 'loading'.
     __parkMatchesAtIdleForTests()
     const wrapper = mount(MainView)
     expect(wrapper.text()).toContain('Cargando partidos…')
   })
 
-  it('renders the FeaturedCard once the matches load resolves', async () => {
+  it('renders the FeaturedCard + MatchesList once the load resolves', async () => {
+    vi.stubEnv('VITE_DATA_SOURCE', 'manual')
     await __reloadMatchesForTests()
     await flushPromises()
     const wrapper = mount(MainView)
     await flushPromises()
-    // The loading copy is gone; either a derby tableau, the live text, the
-    // multi-live headline, or the tournament-over headline is on screen.
-    // Smoke-checking that the loading copy is NOT in the DOM is sufficient
-    // for this gate — the per-variant assertions live in FeaturedCard.test.ts.
     expect(wrapper.text()).not.toContain('Cargando partidos…')
-    // The eyebrow label is always rendered by FeaturedCard. ES copy paths:
-    // 'En vivo' | 'Próximo partido' | 'Mundial 2026'.
     const text = wrapper.text()
     const hasEyebrow =
       text.includes('En vivo') || text.includes('Próximo partido') || text.includes('Mundial 2026')
     expect(hasEyebrow).toBe(true)
+    // Manual mode → no stale indicator.
+    expect(text).not.toContain('Mostrando datos de respaldo')
+    expect(text).not.toContain('Mostrando datos guardados')
+  })
+
+  it('renders the stale-fixture indicator in degraded mode (remote → fixture fallback)', async () => {
+    vi.stubEnv('VITE_DATA_SOURCE', 'remote')
+    await __reloadMatchesForTests()
+    await flushPromises()
+    const wrapper = mount(MainView)
+    await flushPromises()
+    expect(wrapper.text()).toContain('Mostrando datos de respaldo')
   })
 
   it('renders the open-gallery footer link', () => {

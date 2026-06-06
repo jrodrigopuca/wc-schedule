@@ -1,28 +1,32 @@
 <script setup lang="ts">
-// MainView. Renders the featured next-up / live card driven by the singleton
-// data layer (`useMatches`), the singleton tick (`useNow`), and the pure
-// state selector wrapped by `useFeatured`.
-//
-// Three branches:
-//  - 'idle' | 'loading'  → calm "loading matches" surface.
-//  - 'ready'             → `<FeaturedCard>` with the computed state.
-//  - 'error'             → calm "couldn't load" surface (full degraded/error
-//                          UI lands in the B-2 remainder).
-//
-// The matches list under the featured slot is intentionally NOT here yet —
-// `MatchesList` (T8.2) is deferred to the B-2 remainder.
+// MainView. Renders the featured card + today's matches list driven by the
+// singleton data layer (`useMatches`) and tick (`useNow`). The notify CTA is
+// injected into FeaturedCard via the `notify-cta` slot so the featured-domain
+// component stays decoupled from notifications-domain code.
+import { computed } from 'vue'
 import { useFeatured } from '@/featured/composables/useFeatured'
 import FeaturedCard from '@/featured/ui/FeaturedCard.vue'
 import { useMatches } from '@/matches/composables/useMatches'
+import MatchesList from '@/matches/ui/MatchesList.vue'
+import EnableNotificationsButton from '@/notifications/ui/EnableNotificationsButton.vue'
 import { useI18n } from '@/shared/i18n/useI18n'
 import { useNow } from '@/shared/time/useNow'
 import { useRoute } from '@/app/router'
 
 const { t } = useI18n()
-const { matches, status } = useMatches()
+const { matches, status, sourceName } = useMatches()
 const { featured } = useFeatured(matches)
 const { now } = useNow()
 const { navigate } = useRoute()
+
+const hasData = computed(() => status.value === 'ready' || status.value === 'degraded')
+
+const staleMessage = computed(() => {
+  if (status.value !== 'degraded') return null
+  if (sourceName.value === 'history') return t('data.stale.history')
+  if (sourceName.value === 'manual') return t('data.stale.fixture')
+  return null
+})
 
 function openGallery(event: Event): void {
   event.preventDefault()
@@ -37,7 +41,15 @@ function openGallery(event: Event): void {
       <p :class="$style.body">{{ t('main.loading.body') }}</p>
     </section>
 
-    <FeaturedCard v-else-if="status === 'ready'" :state="featured" :now="now" />
+    <template v-else-if="hasData">
+      <FeaturedCard :state="featured" :now="now">
+        <template #notify-cta>
+          <EnableNotificationsButton />
+        </template>
+      </FeaturedCard>
+
+      <MatchesList :matches="matches" :now="now" />
+    </template>
 
     <section v-else :class="$style.message">
       <h1 :class="$style.title">{{ t('main.error.title') }}</h1>
@@ -45,6 +57,7 @@ function openGallery(event: Event): void {
     </section>
 
     <footer :class="$style.footer">
+      <p v-if="staleMessage !== null" :class="$style.stale">{{ staleMessage }}</p>
       <a :class="$style.galleryLink" href="#/preview" @click="openGallery">
         &rarr; {{ t('nav.openGallery') }}
       </a>
@@ -85,8 +98,16 @@ function openGallery(event: Event): void {
 
 .footer {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
   padding: 4px 0 24px;
+}
+
+.stale {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
 }
 
 .galleryLink {
