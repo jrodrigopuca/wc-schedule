@@ -2,6 +2,21 @@
 // drifted from the schema — fix the FIXTURE, not the schema. Other
 // behavioral tests (selectFeaturedState, etc.) rely on the structural
 // guarantees asserted here.
+//
+// As of 2026-06-06, the fixture mirrors the official WC 2026 schedule:
+//   - 104 matches total, dated 2026-06-11 through 2026-07-19.
+//   - 12 groups (A–L), 4 teams each, 6 round-robin matches per group.
+//   - 16 R32 + 8 R16 + 4 QF + 2 SF + 1 third-place + 1 final.
+//   - Every group-stage team is identified by its real lowercase ISO.
+//   - Knockout matches use the placeholder ISO `xx` because the bracket
+//     participants aren't determined until the group stage finishes; the
+//     `team.name` carries the bracket-slot label ("1º grupo A", "Ganador
+//     R16-03", "Mejor tercero (B/E/F/I/J)", etc.).
+//
+// Tournament hasn't started yet → ALL matches are `status: 'scheduled'`.
+// We intentionally relax the older "simultaneous kickoffs" and "empty day"
+// assertions: the real fixture happens to satisfy them, but the structural
+// 104-match shape is what the rest of the app depends on.
 
 import { describe, expect, it } from 'vitest'
 import fixtureJson from '@/shared/fixture/matches.fixture.json'
@@ -10,37 +25,52 @@ import type { Stage } from '@/matches/domain/match'
 
 const parsed = matchListSchema.parse(fixtureJson)
 
+// Eagerly enumerated flag asset list (Vite globs at test time).
+const flagModules = import.meta.glob('@/shared/flags/*.svg', { eager: false })
+const FLAG_ISOS: ReadonlySet<string> = new Set(
+  Object.keys(flagModules).map((path) => {
+    const file = path.split('/').pop() ?? ''
+    return file.replace(/\.svg$/, '').toLowerCase()
+  }),
+)
+
+const TOURNAMENT_WINDOW_START = Date.UTC(2026, 5, 11, 0, 0, 0) // 2026-06-11T00:00:00Z
+const TOURNAMENT_WINDOW_END = Date.UTC(2026, 6, 19, 23, 59, 59) // 2026-07-19T23:59:59Z
+
 describe('matches.fixture.json', () => {
   it('parses cleanly through matchListSchema', () => {
-    expect(parsed.length).toBeGreaterThanOrEqual(40)
-    expect(parsed.length).toBeLessThanOrEqual(48)
+    expect(parsed.length).toBe(104)
   })
 
-  it('contains at least one match in every required stage', () => {
-    const requiredStages: readonly Stage[] = [
-      'group',
-      'round-of-32',
-      'round-of-16',
-      'quarter-final',
-      'semi-final',
-      'third-place',
-      'final',
-    ]
-    for (const stage of requiredStages) {
+  it('contains every required stage with the right count', () => {
+    const expected: Readonly<Record<Stage, number>> = {
+      group: 72,
+      'round-of-32': 16,
+      'round-of-16': 8,
+      'quarter-final': 4,
+      'semi-final': 2,
+      'third-place': 1,
+      final: 1,
+    }
+    for (const [stage, count] of Object.entries(expected) as Array<[Stage, number]>) {
       const found = parsed.filter((m) => m.stage === stage)
-      expect(found.length, `stage=${stage}`).toBeGreaterThanOrEqual(1)
+      expect(found.length, `stage=${stage}`).toBe(count)
     }
   })
 
-  it('covers every group letter A through L', () => {
+  it('covers every group letter A through L with 6 matches each', () => {
     const groupLetters = 'ABCDEFGHIJKL'.split('')
     for (const letter of groupLetters) {
       const found = parsed.filter((m) => m.stage === 'group' && m.group === letter)
-      expect(found.length, `group=${letter}`).toBeGreaterThanOrEqual(1)
+      expect(found.length, `group=${letter}`).toBe(6)
     }
   })
 
-  it('uses lowercase ISO codes everywhere', () => {
+  it('uses lowercase 2-letter ISO codes everywhere', () => {
+    // matchSchema's ISO regex is /^[a-z]{2}$/. Compound subdivision codes
+    // (gb-eng, gb-sct) live in the i18n/flags layer for display, but the
+    // fixture uses the schema-friendly 2-letter aliases `gb` (England) and
+    // `xs` (Scotland) instead.
     for (const m of parsed) {
       expect(m.teamA.iso).toMatch(/^[a-z]{2}$/)
       expect(m.teamB.iso).toMatch(/^[a-z]{2}$/)
@@ -53,43 +83,110 @@ describe('matches.fixture.json', () => {
     }
   })
 
-  it('has at least one finished match (state mix)', () => {
-    const finished = parsed.filter((m) => m.status === 'finished')
-    expect(finished.length).toBeGreaterThanOrEqual(1)
-    for (const m of finished) {
-      expect(m.score).toBeDefined()
-    }
-  })
-
-  it('has zero pre-declared live matches (live is computed)', () => {
-    const liveDeclared = parsed.filter((m) => m.status === 'live')
-    expect(liveDeclared).toHaveLength(0)
-  })
-
-  it('has at least one pair of simultaneous kickoffs (multi-live scenario)', () => {
-    const byTime = new Map<string, number>()
+  it('marks every match as scheduled (tournament has not started)', () => {
     for (const m of parsed) {
-      byTime.set(m.utcKickoff, (byTime.get(m.utcKickoff) ?? 0) + 1)
+      expect(m.status).toBe('scheduled')
     }
-    const simultaneousCount = Array.from(byTime.values()).filter((n) => n >= 2).length
-    expect(simultaneousCount).toBeGreaterThanOrEqual(1)
   })
 
-  it('has at least one empty day inside the tournament window', () => {
-    // Build the set of UTC kickoff dates that DO have matches.
-    const daysWithMatches = new Set(parsed.map((m) => m.utcKickoff.slice(0, 10)))
-    // Walk the tournament window [2026-06-11, 2026-07-19] and find a gap.
-    const START = Date.UTC(2026, 5, 11) // June is month index 5
-    const END = Date.UTC(2026, 6, 19)
-    const DAY_MS = 24 * 60 * 60 * 1000
-    let foundEmpty = false
-    for (let t = START; t <= END; t += DAY_MS) {
-      const iso = new Date(t).toISOString().slice(0, 10)
-      if (!daysWithMatches.has(iso)) {
-        foundEmpty = true
-        break
+  it('never pre-declares a score (live + scores are computed at runtime)', () => {
+    for (const m of parsed) {
+      expect(m.score).toBeUndefined()
+    }
+  })
+
+  it('keeps every kickoff inside the tournament window [Jun 11 – Jul 19, 2026]', () => {
+    for (const m of parsed) {
+      const t = Date.parse(m.utcKickoff)
+      expect(Number.isFinite(t), `bad utcKickoff: ${m.utcKickoff}`).toBe(true)
+      expect(t).toBeGreaterThanOrEqual(TOURNAMENT_WINDOW_START)
+      expect(t).toBeLessThanOrEqual(TOURNAMENT_WINDOW_END)
+    }
+  })
+
+  it('opens on 2026-06-11 in Ciudad de México (Estadio Azteca)', () => {
+    const sorted = [...parsed].sort((a, b) => a.utcKickoff.localeCompare(b.utcKickoff))
+    const opener = sorted[0]
+    expect(opener).toBeDefined()
+    expect(opener?.utcKickoff.slice(0, 10)).toBe('2026-06-11')
+    expect(opener?.venue?.city).toBe('Ciudad de México')
+    expect(opener?.venue?.country).toBe('México')
+  })
+
+  it('closes with the final at MetLife Stadium (East Rutherford)', () => {
+    const sorted = [...parsed].sort((a, b) => a.utcKickoff.localeCompare(b.utcKickoff))
+    const closer = sorted[sorted.length - 1]
+    expect(closer).toBeDefined()
+    expect(closer?.stage).toBe('final')
+    expect(closer?.utcKickoff.slice(0, 10)).toBe('2026-07-19')
+    expect(closer?.venue?.city).toBe('East Rutherford')
+    expect(closer?.venue?.country).toBe('Estados Unidos')
+  })
+
+  it('exposes every group-stage team with a bundled flag SVG', () => {
+    // Knockout matches use the `xx` placeholder ISO because the bracket
+    // participants are still unknown; for the group stage every ISO MUST
+    // resolve to a real flag asset.
+    const missing: string[] = []
+    for (const m of parsed) {
+      if (m.stage !== 'group') continue
+      for (const iso of [m.teamA.iso, m.teamB.iso]) {
+        if (!FLAG_ISOS.has(iso.toLowerCase())) missing.push(iso)
       }
     }
-    expect(foundEmpty).toBe(true)
+    expect(missing, `Group-stage ISOs without a flag: ${missing.join(', ')}`).toEqual([])
+  })
+
+  it('uses the placeholder ISO `xx` only for knockout-stage matches', () => {
+    for (const m of parsed) {
+      if (m.teamA.iso === 'xx' || m.teamB.iso === 'xx') {
+        expect(m.stage).not.toBe('group')
+      }
+    }
+  })
+
+  it('uses a venue from the 16 official host cities', () => {
+    const HOST_CITIES = new Set([
+      // United States (11)
+      'Atlanta',
+      'Boston',
+      'Dallas',
+      'East Rutherford',
+      'Filadelfia',
+      'Houston',
+      'Kansas City',
+      'Los Ángeles',
+      'Miami',
+      'San Francisco',
+      'Seattle',
+      // Mexico (3)
+      'Ciudad de México',
+      'Guadalajara',
+      'Monterrey',
+      // Canada (2)
+      'Toronto',
+      'Vancouver',
+    ])
+    const offenders: string[] = []
+    for (const m of parsed) {
+      const city = m.venue?.city
+      if (city === undefined) {
+        offenders.push(`${m.id} (no venue)`)
+      } else if (!HOST_CITIES.has(city)) {
+        offenders.push(`${m.id} → ${city}`)
+      }
+    }
+    expect(offenders, `Non-host venues: ${offenders.join('; ')}`).toEqual([])
+  })
+
+  it('touches all 16 host cities at least once', () => {
+    const cities = new Set(parsed.map((m) => m.venue?.city).filter((c): c is string => Boolean(c)))
+    expect(cities.size).toBe(16)
+  })
+
+  it('has unique, sortable IDs', () => {
+    const ids = parsed.map((m) => m.id)
+    const unique = new Set(ids)
+    expect(unique.size).toBe(ids.length)
   })
 })

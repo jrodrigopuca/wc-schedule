@@ -10,7 +10,9 @@ import type { Locale } from './types'
 
 const ES: Readonly<Record<string, string>> = {
   ar: 'Argentina',
+  at: 'Austria',
   au: 'Australia',
+  ba: 'Bosnia y Herzegovina',
   be: 'Bélgica',
   br: 'Brasil',
   ca: 'Canadá',
@@ -23,6 +25,7 @@ const ES: Readonly<Record<string, string>> = {
   co: 'Colombia',
   cr: 'Costa Rica',
   cv: 'Cabo Verde',
+  cw: 'Curazao',
   cz: 'República Checa',
   de: 'Alemania',
   dk: 'Dinamarca',
@@ -31,12 +34,14 @@ const ES: Readonly<Record<string, string>> = {
   eg: 'Egipto',
   es: 'España',
   fr: 'Francia',
+  gb: 'Inglaterra',
   'gb-eng': 'Inglaterra',
   'gb-sct': 'Escocia',
   'gb-wls': 'Gales',
   gh: 'Ghana',
   hn: 'Honduras',
   hr: 'Croacia',
+  ht: 'Haití',
   iq: 'Irak',
   ir: 'Irán',
   it: 'Italia',
@@ -57,6 +62,7 @@ const ES: Readonly<Record<string, string>> = {
   qa: 'Catar',
   rs: 'Serbia',
   sa: 'Arabia Saudita',
+  se: 'Suecia',
   sn: 'Senegal',
   tn: 'Túnez',
   tr: 'Turquía',
@@ -66,11 +72,22 @@ const ES: Readonly<Record<string, string>> = {
   ve: 'Venezuela',
   ye: 'Yemen',
   za: 'Sudáfrica',
+  // Schema-compatible alias for Scotland: the canonical ISO subdivision form
+  // is `gb-sct`, but the matchSchema's ISO regex (/^[a-z]{2}$/) rejects
+  // hyphenated codes. We mirror the Saltire flag asset at `xs.svg` and route
+  // group-stage Scotland matches through this 2-letter alias.
+  xs: 'Escocia',
+  // Neutral placeholder used by knockout-stage matches whose participants
+  // are not yet known. The fixture overrides `team.name` with a specific
+  // bracket-slot label per match, so this fallback rarely surfaces.
+  xx: 'Por definir',
 }
 
 const EN: Readonly<Record<string, string>> = {
   ar: 'Argentina',
+  at: 'Austria',
   au: 'Australia',
+  ba: 'Bosnia and Herzegovina',
   be: 'Belgium',
   br: 'Brazil',
   ca: 'Canada',
@@ -83,6 +100,7 @@ const EN: Readonly<Record<string, string>> = {
   co: 'Colombia',
   cr: 'Costa Rica',
   cv: 'Cape Verde',
+  cw: 'Curaçao',
   cz: 'Czechia',
   de: 'Germany',
   dk: 'Denmark',
@@ -91,12 +109,14 @@ const EN: Readonly<Record<string, string>> = {
   eg: 'Egypt',
   es: 'Spain',
   fr: 'France',
+  gb: 'England',
   'gb-eng': 'England',
   'gb-sct': 'Scotland',
   'gb-wls': 'Wales',
   gh: 'Ghana',
   hn: 'Honduras',
   hr: 'Croatia',
+  ht: 'Haiti',
   iq: 'Iraq',
   ir: 'Iran',
   it: 'Italy',
@@ -117,6 +137,7 @@ const EN: Readonly<Record<string, string>> = {
   qa: 'Qatar',
   rs: 'Serbia',
   sa: 'Saudi Arabia',
+  se: 'Sweden',
   sn: 'Senegal',
   tn: 'Tunisia',
   tr: 'Türkiye',
@@ -126,6 +147,8 @@ const EN: Readonly<Record<string, string>> = {
   ve: 'Venezuela',
   ye: 'Yemen',
   za: 'South Africa',
+  xs: 'Scotland',
+  xx: 'To be determined',
 }
 
 export const COUNTRY_NAMES: Record<Locale, Readonly<Record<string, string>>> = {

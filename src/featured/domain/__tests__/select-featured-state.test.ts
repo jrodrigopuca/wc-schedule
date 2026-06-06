@@ -340,9 +340,9 @@ describe('selectFeaturedState — source-status precedence', () => {
   })
 })
 
-describe('selectFeaturedState — integration with the 44-match fixture', () => {
+describe('selectFeaturedState — integration with the bundled fixture', () => {
   it('returns upcoming-future before the tournament starts', () => {
-    // 2026-06-10 → one day before the WC 2026 first kickoff.
+    // 2026-06-10 → one day before the WC 2026 first kickoff (June 11).
     const now = Date.parse('2026-06-10T12:00:00Z')
     const state = selectFeaturedState(fixture, now)
     expect(state.kind).toBe('upcoming-future')
@@ -352,13 +352,15 @@ describe('selectFeaturedState — integration with the 44-match fixture', () => 
   })
 
   it('returns tournament-over after the final + live window', () => {
+    // Real final is 2026-07-19T19:00:00Z (3 PM ET) at MetLife Stadium.
     const after = Date.parse('2026-07-19T19:00:00Z') + LIVE_WINDOW_MS + 1
     expect(selectFeaturedState(fixture, after).kind).toBe('tournament-over')
   })
 
-  it('returns live-single during a known group-stage kickoff', () => {
-    // wc2026-g-a-01 kicks off at 2026-06-11T20:00:00Z (no simultaneous match).
-    const now = Date.parse('2026-06-11T20:10:00Z')
+  it('returns live-single during the opening match', () => {
+    // wc2026-g-a-01: Mexico vs South Africa at Estadio Azteca,
+    // 2026-06-11T19:00:00Z (3 PM ET). It has no simultaneous group match.
+    const now = Date.parse('2026-06-11T19:10:00Z')
     const state = selectFeaturedState(fixture, now)
     expect(state.kind).toBe('live-single')
     if (state.kind === 'live-single') {
@@ -367,27 +369,18 @@ describe('selectFeaturedState — integration with the 44-match fixture', () => 
   })
 
   it('returns live-multiple when two same-kickoff matches are simultaneously live', () => {
-    // wc2026-g-a-03 (finished in fixture) and wc2026-g-a-04 (scheduled) share
-    // 2026-06-23T18:00:00Z. The fixture marks -03 as finished, so it does NOT
-    // count as live. Pick a different pair: r32-01 and r32-02 are at distinct
-    // times; semi-finals are 24h apart. Use a synthesized "two simultaneous
-    // scheduled" by combining two scheduled-and-still-pending matches:
-    // wc2026-g-a-04 (2026-06-23T18:00:00Z, scheduled) is solo at that minute.
-    //
-    // So instead, prove live-multiple by stripping the finished flag off -03
-    // locally — this verifies the algorithm, not the fixture data.
-    const a03 = fixture.find((m) => m.id === 'wc2026-g-a-03')!
-    const a04 = fixture.find((m) => m.id === 'wc2026-g-a-04')!
-    const others = fixture.filter((m) => m.id !== 'wc2026-g-a-03' && m.id !== 'wc2026-g-a-04')
-    const a03Scheduled: Match = { ...a03, status: 'scheduled' }
-    const synthetic: readonly Match[] = [a03Scheduled, a04, ...others]
-
-    const now = Date.parse('2026-06-23T18:10:00Z')
-    const state = selectFeaturedState(synthetic, now)
+    // The real schedule packs matchday 3 of every group into two simultaneous
+    // pairs: e.g. Group A's last two matches both kick off at 2026-06-25T01:00:00Z
+    // (Czechia vs Mexico + South Africa vs South Korea). Both are scheduled in
+    // this fixture, so the algorithm should report live-multiple at that instant.
+    const now = Date.parse('2026-06-25T01:10:00Z')
+    const state = selectFeaturedState(fixture, now)
     expect(state.kind).toBe('live-multiple')
     if (state.kind === 'live-multiple') {
-      expect(state.count).toBe(2)
-      expect(state.matches.map((m) => m.id).sort()).toEqual(['wc2026-g-a-03', 'wc2026-g-a-04'])
+      expect(state.count).toBeGreaterThanOrEqual(2)
+      const ids = state.matches.map((m) => m.id)
+      expect(ids).toContain('wc2026-g-a-05')
+      expect(ids).toContain('wc2026-g-a-06')
     }
   })
 })

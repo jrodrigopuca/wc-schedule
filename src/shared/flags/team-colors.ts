@@ -13,7 +13,9 @@ export const FALLBACK_GLOW = '#16A34A'
 
 export const TEAM_COLORS: Readonly<Record<string, string>> = {
   ar: '#6CB4EE', // Argentina — celeste
+  at: '#ED2939', // Austria — rojo (das Team)
   au: '#FFCD00', // Australia — oro (Socceroos)
+  ba: '#002F6C', // Bosnia y Herzegovina — azul (Zmajevi)
   be: '#ED2939', // Bélgica — rojo (Diables Rouges)
   br: '#FFDF00', // Brasil — amarillo
   ca: '#FF0000', // Canadá — rojo
@@ -26,6 +28,7 @@ export const TEAM_COLORS: Readonly<Record<string, string>> = {
   co: '#FCD116', // Colombia — amarillo
   cr: '#CE1126', // Costa Rica — rojo (Los Ticos)
   cv: '#003893', // Cabo Verde — azul
+  cw: '#012A87', // Curazao — azul (kit principal)
   cz: '#11457E', // República Checa — azul
   de: '#DD0000', // Alemania — rojo (franja central de la bandera)
   dk: '#C60C30', // Dinamarca — rojo (Dannebrog)
@@ -34,12 +37,17 @@ export const TEAM_COLORS: Readonly<Record<string, string>> = {
   eg: '#C8102E', // Egipto — rojo (Pharaohs)
   es: '#C60B1E', // España — rojo (La Roja)
   fr: '#002395', // Francia — azul (Les Bleus)
+  // `gb` is the schema-friendly 2-letter alias used by the fixture for
+  // England (the canonical `gb-eng` form is rejected by matchSchema's
+  // /^[a-z]{2}$/ regex). The hyphenated entry below stays for legacy lookups.
+  gb: '#DC143C', // Inglaterra — rojo (cruz de San Jorge)
   'gb-eng': '#DC143C', // Inglaterra — rojo (cruz de San Jorge)
   'gb-sct': '#0065BD', // Escocia — azul (Tartan Army)
   'gb-wls': '#C8102E', // Gales — rojo
   gh: '#FCD116', // Ghana — amarillo (Black Stars — pero amarillo es lo más visible)
   hn: '#0073CF', // Honduras — azul
   hr: '#DC143C', // Croacia — rojo (Vatreni)
+  ht: '#00209F', // Haití — azul (Les Grenadiers)
   iq: '#CE1126', // Irak — rojo
   ir: '#239F40', // Irán — verde
   it: '#0066CC', // Italia — azul (Azzurri)
@@ -60,6 +68,7 @@ export const TEAM_COLORS: Readonly<Record<string, string>> = {
   qa: '#8B1538', // Catar — granate
   rs: '#C6363C', // Serbia — rojo
   sa: '#006C35', // Arabia Saudita — verde (Green Falcons)
+  se: '#005293', // Suecia — azul (Blågult)
   sn: '#00853F', // Senegal — verde (Lions of Teranga)
   tn: '#C8102E', // Túnez — rojo
   tr: '#E30A17', // Turquía — rojo
@@ -69,6 +78,12 @@ export const TEAM_COLORS: Readonly<Record<string, string>> = {
   ve: '#7C2333', // Venezuela — vinotinto (La Vinotinto)
   ye: '#DC143C', // Yemen — rojo
   za: '#007749', // Sudáfrica — verde (Bafana Bafana)
+  // Schema-friendly 2-letter alias for Scotland. Visual: Tartan Army blue,
+  // identical to the legacy `gb-sct` entry.
+  xs: '#0065BD', // Escocia — azul (Tartan Army)
+  // Neutral placeholder for knockout-stage matches whose participants are
+  // not yet determined. Matches the muted slate used in `xx.svg`.
+  xx: '#6B7280', // Por definir — gris neutro
 }
 
 export function resolveGlow(iso: string): string {

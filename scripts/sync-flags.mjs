@@ -28,7 +28,9 @@ const FLAG_ISOS = [
   'jo', 'jp', 'kr', 'ma', 'mx', 'ng', 'nl', 'no', 'nz', 'pa', 'pl', 'pt',
   'py', 'qa', 'sa', 'sn', 'tn', 'tr', 'us', 'uy', 'uz', 've', 'ye', 'za',
   // ── Likely WC-2026 participants not yet in the fixture ───────────────────
-  'cd', 'cn', 'dk', 'gb-eng', 'gb-sct', 'gb-wls', 'hr', 'jm', 'rs',
+  'cd', 'cn', 'dk', 'gb', 'gb-eng', 'gb-sct', 'gb-wls', 'hr', 'jm', 'rs',
+  // ── Real WC-2026 qualifiers added after the December 2025 draw ───────────
+  'at', 'ba', 'cw', 'ht', 'se',
 ]
 
 async function pathExists(p) {

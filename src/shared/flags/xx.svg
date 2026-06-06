@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<!-- Neutral placeholder used for matches whose participants are not yet
+     determined (knockout slots before bracket resolution). The ISO code
+     'xx' is the ISO-3166-1 user-assigned region commonly used as "unknown
+     country" — schema-compatible with the /^[a-z]{2}$/ regex, but visually
+     marked so the UI never claims a real team. -->
+<circle cx="256" cy="256" r="256" fill="#1F2937"/>
+<circle cx="256" cy="256" r="240" fill="none" stroke="#9CA3AF" stroke-width="4" stroke-dasharray="12 10"/>
+<text x="256" y="320" font-family="system-ui, -apple-system, sans-serif" font-size="220" font-weight="700" text-anchor="middle" fill="#9CA3AF">?</text>
+</svg>
