@@ -9,11 +9,13 @@
 // day is NOT today), the view collapses to a single section — just the
 // MatchesList for that day, no FeaturedCard. Today + empty hash is the
 // canonical "main mode": FeaturedCard + MatchesList for today.
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import { useFeatured } from '@/featured/composables/useFeatured'
 import FeaturedCard from '@/featured/ui/FeaturedCard.vue'
 import { useMatches } from '@/matches/composables/useMatches'
 import { useSelectedDay } from '@/matches/composables/useSelectedDay'
+import { useNotifications } from '@/notifications/composables/useNotifications'
+import { planSchedule } from '@/notifications/domain/schedule'
 import { useI18n } from '@/shared/i18n/useI18n'
 import { useNow } from '@/shared/time/useNow'
 import { useRoute } from '@/app/router'
@@ -22,6 +24,7 @@ import DaySelector from '@/matches/ui/DaySelector.vue'
 import MatchesList from '@/matches/ui/MatchesList.vue'
 import EnableNotificationsButton from '@/notifications/ui/EnableNotificationsButton.vue'
 import { formatDate } from '@/shared/time/format'
+import { getNow } from '@/shared/time/now'
 import { dayBoundsForYMD } from '@/matches/domain/tournament-day'
 
 const { t, current: locale } = useI18n()
@@ -30,6 +33,33 @@ const { featured } = useFeatured(matches)
 const { now } = useNow()
 const { navigate } = useRoute()
 const { selectedYMD, selectDay } = useSelectedDay()
+const { permission, schedule: scheduleNotifications } = useNotifications()
+
+// All-or-nothing scheduling: granting permission arms a `setTimeout` for
+// EVERY future match in `matches` (up to ~104 over the tournament). The
+// browser's quota is high enough that this isn't a memory concern, and
+// the model lets users grant once and forget. Revoking via browser
+// settings cancels at the OS level — we re-check `permission` on
+// visibility-regain (handled by `useMatches`' refresh path, which
+// updates `matches` → re-fires this watcher).
+//
+// This watcher fires on:
+//   - initial mount (immediate: true) — picks up matches loaded at boot
+//   - permission flipping from idle → granted (post user-gesture grant)
+//   - matches replaced by `useMatches.refresh()` (visibility regain or
+//     `refresh()` call after a successful new walk)
+//
+// `planSchedule` is pure + atomic-replace: the notifier cancels prior
+// timers before arming, so re-firing is safe and dedupe-by-tag at the
+// OS level handles any in-flight race.
+watch(
+  [matches, permission],
+  ([currentMatches, currentPermission]) => {
+    if (currentPermission !== 'granted') return
+    scheduleNotifications(planSchedule(currentMatches, getNow()))
+  },
+  { immediate: true },
+)
 
 const hasData = computed(() => status.value === 'ready' || status.value === 'degraded')
 

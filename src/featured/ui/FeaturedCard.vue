@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { assertNever, type FeaturedState } from '@/featured/domain/featured-state'
-import type { Match, Stage } from '@/matches/domain/match'
-import type { MessageKey } from '@/shared/i18n/types'
+import type { Match } from '@/matches/domain/match'
+import { STAGE_KEYS } from '@/matches/i18n/stage-labels'
 import { useI18n } from '@/shared/i18n/useI18n'
 import { resolveFlag } from '@/shared/flags/resolve'
 import { resolveGlow } from '@/shared/flags/team-colors'
@@ -12,18 +12,6 @@ import Countdown from '@/featured/ui/Countdown.vue'
 const props = defineProps<{ state: FeaturedState; now: number }>()
 
 const { t, country } = useI18n()
-
-// Stage → message key. Keeping the mapping local for now; if a second view
-// needs it we lift it to `src/matches/i18n/stage-labels.ts`.
-const STAGE_KEYS: Record<Stage, MessageKey> = {
-  group: 'stage.group',
-  'round-of-32': 'stage.roundOf32',
-  'round-of-16': 'stage.roundOf16',
-  'quarter-final': 'stage.quarterFinal',
-  'semi-final': 'stage.semiFinal',
-  'third-place': 'stage.thirdPlace',
-  final: 'stage.final',
-}
 
 type HaloStyle = { [K in `--${string}`]: string }
 

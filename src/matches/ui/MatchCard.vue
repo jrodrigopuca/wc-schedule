@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { Match, Stage } from '@/matches/domain/match'
+import type { Match } from '@/matches/domain/match'
 import { resolveState } from '@/matches/domain/resolve-state'
+import { STAGE_KEYS } from '@/matches/i18n/stage-labels'
 import { resolveFlag } from '@/shared/flags/resolve'
 import { resolveGlow } from '@/shared/flags/team-colors'
-import type { MessageKey } from '@/shared/i18n/types'
 import { useI18n } from '@/shared/i18n/useI18n'
 import { formatTime } from '@/shared/time/format'
 
@@ -13,18 +13,6 @@ type HaloStyle = { [K in `--${string}`]: string }
 const props = defineProps<{ match: Match; now: number }>()
 
 const { t, country } = useI18n()
-
-// Stage → message key. Mirrors FeaturedCard; lift to a shared helper if a
-// third caller appears.
-const STAGE_KEYS: Record<Stage, MessageKey> = {
-  group: 'stage.group',
-  'round-of-32': 'stage.roundOf32',
-  'round-of-16': 'stage.roundOf16',
-  'quarter-final': 'stage.quarterFinal',
-  'semi-final': 'stage.semiFinal',
-  'third-place': 'stage.thirdPlace',
-  final: 'stage.final',
-}
 
 const resolvedStatus = computed(() => resolveState(props.match, props.now))
 const stageLabel = computed(() => t(STAGE_KEYS[props.match.stage]))

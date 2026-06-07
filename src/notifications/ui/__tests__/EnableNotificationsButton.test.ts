@@ -15,11 +15,35 @@ function stubNotification(
   if (permission === undefined) {
     return { requestPermission }
   }
-  vi.stubGlobal('Notification', {
-    permission,
-    requestPermission,
+  // Phase 9b: we also need the showTrigger probe to pass so the
+  // composable doesn't pin state at `'unsupported'`. Build a fake
+  // constructor whose `prototype` carries `showTrigger`.
+  function FakeNotification(this: object): void {}
+  Object.defineProperty(FakeNotification.prototype, 'showTrigger', {
+    value: null,
+    configurable: true,
   })
+  ;(FakeNotification as unknown as { permission: NotificationPermission }).permission = permission
+  ;(
+    FakeNotification as unknown as { requestPermission: typeof requestPermission }
+  ).requestPermission = requestPermission
+  vi.stubGlobal('Notification', FakeNotification)
   return { requestPermission }
+}
+
+function installShowTriggerEnvironment(): void {
+  // Mirror the four probes in pick-notifier.ts so the composable
+  // initializes to a non-`unsupported` state.
+  if (!('serviceWorker' in window.navigator)) {
+    Object.defineProperty(window.navigator, 'serviceWorker', {
+      value: {},
+      configurable: true,
+    })
+  }
+  class FakeTimestampTrigger {
+    constructor(public ts: number) {}
+  }
+  vi.stubGlobal('TimestampTrigger', FakeTimestampTrigger)
 }
 
 describe('EnableNotificationsButton', () => {
@@ -40,6 +64,10 @@ describe('EnableNotificationsButton', () => {
   it("renders nothing when permission is 'unsupported'", () => {
     delete (globalThis as { Notification?: unknown }).Notification
     delete (window as unknown as { Notification?: unknown }).Notification
+    // Also strip the showTrigger probes — Phase 9b reports
+    // `'unsupported'` whenever ANY probe fails, not just the
+    // Notification global. (No CTA on Safari/Firefox/etc.)
+    delete (globalThis as { TimestampTrigger?: unknown }).TimestampTrigger
     __resetNotificationsForTests()
     const wrapper = mount(EnableNotificationsButton)
     expect(useNotifications().permission.value).toBe('unsupported')
@@ -52,6 +80,7 @@ describe('EnableNotificationsButton', () => {
     const pending = new Promise<NotificationPermission>((res) => {
       resolveOutcome = res
     })
+    installShowTriggerEnvironment()
     const { requestPermission: nativeFn } = stubNotification('default', () => pending)
     __resetNotificationsForTests()
     const wrapper = mount(EnableNotificationsButton)
@@ -72,6 +101,7 @@ describe('EnableNotificationsButton', () => {
     const pending = new Promise<NotificationPermission>((res) => {
       resolveOutcome = res
     })
+    installShowTriggerEnvironment()
     stubNotification('default', () => pending)
     __resetNotificationsForTests()
     const wrapper = mount(EnableNotificationsButton)
@@ -87,6 +117,7 @@ describe('EnableNotificationsButton', () => {
   })
 
   it("renders the calm confirmation pill when permission is 'granted'", () => {
+    installShowTriggerEnvironment()
     stubNotification('granted', () => Promise.resolve('granted'))
     __resetNotificationsForTests()
     const wrapper = mount(EnableNotificationsButton)
@@ -98,6 +129,7 @@ describe('EnableNotificationsButton', () => {
   })
 
   it("renders title + hint with NO interactive button when 'denied'", () => {
+    installShowTriggerEnvironment()
     stubNotification('denied', () => Promise.resolve('denied'))
     __resetNotificationsForTests()
     const wrapper = mount(EnableNotificationsButton)

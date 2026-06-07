@@ -490,26 +490,31 @@ Decisions:
 
 ## 8. Notification scheduling
 
-Three execution paths, single planning function. Lead time is `NOTIFICATION_LEAD_MS = 15 * 60_000`, defined once in `src/notifications/domain/lead-time.ts`.
+Single execution path in production, single planning function. Lead time is `NOTIFICATION_LEAD_MS = 15 * 60_000`, defined once in `src/notifications/domain/lead-time.ts`.
+
+**Phase 9a/9b decision (LOCKED)**: only `showTrigger` is wired in production. `pickNotifier()` returns the showTrigger adapter when supported, otherwise `null` — and the composable interprets `null` as `'unsupported'`, hiding the CTA entirely. The foreground `setTimeout` notifier (`timeout-notifier.ts`) remains in the repo as **documentation + a test seam** for unit-testing `useNotifications.schedule()` against the port; production composition never picks it. See §12.2 for the full rationale.
 
 **Strategy selection at runtime**:
 
 ```ts
-function pickNotifier(): Notifier {
-  if ("Notification" in window && "showTrigger" in Notification.prototype) {
-    return createShowTriggerNotifier(); // Chromium, best effort, OS-scheduled
-  }
-  // foreground only
-  return createTimeoutNotifier();
+function pickNotifier(): Notifier | null {
+  if (!isShowTriggerSupported()) return null; // hide CTA entirely
+  return createShowTriggerNotifier();          // OS-scheduled, tab-close-safe
 }
-// In parallel, ALWAYS register the SW handler — it covers background.
 ```
 
-The three paths cooperate, they don't fight:
+Detection probes (all four must pass):
+- `'Notification' in window`
+- `'showTrigger' in Notification.prototype` (canonical surface)
+- `'serviceWorker' in window.navigator`
+- `typeof TimestampTrigger !== 'undefined'`
 
-1. **`Notification.showTrigger` (where supported)**: schedule once at boot via `serviceWorkerRegistration.showNotification({ ...payload, showTrigger: new TimestampTrigger(fireAt) })`. OS-managed, survives tab close. Currently Chromium-only.
-2. **`setTimeout` fallback (foreground)**: when the app is open, an in-page `setTimeout(fire, ms)` per upcoming match. Works on any browser. Dies when the tab dies.
-3. **Service Worker scheduled messages (background fallback)**: on app boot, the page `postMessage`s the schedule to the SW. The SW maintains an in-memory queue and a single `setTimeout` for the earliest fire-time. On wake (push, sync, navigation), it re-evaluates the queue. Not as reliable as `showTrigger` but covers cases where the tab is closed and the SW gets a wake event.
+The retained-but-unused timeout strategy:
+
+1. **`Notification.showTrigger` (production)**: schedule once at boot via `serviceWorkerRegistration.showNotification({ ...payload, showTrigger: new TimestampTrigger(fireAt) })`. OS-managed, survives tab close. Currently Chromium-only.
+2. **`setTimeout` (NOT in production)**: foreground-only; kept as `timeout-notifier.ts` purely to (a) document the alternative, and (b) provide a clean Notifier implementation for unit-testing `useNotifications.schedule()`. Rejected as a fallback — see §12.2.
+
+**Content resolution timing — locked**: with showTrigger, the title and body are rendered at **schedule time**, not fire time, because the OS holds the pre-rendered notification. A locale switch after scheduling does NOT translate pending notifications. To honor a locale change, the user must trigger a re-schedule (re-grant permission, a refresh that re-runs `schedule()` on boot, or any `matches` mutation that cascades into a re-plan). The retained `timeout-notifier` resolves at fire time and is therefore a useful sanity reference, but production accepts the schedule-time tradeoff in exchange for tab-close delivery.
 
 **Planning function** (pure, testable):
 
@@ -867,14 +872,22 @@ Every open question from proposal §9, with a decision, reasoning, and rejected 
 
 ### 12.2 Notification reliability fallback
 
-**Decision**: triple-strategy with graceful degradation:
-1. `Notification.showTrigger` when available (Chromium).
-2. `setTimeout` while the app is foregrounded (any browser).
-3. Service Worker with a recomputed queue, fires on wake events (any browser with SW support).
+**Decision (LOCKED, Phase 9b)**: ship **only** the `Notification.showTrigger` strategy in production. When the platform lacks showTrigger, hide the entire CTA — no foreground `setTimeout` fallback, no SW-queue fallback. Honest UX over half-broken graceful degradation.
 
-**Reasoning**: no single mechanism is reliable across the matrix. Layering them maximizes coverage; the user gets *a* notification in the vast majority of cases.
+**Reasoning**: the feature exists to "remind you 15 minutes before kickoff while you're doing something else". A foreground-only fallback delivers exactly the wrong UX — the user closes the tab, gets no reminder, and (worst case) thinks the app is broken or unreliable. Better to show nothing on Safari/Firefox/etc. than to ship a notification feature that silently misses the cases it was built for.
 
-**Rejected**: relying solely on `setTimeout` (dies when tab dies), demanding push subscriptions (out of scope — no server), shipping a worker-managed alarms polyfill (overkill).
+**Rejected — the prior triple-strategy plan**:
+1. `Notification.showTrigger` when available (Chromium) — kept.
+2. `setTimeout` while the app is foregrounded — **rejected**: dies the moment the user navigates away, which is the very scenario notifications exist for. Foreground reminders for the in-page case are better served by the visible countdown.
+3. Service Worker with a recomputed queue — **rejected**: high implementation cost, the SW only fires on wake events (push, sync, navigation) that we don't have, and unreliable enough that we'd still be lying to the user.
+
+**Also rejected**: push subscriptions (out of scope — no server), worker-managed alarms polyfill (overkill).
+
+**Browser matrix today (2026-06)**:
+- Chromium-based (Chrome, Edge, Brave, Opera, Samsung): CTA visible, scheduling works, tab-closed delivery works.
+- Safari (any), Firefox (any), iOS browsers: CTA hidden — `EnableNotificationsButton` renders nothing.
+
+**Code seam preserved**: `src/notifications/adapters/timeout-notifier.ts` remains in the repo as documentation + a Notifier-port reference implementation that unit tests of `useNotifications.schedule()` can wire against without DOM ceremony. Production never picks it.
 
 ### 12.3 Permission prompt UX
 
@@ -1362,6 +1375,7 @@ export type MessageKey =
   | "notifications.cta.granted"
   | "notifications.cta.denied.title"
   | "notifications.cta.denied.hint"
+  | "notification.body"
   | "data.stale.history"
   | "data.stale.fixture"
   | "preview.section.daySelector"
@@ -1394,7 +1408,7 @@ export const MESSAGES: Record<Locale, Record<MessageKey, string>> = {
     "stage.semiFinal":                 "Semifinales",
     "stage.thirdPlace":                "Tercer puesto",
     "stage.final":                     "Final",
-    "list.title":                      "Partidos de hoy",
+    "list.title":                      "Partidos del día",
     "list.count":                      "{n} partidos",
     "list.empty":                      "No hay partidos hoy",
     "header.subtitle":                 "Mundial 2026",
@@ -1424,6 +1438,7 @@ export const MESSAGES: Record<Locale, Record<MessageKey, string>> = {
     "notifications.cta.granted":       "✓ Avisos activos",
     "notifications.cta.denied.title":  "Avisos bloqueados",
     "notifications.cta.denied.hint":   "Activá los avisos del navegador para recibirlos",
+    "notification.body":               "Empieza en {n} minutos",
     "data.stale.history":              "Mostrando datos guardados",
     "data.stale.fixture":              "Mostrando datos de respaldo",
     "preview.section.daySelector":     "Tira de selección de días",
@@ -1455,7 +1470,7 @@ export const MESSAGES: Record<Locale, Record<MessageKey, string>> = {
     "stage.semiFinal":                 "Semi-finals",
     "stage.thirdPlace":                "Third place",
     "stage.final":                     "Final",
-    "list.title":                      "Today's matches",
+    "list.title":                      "Matches of the day",
     "list.count":                      "{n} matches",
     "list.empty":                      "No matches today",
     "header.subtitle":                 "World Cup 2026",
@@ -1485,6 +1500,7 @@ export const MESSAGES: Record<Locale, Record<MessageKey, string>> = {
     "notifications.cta.granted":       "✓ Notifications enabled",
     "notifications.cta.denied.title":  "Notifications blocked",
     "notifications.cta.denied.hint":   "Enable notifications in your browser to receive them",
+    "notification.body":               "Starts in {n} minutes",
     "data.stale.history":              "Showing saved data",
     "data.stale.fixture":              "Showing fallback data",
     "preview.section.daySelector":     "Day selector strip",

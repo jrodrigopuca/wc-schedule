@@ -8,11 +8,52 @@ import {
   __resetMatchesForTests,
 } from '@/matches/composables/useMatches'
 import { __resetSelectedDayForTests } from '@/matches/composables/useSelectedDay'
+import {
+  __resetNotificationsForTests,
+  __resetNotifierForTests,
+} from '@/notifications/composables/useNotifications'
 import { __resetClockForTests, __setClockForTests } from '@/shared/time/now'
 
 vi.mock('@/shared/flags/resolve', () => ({
   resolveFlag: (iso: string): string | null => `/flags/${iso}.svg`,
 }))
+
+// Mock the notifier picker so the MainView watcher's call lands on a
+// spy notifier (no real timers armed). The mock module also exposes
+// `__stubs` so the test can re-import and inspect calls — `vi.mock` is
+// hoisted, so we can't close over outer variables in the factory.
+//
+// Phase 9b: the picker module now also exports `isShowTriggerSupported`,
+// consumed by `useNotifications.readInitialState`. We default it to
+// `true` so the composable mirrors `Notification.permission` instead of
+// pinning to `'unsupported'` — the existing MainView tests assume the
+// "supported" path.
+vi.mock('@/notifications/adapters/pick-notifier', () => {
+  const schedule = vi.fn()
+  const cancel = vi.fn()
+  const cancelAll = vi.fn()
+  const isShowTriggerSupported = vi.fn(() => true)
+  return {
+    isShowTriggerSupported,
+    pickNotifier: vi.fn(() => ({
+      name: 'mock',
+      schedule,
+      cancel,
+      cancelAll,
+    })),
+    __stubs: { schedule, cancel, cancelAll, isShowTriggerSupported },
+  }
+})
+
+async function loadNotifierStubs(): Promise<{
+  schedule: ReturnType<typeof vi.fn>
+  cancelAll: ReturnType<typeof vi.fn>
+}> {
+  const mocked = (await import('@/notifications/adapters/pick-notifier')) as unknown as {
+    __stubs: { schedule: ReturnType<typeof vi.fn>; cancelAll: ReturnType<typeof vi.fn> }
+  }
+  return mocked.__stubs
+}
 
 describe('MainView (smoke)', () => {
   beforeEach(() => {
@@ -90,6 +131,48 @@ describe('MainView (smoke)', () => {
     // The featured eyebrow is the surface that disambiguates main mode
     // from day mode (no eyebrow in day mode because there's no card).
     expect(wrapper.text()).toContain('Próximo partido')
+  })
+
+  it('schedules notifications when permission flips to granted', async () => {
+    // The watcher in MainView calls `planSchedule(matches, now())` and
+    // forwards to `useNotifications().schedule()`, which delegates to
+    // the picked notifier. We've mocked the picker module at the file
+    // top so we can assert delegation without arming real timers.
+    vi.stubEnv('VITE_DATA_SOURCE', 'manual')
+    // Pin to before the tournament so all matches are 'scheduled' and
+    // their fireAtMs is in the future — planSchedule returns a non-empty
+    // array. Without this, NOW after the tournament would filter all out.
+    __setClockForTests(() => Date.parse('2026-06-10T17:00:00Z'))
+    // Stub Notification BEFORE mounting so useNotifications reads
+    // 'granted' as its initial state. The composable is a singleton —
+    // we have to reset it to pick up the new global.
+    vi.stubGlobal('Notification', {
+      permission: 'granted',
+      requestPermission: () => Promise.resolve('granted'),
+    })
+    __resetNotificationsForTests()
+    __resetNotifierForTests()
+    const stubs = await loadNotifierStubs()
+    stubs.schedule.mockClear()
+
+    await __reloadMatchesForTests()
+    await flushPromises()
+    mount(MainView)
+    await flushPromises()
+
+    // Watcher with `immediate: true` fires on mount with permission ===
+    // 'granted'; the composable forwards to the mocked notifier.
+    expect(stubs.schedule).toHaveBeenCalled()
+    const calls = stubs.schedule.mock.calls
+    const lastCall = calls[calls.length - 1] as [readonly unknown[]] | undefined
+    expect(Array.isArray(lastCall?.[0])).toBe(true)
+    // The fixture has matches — planSchedule should yield at least one
+    // entry given our pinned-pre-tournament `now`.
+    expect((lastCall?.[0] as readonly unknown[]).length).toBeGreaterThan(0)
+
+    vi.unstubAllGlobals()
+    __resetNotificationsForTests()
+    __resetNotifierForTests()
   })
 
   it('hides the FeaturedCard in day mode (#/day/<future-day>)', async () => {
