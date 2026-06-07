@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import type { Match } from '@/matches/domain/match'
 import { resolveState } from '@/matches/domain/resolve-state'
 import { STAGE_KEYS } from '@/matches/i18n/stage-labels'
+import AddToCalendarButton from '@/matches/ui/AddToCalendarButton.vue'
 import { resolveFlag } from '@/shared/flags/resolve'
 import { resolveGlow } from '@/shared/flags/team-colors'
 import { useI18n } from '@/shared/i18n/useI18n'
@@ -48,6 +49,16 @@ const ariaLabel = computed(
   () => `${teamAName.value} vs ${teamBName.value}, ${kickoffLocal.value}, ${stageLabel.value}`,
 )
 
+// Calendar export is only meaningful for matches the user could still
+// attend or anticipate. Skip past events (finished by status OR by clock)
+// to avoid encouraging users to add a stale event.
+const showCalendarButton = computed(() => {
+  if (resolvedStatus.value === 'finished') return false
+  const kickoffMs = Date.parse(props.match.utcKickoff)
+  if (props.now >= kickoffMs) return false
+  return true
+})
+
 const haloStyle = computed<HaloStyle>(() => ({
   '--team-a-glow': resolveGlow(props.match.teamA.iso),
   '--team-b-glow': resolveGlow(props.match.teamB.iso),
@@ -81,9 +92,12 @@ const haloStyle = computed<HaloStyle>(() => ({
         <span v-if="showScore && match.score" :class="$style.score">{{ match.score.away }}</span>
       </div>
     </div>
-    <span :class="[$style.badge, $style[`badge_${badge.variant}`]]">
-      {{ badge.text }}
-    </span>
+    <div :class="$style.actions">
+      <span :class="[$style.badge, $style[`badge_${badge.variant}`]]">
+        {{ badge.text }}
+      </span>
+      <AddToCalendarButton v-if="showCalendarButton" :match="match" />
+    </div>
   </li>
 </template>
 
@@ -201,6 +215,13 @@ const haloStyle = computed<HaloStyle>(() => ({
   font-weight: 700;
   color: var(--text-strong);
   font-variant-numeric: tabular-nums;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
 }
 
 .badge {

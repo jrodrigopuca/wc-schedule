@@ -28,6 +28,7 @@ A small installable PWA that, on open, shows:
   5. **Tournament over** — an "el mundial ha terminado" terminal state.
 - A **list of today's matches** in the user's local timezone (resolved client-side). Live rows display the "EN VIVO" badge ONLY — no in-flight score. Finished rows display the final score once the next daily refresh backfills it.
 - A path to **install the PWA** and to **enable local notifications**, which fire 15 minutes before each match (fixed value for MVP).
+- **Per-match calendar export**: clicking a small icon on any match row downloads a standards-based `.ics` file that imports into Google Calendar, Apple Calendar, Outlook, or any RFC 5545-compliant calendar app. Universal, privacy-friendly, no third-party redirects.
 - **Prominent team identity** in the featured slot — circular flag medallions, country names, and a soft tint of each team's colors — to evoke the feeling of a derby rather than a generic schedule entry.
 - **Bilingual UI (Spanish + English).** Locale is auto-detected from `navigator.language` on first load; the user can override via a UI toggle, and the override persists in `localStorage`. Clearing the override returns to browser-driven detection.
 
@@ -44,6 +45,7 @@ There is no login and no settings beyond install/notification permission, theme 
 - Adapt the visual presentation to the user's OS color-scheme preference (light/dark), with a manual override that persists.
 - Support Spanish and English UI, with auto-detection from the browser locale and a persistent manual override.
 - Provide a permanent component gallery at `/preview` to keep design / QA / dev review fast.
+- Let users add specific matches to their personal calendar with one click, using a universal `.ics` format that works with every standards-compliant calendar app.
 
 ## 5. Non-goals (out of scope for MVP)
 

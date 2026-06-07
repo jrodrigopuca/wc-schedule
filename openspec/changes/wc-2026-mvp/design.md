@@ -1387,7 +1387,8 @@ export type MessageKey =
   | "day.label"
   | "day.today"
   | "day.empty"
-  | "day.selector.aria";
+  | "day.selector.aria"
+  | "calendar.cta.add";
 
 export const MESSAGES: Record<Locale, Record<MessageKey, string>> = {
   es: {
@@ -1451,6 +1452,7 @@ export const MESSAGES: Record<Locale, Record<MessageKey, string>> = {
     "day.today":                       "Hoy",
     "day.empty":                       "Sin partidos este día",
     "day.selector.aria":               "Seleccionar día del torneo",
+    "calendar.cta.add":                "Agregar al calendario",
   },
   en: {
     "featured.eyebrow.upcomingToday": "Next match",
@@ -1513,6 +1515,7 @@ export const MESSAGES: Record<Locale, Record<MessageKey, string>> = {
     "day.today":                       "Today",
     "day.empty":                       "No matches this day",
     "day.selector.aria":               "Select tournament day",
+    "calendar.cta.add":                "Add to calendar",
   },
 };
 ```
@@ -1805,3 +1808,67 @@ For `useTheme()` and `getRefreshMode` tests, `matchMedia` and `localStorage` are
 - **History-manifest staleness on GH Pages**: the manifest is `CacheFirst` with a 6h TTL (§9). Worst case, a user offline for >6h after a refresh sees a one-snapshot-stale `index.json`. The chain still works (the named file is also cached), and the next online visit refreshes the manifest.
 
 These items are deferred to follow-up changes if the MVP needs them. None block implementation today.
+
+---
+
+## 18. Calendar export (ICS per-match)
+
+Each `MatchCard` exposes a small calendar-icon button that downloads a standards-compliant `.ics` file for that single match. The user's OS / browser then offers to import it into the default calendar app (Google Calendar, Apple Calendar, Outlook, Thunderbird, Proton, or any RFC 5545–compliant client).
+
+### 18.1 Strategy: ICS over vendor URLs
+
+We commit to **ICS download per-match** and reject the alternatives:
+
+- **Google Calendar URL** (`https://calendar.google.com/calendar/render?action=TEMPLATE&...`) — vendor lock-in, leaks the match the user cares about to a third party, requires a separate code path per provider.
+- **Bulk "subscribe to feed"** — importing all 104 events into a personal calendar is noise. Per-match opt-in matches the user's intent (they're choosing the matches they actually care about).
+- **Per-match notifications and per-match calendar combined into one toggle** — different patterns: notifications are passive ("the app reminds me 15 min before"), calendar is intentional ("this match is on my agenda"). The two CTAs stay separate.
+
+### 18.2 Pure builder + DI render context
+
+The ICS builder is a pure function in `src/matches/domain/ics.ts`:
+
+```ts
+export interface IcsRenderContext {
+  readonly resolveTeamName: (iso: string, fallback: string) => string
+  readonly resolveStageLabel: (stage: Stage) => string
+  readonly appUrl: string
+}
+
+export function buildMatchIcs(match: Match, ctx: IcsRenderContext, now: number): string
+```
+
+No i18n coupling at the domain layer. `AddToCalendarButton.vue` builds the context by injecting `country()` from `useI18n()` and the `STAGE_KEYS` mapping at click time, so SUMMARY and DESCRIPTION render in the user's currently-active locale.
+
+### 18.3 Event shape
+
+- `UID:{match.id}@wc-schedule.app` — stable, globally unique.
+- `DTSTART` — `match.utcKickoff` in `YYYYMMDDTHHMMSSZ` UTC form.
+- `DTEND` — `DTSTART + 120 minutes`. Covers regulation (90), extra time (30), and a small buffer. Generous for group-stage matches but accurate enough; calendars treat duration as a hint, not a contract.
+- `DTSTAMP` — `now` formatted the same way (RFC 5545 requires it).
+- `SUMMARY` — `${resolveTeamName(teamA)} vs ${resolveTeamName(teamB)}`.
+- `DESCRIPTION` — `${resolveStageLabel(stage)}{group ? ' · Grupo ' + group : ''} · Mundial 2026`.
+- `LOCATION` — `${venue.city}, ${venue.country}` when present; field omitted when not.
+- `URL` — `${location.origin + import.meta.env.BASE_URL}` (the app's root, honoring the Vite `base` config).
+- `STATUS:CONFIRMED`.
+
+CRLF line endings (`\r\n`) per RFC 5545. Special characters in user-facing fields (`,`, `;`, `\`, newlines) are escaped per the spec. Long-line folding is NOT applied for MVP — modern calendar apps tolerate unfolded lines and the lines we generate stay under 75 octets for the vast majority of fixtures; documented trade-off.
+
+### 18.4 Download trigger
+
+`src/matches/domain/download.ts` wraps the standard Blob + `<a download>` pattern. Defensive: when `window` or `URL.createObjectURL` is missing (SSR, test env without happy-dom), the function is a silent no-op. Production browsers all support it.
+
+Filename: `wc2026-{teamA.iso}-vs-{teamB.iso}-{YYYY-MM-DD}.ics`, e.g. `wc2026-ar-vs-ma-2026-06-25.ics`. Stable, human-readable, sortable.
+
+### 18.5 Visibility rules
+
+The button does NOT render when:
+- The match `status === 'cancelled'` (the entire row is already excluded upstream).
+- The match `status === 'finished'` (no point agendar a past event).
+- The match has already kicked off (`now > Date.parse(match.utcKickoff)`).
+
+For all other states (`scheduled`, `live`, `postponed`) the button renders — `postponed` is intentional because the user may want to agendar the match for whenever it does get played, and the calendar event can be edited.
+
+### 18.6 Deferred for post-MVP
+
+- **ICS feed subscription** — a single hosted `.ics` URL on GH Pages that the user subscribes to once and the calendar auto-syncs for the whole tournament. Generated by the same GitHub Actions pipeline that refreshes `matches.json`. Documented here as the natural next step; not in MVP because per-match download already covers 100% of the user's stated need.
+- **iOS-specific quirks** — iOS Safari downloads `.ics` files but the integration with Calendar.app varies. Acceptable for MVP; documented as a known limitation.

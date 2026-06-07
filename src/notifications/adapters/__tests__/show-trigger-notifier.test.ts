@@ -46,13 +46,18 @@ interface FakeRegistration {
   pending: PendingNotification[]
 }
 
-function makeFakeRegistration(opts: { showThrowsForMatchId?: string } = {}): FakeRegistration {
+function makeFakeRegistration(
+  opts: {
+    readonly showThrowsForMatchId?: string
+    // Seed the OS-level pending list with notifications that the
+    // registration "already holds" (e.g. left over from a previous
+    // session before the tab was closed). The orphan-cleanup path in
+    // `schedule()` enumerates these via `getNotifications`.
+    readonly seedTags?: readonly string[]
+  } = {},
+): FakeRegistration {
   const pending: PendingNotification[] = []
-  const showNotification = vi.fn(async (_title: string, options: Record<string, unknown>) => {
-    const tag = options.tag as string
-    if (opts.showThrowsForMatchId !== undefined && tag.endsWith(opts.showThrowsForMatchId)) {
-      throw new Error('simulated showNotification failure')
-    }
+  const enroll = (tag: string): void => {
     pending.push({
       tag,
       close: vi.fn(() => {
@@ -60,6 +65,20 @@ function makeFakeRegistration(opts: { showThrowsForMatchId?: string } = {}): Fak
         if (idx >= 0) pending.splice(idx, 1)
       }),
     })
+  }
+  for (const seed of opts.seedTags ?? []) enroll(seed)
+  const showNotification = vi.fn(async (_title: string, options: Record<string, unknown>) => {
+    const tag = options.tag as string
+    if (opts.showThrowsForMatchId !== undefined && tag.endsWith(opts.showThrowsForMatchId)) {
+      throw new Error('simulated showNotification failure')
+    }
+    // Spec-defined tag-replace: if a same-tag entry already exists,
+    // drop it before adding the new one. Mirrors what Chromium does
+    // under the hood and keeps the fake consistent with the
+    // "re-arming is idempotent" contract.
+    const existingIdx = pending.findIndex((p) => p.tag === tag)
+    if (existingIdx >= 0) pending.splice(existingIdx, 1)
+    enroll(tag)
   })
   const getNotifications = vi.fn(async (filter?: { includeTriggered?: boolean; tag?: string }) => {
     if (filter?.tag !== undefined) {

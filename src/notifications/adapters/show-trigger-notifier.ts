@@ -22,13 +22,20 @@
 // the next `matches` mutation cascading into a re-plan. Documented in
 // design.md §8 and risks below.
 //
-// ── Atomicity ─────────────────────────────────────────────────────────
-// `schedule()` cancels every previously-scheduled entry BEFORE arming
-// the new batch. Same contract as the timeout notifier. Re-scheduling
-// with the same `tag: matchId` is already idempotent at the OS level
-// (the spec defines tag-replace semantics), but explicit cancellation
-// keeps `scheduledIds` honest so `cancelAll()` doesn't iterate stale
-// entries.
+// ── Atomicity & cross-session cleanup ─────────────────────────────────
+// Every `schedule()` call automatically closes any prior notifications
+// registered by this app that aren't in the new plan. This handles the
+// cross-session cancelled/postponed match case: if the user closed the
+// tab, the match got cancelled in the next daily refresh, then the user
+// re-opens — the orphan pending notification gets closed before we
+// re-arm the new plan. We do this by enumerating the OS-level pending
+// notifications via `registration.getNotifications({ includeTriggered:
+// false })` (not the in-memory `scheduledIds` Set, which doesn't
+// survive across sessions) and filtering by the `wc2026-` tag prefix
+// so we never touch notifications that belong to other code. Same-tag
+// matches in the new plan are NOT explicitly closed; `showNotification`
+// with the same tag REPLACES the pending notification per spec, so
+// re-arming is idempotent.
 
 import { STAGE_KEYS } from '@/matches/i18n/stage-labels'
 import type { Notifier } from '@/notifications/ports/notifier'
@@ -106,6 +113,15 @@ function defaultIconPath(): string {
 
 const TAG_PREFIX = 'wc2026-'
 
+// Tag-prefix guard for cross-session cleanup. Every notification we
+// arm carries this prefix; the cleanup pass refuses to close any
+// notification whose tag doesn't start with it. Defensive — there is
+// no other code that calls `registration.showNotification` today, but
+// keeping the filter narrow means a future feature can use the same
+// SW registration without us yanking its notifications out from
+// under it.
+const OWN_NOTIFICATION_PREFIX = 'wc2026-'
+
 function taggedId(matchId: string): string {
   return `${TAG_PREFIX}${matchId}`
 }
@@ -116,10 +132,11 @@ export function createShowTriggerNotifier(deps: ShowTriggerNotifierDeps = {}): N
   const i18nFn = deps.i18n ?? (useI18n as unknown as () => I18nLike)
   const iconPath = deps.iconPath ?? defaultIconPath()
 
-  // We track only the ids we successfully armed. `cancelAll()` walks
-  // this set and closes by-tag, which is safer than "close every
-  // pending notification with this prefix" because it never touches
-  // notifications from other surfaces the app might add later.
+  // Hot-path optimization for `cancel(matchId)`: lets us short-circuit
+  // when a caller cancels a tag we never armed in this session. NOT
+  // the source of truth for cleanup anymore — that role moved to the
+  // OS-level `getNotifications()` enumeration so we can catch orphans
+  // from previous sessions (see `getOwnNotifications` + `schedule`).
   const scheduledIds = new Set<string>()
 
   function renderContent(entry: ScheduleEntry): { title: string; body: string } {
@@ -158,6 +175,31 @@ export function createShowTriggerNotifier(deps: ShowTriggerNotifierDeps = {}): N
     }
   }
 
+  // Enumerate every OS-level pending notification we own — i.e. those
+  // tagged with the `wc2026-` prefix. This is the source of truth for
+  // cleanup; `scheduledIds` is only a session-scoped hot cache and
+  // wouldn't survive a tab close.
+  //
+  // We try `{ includeTriggered: false }` first because the Notification
+  // Triggers spec defines that filter and Chromium respects it. Some
+  // older / non-Chromium implementations are documented to throw on
+  // unknown option keys; in that case we fall back to the unfiltered
+  // call. Either branch yields the same logical result for our use
+  // case (we only ever arm trigger-backed notifications) — the
+  // `includeTriggered` flag exists mainly to skip already-delivered
+  // ones if the OS happens to keep them around.
+  async function getOwnNotifications(
+    registration: ServiceWorkerRegistrationLike,
+  ): Promise<readonly ClosableNotification[]> {
+    let all: readonly ClosableNotification[]
+    try {
+      all = await registration.getNotifications({ includeTriggered: false })
+    } catch {
+      all = await registration.getNotifications()
+    }
+    return all.filter((n) => typeof n.tag === 'string' && n.tag.startsWith(OWN_NOTIFICATION_PREFIX))
+  }
+
   async function cancel(matchId: string): Promise<void> {
     const tag = taggedId(matchId)
     const registration = await getRegistration()
@@ -174,32 +216,71 @@ export function createShowTriggerNotifier(deps: ShowTriggerNotifierDeps = {}): N
   }
 
   async function cancelAll(): Promise<void> {
-    const ids = Array.from(scheduledIds)
-    if (ids.length === 0) return
     const registration = await getRegistration()
     if (registration === null) {
       scheduledIds.clear()
       return
     }
-    for (const tag of ids) {
+    let pending: readonly ClosableNotification[]
+    try {
+      pending = await getOwnNotifications(registration)
+    } catch (error) {
+      // If we can't enumerate, we can't safely close — log and clear
+      // the in-memory cache so callers don't see stale ids. Production
+      // never relies on this branch for correctness; it's a belt for
+      // pathological SW implementations.
+      console.warn('[show-trigger-notifier] cancelAll: enumeration failed', { error })
+      scheduledIds.clear()
+      return
+    }
+    for (const n of pending) {
       try {
-        await closeByTag(registration, tag)
+        n.close()
       } catch (error) {
-        console.warn('[show-trigger-notifier] cancelAll: per-tag close failed', { tag, error })
+        console.warn('[show-trigger-notifier] cancelAll: per-tag close failed', {
+          tag: n.tag,
+          error,
+        })
       }
     }
     scheduledIds.clear()
   }
 
   async function schedule(entries: readonly ScheduleEntry[]): Promise<void> {
-    // Atomic replace — drop in-flight before arming. We await this
-    // because `showNotification` with the same tag REPLACES the pending
-    // entry, but if the new batch omits a previously-scheduled match
-    // we'd leak it without the explicit close.
-    await cancelAll()
-
     const registration = await getRegistration()
     if (registration === null) return
+
+    // Cross-session orphan cleanup: enumerate every prior `wc2026-*`
+    // notification the OS is holding and close the ones whose tag
+    // isn't in the new plan. Same-tag entries are intentionally left
+    // alone — `showNotification` with the same tag REPLACES the
+    // pending one per spec, so re-arming below is idempotent and a
+    // pre-close would race with the re-arm.
+    const planTags = new Set(entries.map((e) => taggedId(e.matchId)))
+    try {
+      const existing = await getOwnNotifications(registration)
+      for (const n of existing) {
+        if (!planTags.has(n.tag)) {
+          try {
+            n.close()
+          } catch (error) {
+            console.warn('[show-trigger-notifier] schedule: orphan close failed', {
+              tag: n.tag,
+              error,
+            })
+          }
+        }
+      }
+    } catch (error) {
+      // Enumeration failure is non-fatal — we still try to arm the new
+      // plan. The next `schedule()` call will retry the cleanup.
+      console.warn('[show-trigger-notifier] schedule: orphan enumeration failed', { error })
+    }
+
+    // Reset the in-memory cache to mirror the new plan; we repopulate
+    // as each entry arms successfully so a failing entry isn't tracked
+    // as scheduled.
+    scheduledIds.clear()
 
     for (const entry of entries) {
       const tag = taggedId(entry.matchId)

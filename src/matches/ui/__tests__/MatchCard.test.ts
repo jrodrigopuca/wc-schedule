@@ -120,4 +120,24 @@ describe('MatchCard', () => {
     // Format depends on the host TZ; just confirm SOMETHING time-shaped is present.
     expect(label).toMatch(/\d{2}:\d{2}/)
   })
+
+  it('renders the AddToCalendar button for scheduled matches', () => {
+    const wrapper = mount(MatchCard, { props: { match: baseMatch, now: NOW } })
+    const button = wrapper.find('button')
+    expect(button.exists()).toBe(true)
+    expect(button.attributes('aria-label') ?? '').toContain('Agregar al calendario')
+  })
+
+  it('does NOT render the AddToCalendar button for finished matches', () => {
+    const finished: Match = { ...baseMatch, status: 'finished', score: { home: 2, away: 1 } }
+    const wrapper = mount(MatchCard, { props: { match: finished, now: NOW } })
+    expect(wrapper.find('button').exists()).toBe(false)
+  })
+
+  it('does NOT render the AddToCalendar button when kickoff is already in the past', () => {
+    // baseMatch.utcKickoff is 2026-06-14T19:00:00Z. Move `now` past it.
+    const past = Date.parse('2026-06-14T20:00:00Z')
+    const wrapper = mount(MatchCard, { props: { match: baseMatch, now: past } })
+    expect(wrapper.find('button').exists()).toBe(false)
+  })
 })

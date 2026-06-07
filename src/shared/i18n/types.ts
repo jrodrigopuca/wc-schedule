@@ -67,3 +67,4 @@ export type MessageKey =
   | 'day.today'
   | 'day.empty'
   | 'day.selector.aria'
+  | 'calendar.cta.add'

@@ -72,6 +72,7 @@ export const MESSAGES: Record<Locale, Record<MessageKey, string>> = {
     'day.today': 'Hoy',
     'day.empty': 'Sin partidos este día',
     'day.selector.aria': 'Seleccionar día del torneo',
+    'calendar.cta.add': 'Agregar al calendario',
   },
   en: {
     'featured.eyebrow.upcomingToday': 'Next match',
@@ -136,5 +137,6 @@ export const MESSAGES: Record<Locale, Record<MessageKey, string>> = {
     'day.today': 'Today',
     'day.empty': 'No matches this day',
     'day.selector.aria': 'Select tournament day',
+    'calendar.cta.add': 'Add to calendar',
   },
 }

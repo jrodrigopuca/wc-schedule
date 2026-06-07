@@ -667,6 +667,34 @@
     font-variant-numeric: tabular-nums;
   }
 
+  .match__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+  }
+  .cal-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: background 120ms ease, color 120ms ease, border-color 120ms ease, transform 120ms ease;
+  }
+  .cal-btn:hover {
+    background: var(--bg-pill);
+    color: var(--text-strong);
+    border-color: var(--border-strong);
+    transform: translateY(-1px);
+  }
+  .cal-btn svg { width: 14px; height: 14px; }
+
   .badge {
     display: inline-flex;
     align-items: center;
