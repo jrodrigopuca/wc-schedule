@@ -26,9 +26,13 @@ function installShowTriggerStubs(): void {
     configurable: true,
   })
   vi.stubGlobal('Notification', FakeNotification)
-  // Inject the trigger constructor.
+  // Inject the trigger constructor. `erasableSyntaxOnly` forbids
+  // parameter properties — assign by hand.
   class FakeTimestampTrigger {
-    constructor(public ts: number) {}
+    public ts: number
+    constructor(ts: number) {
+      this.ts = ts
+    }
   }
   vi.stubGlobal('TimestampTrigger', FakeTimestampTrigger)
   // Ensure navigator.serviceWorker exists; happy-dom doesn't ship it by
@@ -84,7 +88,10 @@ describe('isShowTriggerSupported', () => {
     class NotificationWithoutTrigger {}
     vi.stubGlobal('Notification', NotificationWithoutTrigger)
     class FakeTimestampTrigger {
-      constructor(public ts: number) {}
+      public ts: number
+      constructor(ts: number) {
+        this.ts = ts
+      }
     }
     vi.stubGlobal('TimestampTrigger', FakeTimestampTrigger)
     if (!('serviceWorker' in window.navigator)) {

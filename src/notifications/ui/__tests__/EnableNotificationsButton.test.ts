@@ -40,8 +40,12 @@ function installShowTriggerEnvironment(): void {
       configurable: true,
     })
   }
+  // `erasableSyntaxOnly` forbids parameter properties — assign by hand.
   class FakeTimestampTrigger {
-    constructor(public ts: number) {}
+    public ts: number
+    constructor(ts: number) {
+      this.ts = ts
+    }
   }
   vi.stubGlobal('TimestampTrigger', FakeTimestampTrigger)
 }

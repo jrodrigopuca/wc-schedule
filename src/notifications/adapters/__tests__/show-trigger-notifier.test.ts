@@ -25,8 +25,14 @@ function makeEntry(
 // Sentinel constructor for the trigger value. We assert
 // `showTrigger instanceof TT` so the adapter is wired to call our
 // injected factory and not the real TimestampTrigger global.
+//
+// NOTE: `erasableSyntaxOnly` in tsconfig.app.json bans parameter
+// properties — use an explicit field + assignment instead.
 class TT {
-  constructor(public ts: number) {}
+  public ts: number
+  constructor(ts: number) {
+    this.ts = ts
+  }
 }
 
 interface PendingNotification {
@@ -68,6 +74,23 @@ function makeFakeRegistration(opts: { showThrowsForMatchId?: string } = {}): Fak
   }
 }
 
+// `vi.fn` infers its mock signature as the wide `Procedure | Constructable`
+// union, which strict structural typing in tsconfig.app.json refuses to
+// match against the adapter's narrow `(title, options) => Promise<void>`
+// shape on `ServiceWorkerRegistrationLike`. The DI seam doesn't care —
+// we route the FakeRegistration through `unknown` at the boundary, which
+// preserves runtime behavior and the assertion power of `vi.fn` while
+// keeping vue-tsc happy. Pin the helper return type narrowly (no
+// `undefined`) so `exactOptionalPropertyTypes` accepts the assignment.
+type RegistrationPromiseFn = Exclude<
+  NonNullable<Parameters<typeof createShowTriggerNotifier>[0]>['registrationPromise'],
+  undefined
+>
+
+function asRegistrationPromise(reg: FakeRegistration): RegistrationPromiseFn {
+  return (async () => reg) as unknown as RegistrationPromiseFn
+}
+
 describe('createShowTriggerNotifier — schedule()', () => {
   beforeEach(() => {
     useI18n().setLocale('es')
@@ -80,7 +103,7 @@ describe('createShowTriggerNotifier — schedule()', () => {
   it('arms showNotification once per entry with the right tag and trigger', async () => {
     const reg = makeFakeRegistration()
     const notifier = createShowTriggerNotifier({
-      registrationPromise: async () => reg,
+      registrationPromise: asRegistrationPromise(reg),
       trigger: (ts) => new TT(ts),
     })
     const entries = [
@@ -103,7 +126,7 @@ describe('createShowTriggerNotifier — schedule()', () => {
   it('resolves title and body via i18n at SCHEDULE time (ES locale pinned)', async () => {
     const reg = makeFakeRegistration()
     const notifier = createShowTriggerNotifier({
-      registrationPromise: async () => reg,
+      registrationPromise: asRegistrationPromise(reg),
       trigger: (ts) => new TT(ts),
     })
     await (notifier.schedule([
@@ -117,7 +140,7 @@ describe('createShowTriggerNotifier — schedule()', () => {
   it('passes the BASE_URL-prefixed icon path', async () => {
     const reg = makeFakeRegistration()
     const notifier = createShowTriggerNotifier({
-      registrationPromise: async () => reg,
+      registrationPromise: asRegistrationPromise(reg),
       trigger: (ts) => new TT(ts),
       iconPath: '/wc-schedule/pwa-192x192.png',
     })
@@ -132,7 +155,7 @@ describe('createShowTriggerNotifier — schedule()', () => {
   it('continues scheduling other entries when one showNotification throws', async () => {
     const reg = makeFakeRegistration({ showThrowsForMatchId: 'bad' })
     const notifier = createShowTriggerNotifier({
-      registrationPromise: async () => reg,
+      registrationPromise: asRegistrationPromise(reg),
       trigger: (ts) => new TT(ts),
     })
     const consoleWarn = vi.spyOn(console, 'warn').mockImplementation(() => {})
@@ -150,7 +173,7 @@ describe('createShowTriggerNotifier — schedule()', () => {
   it('clears the previous batch before arming the second (atomic replace)', async () => {
     const reg = makeFakeRegistration()
     const notifier = createShowTriggerNotifier({
-      registrationPromise: async () => reg,
+      registrationPromise: asRegistrationPromise(reg),
       trigger: (ts) => new TT(ts),
     })
     await (notifier.schedule([
@@ -178,7 +201,7 @@ describe('createShowTriggerNotifier — cancellation', () => {
   it('cancel(matchId) closes the matching pending notification by tag', async () => {
     const reg = makeFakeRegistration()
     const notifier = createShowTriggerNotifier({
-      registrationPromise: async () => reg,
+      registrationPromise: asRegistrationPromise(reg),
       trigger: (ts) => new TT(ts),
     })
     await (notifier.schedule([
@@ -194,7 +217,7 @@ describe('createShowTriggerNotifier — cancellation', () => {
   it('cancelAll() closes every pending notification we armed', async () => {
     const reg = makeFakeRegistration()
     const notifier = createShowTriggerNotifier({
-      registrationPromise: async () => reg,
+      registrationPromise: asRegistrationPromise(reg),
       trigger: (ts) => new TT(ts),
     })
     await (notifier.schedule([
@@ -209,7 +232,7 @@ describe('createShowTriggerNotifier — cancellation', () => {
   it('cancelAll() with nothing scheduled is a no-op and does NOT call SW', async () => {
     const reg = makeFakeRegistration()
     const notifier = createShowTriggerNotifier({
-      registrationPromise: async () => reg,
+      registrationPromise: asRegistrationPromise(reg),
       trigger: (ts) => new TT(ts),
     })
     await (notifier.cancelAll() as unknown as Promise<void>)

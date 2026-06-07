@@ -509,7 +509,12 @@ Detection probes (all four must pass):
 - `'serviceWorker' in window.navigator`
 - `typeof TimestampTrigger !== 'undefined'`
 
-The retained-but-unused timeout strategy:
+Strategy table — Phase 9a and Phase 9b collapse to a single production wiring:
+
+| Strategy        | Phase | Status                  | Tab-closed delivery | Use                                                                                  |
+| --------------- | ----- | ----------------------- | ------------------- | ------------------------------------------------------------------------------------ |
+| `show-trigger`  | 9a/9b | **Production (locked)** | Yes (OS-scheduled)  | Chromium-only — `pickNotifier()` returns this whenever the four probes pass.         |
+| `timeout`       | 9a    | Repo-only (test seam)   | No                  | Documentation + Notifier-port reference for unit tests; production NEVER picks it.   |
 
 1. **`Notification.showTrigger` (production)**: schedule once at boot via `serviceWorkerRegistration.showNotification({ ...payload, showTrigger: new TimestampTrigger(fireAt) })`. OS-managed, survives tab close. Currently Chromium-only.
 2. **`setTimeout` (NOT in production)**: foreground-only; kept as `timeout-notifier.ts` purely to (a) document the alternative, and (b) provide a clean Notifier implementation for unit-testing `useNotifications.schedule()`. Rejected as a fallback — see §12.2.
