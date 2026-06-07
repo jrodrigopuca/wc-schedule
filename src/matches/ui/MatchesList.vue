@@ -1,7 +1,12 @@
 <script setup lang="ts">
-// MatchesList — renders the list of today's matches under the featured
-// card. Filters cancelled matches per specs/matches.md AC-6, excludes
-// non-today entries per AC-7, and sorts by `byKickoffThenId` per AC-3.
+// MatchesList — renders a list of matches. By default it filters to
+// "today" (host-local), per specs/matches.md AC-7. Pass `dayYMD` to
+// pin the list to an explicit YYYY-MM-DD instead — used by the
+// day-navigation surface so the same component handles both the
+// "main" (today) and "day" (selected) modes.
+//
+// Always filters cancelled matches per AC-6 and sorts by
+// `byKickoffThenId` per AC-3.
 //
 // Pure presentational composition over `MatchCard`; the empty-state copy
 // covers AC-8 ("zero matches today" surface).
@@ -10,33 +15,43 @@ import type { Match } from '@/matches/domain/match'
 import MatchCard from '@/matches/ui/MatchCard.vue'
 import { isToday } from '@/matches/domain/today'
 import { byKickoffThenId } from '@/matches/domain/sort'
+import { matchesForDay } from '@/matches/domain/day-matches'
 import { useI18n } from '@/shared/i18n/useI18n'
 
-const props = defineProps<{ matches: readonly Match[]; now: number }>()
+const props = defineProps<{
+  matches: readonly Match[]
+  now: number
+  dayYMD?: string
+}>()
 
 const { t } = useI18n()
 
-const todays = computed<readonly Match[]>(() => {
+const visible = computed<readonly Match[]>(() => {
+  if (props.dayYMD !== undefined) {
+    return matchesForDay(props.matches, props.dayYMD, props.now)
+  }
   const filtered = props.matches.filter(
     (m) => m.status !== 'cancelled' && isToday(m.utcKickoff, props.now),
   )
   return [...filtered].sort(byKickoffThenId)
 })
+
+const emptyCopy = computed(() => (props.dayYMD !== undefined ? t('day.empty') : t('list.empty')))
 </script>
 
 <template>
   <section :class="$style.section">
     <div :class="$style.header">
       <h2 :class="$style.title">{{ t('list.title') }}</h2>
-      <span :class="$style.count">{{ t('list.count', { n: todays.length }) }}</span>
+      <span :class="$style.count">{{ t('list.count', { n: visible.length }) }}</span>
     </div>
 
-    <ul v-if="todays.length > 0" :class="$style.list">
-      <MatchCard v-for="match in todays" :key="match.id" :match="match" :now="now" />
+    <ul v-if="visible.length > 0" :class="$style.list">
+      <MatchCard v-for="match in visible" :key="match.id" :match="match" :now="now" />
     </ul>
 
     <div v-else :class="$style.empty" role="status">
-      <p :class="$style.emptyText">{{ t('list.empty') }}</p>
+      <p :class="$style.emptyText">{{ emptyCopy }}</p>
     </div>
   </section>
 </template>

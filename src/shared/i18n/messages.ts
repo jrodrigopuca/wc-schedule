@@ -66,6 +66,11 @@ export const MESSAGES: Record<Locale, Record<MessageKey, string>> = {
     'data.stale.history': 'Mostrando datos guardados',
     'data.stale.fixture': 'Mostrando datos de respaldo',
     'preview.section.matchesList': 'Listado de partidos',
+    'preview.section.daySelector': 'Tira de selección de días',
+    'day.label': 'Día {n}',
+    'day.today': 'Hoy',
+    'day.empty': 'Sin partidos este día',
+    'day.selector.aria': 'Seleccionar día del torneo',
   },
   en: {
     'featured.eyebrow.upcomingToday': 'Next match',
@@ -124,5 +129,10 @@ export const MESSAGES: Record<Locale, Record<MessageKey, string>> = {
     'data.stale.history': 'Showing saved data',
     'data.stale.fixture': 'Showing fallback data',
     'preview.section.matchesList': 'Matches list',
+    'preview.section.daySelector': 'Day selector strip',
+    'day.label': 'Day {n}',
+    'day.today': 'Today',
+    'day.empty': 'No matches this day',
+    'day.selector.aria': 'Select tournament day',
   },
 }

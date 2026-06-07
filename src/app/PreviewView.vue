@@ -12,6 +12,7 @@ import FeaturedCard from '@/featured/ui/FeaturedCard.vue'
 import Countdown from '@/featured/ui/Countdown.vue'
 import MatchCard from '@/matches/ui/MatchCard.vue'
 import MatchesList from '@/matches/ui/MatchesList.vue'
+import DaySelector from '@/matches/ui/DaySelector.vue'
 import EnableNotificationsButton from '@/notifications/ui/EnableNotificationsButton.vue'
 import { useI18n } from '@/shared/i18n/useI18n'
 import { useRoute } from '@/app/router'
@@ -112,6 +113,16 @@ const matchesListSample = computed<readonly Match[]>(() => {
   ]
 })
 
+// DaySelector preview: stub `selectedYMD` to a non-today YMD inside the
+// tournament window so the active-chip styling is observable in
+// isolation. The actual selectDay flow is owned by MainView; the
+// preview just demonstrates the component shell.
+const previewSelectedYMD = ref<string | null>('2026-06-15')
+
+function onPreviewDaySelect(ymd: string): void {
+  previewSelectedYMD.value = ymd
+}
+
 function backToMain(event: Event): void {
   event.preventDefault()
   navigate('main')
@@ -207,6 +218,19 @@ function backToMain(event: Event): void {
         <p :class="$style.sectionDescription">{{ t('preview.section.matchesList') }}</p>
       </div>
       <MatchesList :matches="matchesListSample" :now="now" />
+    </section>
+
+    <section :class="$style.section">
+      <div :class="$style.sectionHeader">
+        <code :class="$style.sectionId">DaySelector · 39 days</code>
+        <p :class="$style.sectionDescription">{{ t('preview.section.daySelector') }}</p>
+      </div>
+      <DaySelector
+        :matches="matchesListSample"
+        :selected-y-m-d="previewSelectedYMD"
+        :now="now"
+        @select="onPreviewDaySelect"
+      />
     </section>
 
     <section :class="$style.section">

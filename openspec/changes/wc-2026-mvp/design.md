@@ -1363,7 +1363,12 @@ export type MessageKey =
   | "notifications.cta.denied.title"
   | "notifications.cta.denied.hint"
   | "data.stale.history"
-  | "data.stale.fixture";
+  | "data.stale.fixture"
+  | "preview.section.daySelector"
+  | "day.label"
+  | "day.today"
+  | "day.empty"
+  | "day.selector.aria";
 
 export const MESSAGES: Record<Locale, Record<MessageKey, string>> = {
   es: {
@@ -1421,6 +1426,11 @@ export const MESSAGES: Record<Locale, Record<MessageKey, string>> = {
     "notifications.cta.denied.hint":   "Activá los avisos del navegador para recibirlos",
     "data.stale.history":              "Mostrando datos guardados",
     "data.stale.fixture":              "Mostrando datos de respaldo",
+    "preview.section.daySelector":     "Tira de selección de días",
+    "day.label":                       "Día {n}",
+    "day.today":                       "Hoy",
+    "day.empty":                       "Sin partidos este día",
+    "day.selector.aria":               "Seleccionar día del torneo",
   },
   en: {
     "featured.eyebrow.upcomingToday": "Next match",
@@ -1477,6 +1487,11 @@ export const MESSAGES: Record<Locale, Record<MessageKey, string>> = {
     "notifications.cta.denied.hint":   "Enable notifications in your browser to receive them",
     "data.stale.history":              "Showing saved data",
     "data.stale.fixture":              "Showing fallback data",
+    "preview.section.daySelector":     "Day selector strip",
+    "day.label":                       "Day {n}",
+    "day.today":                       "Today",
+    "day.empty":                       "No matches this day",
+    "day.selector.aria":               "Select tournament day",
   },
 };
 ```

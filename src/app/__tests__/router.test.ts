@@ -38,6 +38,11 @@ describe('parseHash', () => {
     const { parseHash } = await loadRouter()
     expect(parseHash('#/something-else')).toBe('main')
   })
+
+  it('returns "main" for "#/day/<YMD>" (day route is owned by useSelectedDay)', async () => {
+    const { parseHash } = await loadRouter()
+    expect(parseHash('#/day/2026-06-12')).toBe('main')
+  })
 })
 
 describe('useRoute', () => {

@@ -138,4 +138,30 @@ describe('MatchesList', () => {
     })
     expect(wrapper.text()).toContain('2 partidos')
   })
+
+  it('uses matchesForDay when dayYMD is passed (bypasses the today filter)', () => {
+    // TOMORROW is 2026-06-14. Pinning to that day surfaces it instead.
+    const wrapper = mount(MatchesList, {
+      props: {
+        matches: [TODAY_EARLY, TOMORROW, YESTERDAY],
+        now: NOW,
+        dayYMD: '2026-06-14',
+      },
+    })
+    const items = wrapper.findAll('li')
+    expect(items).toHaveLength(1)
+    expect(wrapper.text()).toContain('México')
+    expect(wrapper.text()).not.toContain('Argentina')
+  })
+
+  it('uses the day-empty copy when dayYMD is passed and yields zero matches', () => {
+    const wrapper = mount(MatchesList, {
+      props: {
+        matches: [TODAY_EARLY],
+        now: NOW,
+        dayYMD: '2026-07-01',
+      },
+    })
+    expect(wrapper.text()).toContain('Sin partidos este día')
+  })
 })

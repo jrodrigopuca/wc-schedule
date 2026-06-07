@@ -61,3 +61,8 @@ export type MessageKey =
   | 'data.stale.history'
   | 'data.stale.fixture'
   | 'preview.section.matchesList'
+  | 'preview.section.daySelector'
+  | 'day.label'
+  | 'day.today'
+  | 'day.empty'
+  | 'day.selector.aria'
