@@ -9,7 +9,7 @@ describe('triggerIcsDownload', () => {
 
   it('creates a Blob URL, sets it on an anchor, clicks, and revokes the URL', () => {
     const SENTINEL = 'blob:sentinel-url'
-    const createObjectURL = vi.fn(() => SENTINEL)
+    const createObjectURL = vi.fn((_blob: Blob) => SENTINEL)
     const revokeObjectURL = vi.fn()
     vi.stubGlobal('URL', { createObjectURL, revokeObjectURL })
 
@@ -29,12 +29,12 @@ describe('triggerIcsDownload', () => {
     triggerIcsDownload('FAKE-ICS-BODY', 'wc2026.ics')
 
     expect(createObjectURL).toHaveBeenCalledTimes(1)
-    const blobArg = createObjectURL.mock.calls[0]?.[0] as Blob
+    const blobArg = createObjectURL.mock.calls[0]?.[0] as unknown as Blob
     expect(blobArg).toBeInstanceOf(Blob)
     expect(blobArg.type).toBe('text/calendar;charset=utf-8')
 
     expect(appendSpy).toHaveBeenCalledTimes(1)
-    const anchor = appendSpy.mock.calls[0]?.[0] as HTMLAnchorElement
+    const anchor = appendSpy.mock.calls[0]?.[0] as unknown as HTMLAnchorElement
     expect(anchor.href).toBe(SENTINEL)
     expect(anchor.download).toBe('wc2026.ics')
 

@@ -43,7 +43,7 @@ describe('AddToCalendarButton', () => {
 
   it('on click, triggers the Blob download flow with a localized SUMMARY', () => {
     const SENTINEL = 'blob:download-sentinel'
-    const createObjectURL = vi.fn(() => SENTINEL)
+    const createObjectURL = vi.fn((_blob: Blob) => SENTINEL)
     const revokeObjectURL = vi.fn()
     vi.stubGlobal('URL', { createObjectURL, revokeObjectURL })
 
@@ -61,7 +61,7 @@ describe('AddToCalendarButton', () => {
     void wrapper.find('button').trigger('click')
 
     expect(createObjectURL).toHaveBeenCalledTimes(1)
-    const blob = createObjectURL.mock.calls[0]?.[0] as Blob
+    const blob = createObjectURL.mock.calls[0]?.[0] as unknown as Blob
     expect(blob.type).toBe('text/calendar;charset=utf-8')
     expect(clickSpy).toHaveBeenCalledTimes(1)
     expect(revokeObjectURL).toHaveBeenCalledWith(SENTINEL)

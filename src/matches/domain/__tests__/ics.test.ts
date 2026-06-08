@@ -101,10 +101,11 @@ describe('buildMatchIcs', () => {
   })
 
   it('DESCRIPTION omits the "Grupo X" suffix for knockout stages', () => {
+    const { group: _g, ...rest } = baseMatch
+    void _g
     const knockout: Match = {
-      ...baseMatch,
+      ...rest,
       stage: 'quarter-final',
-      group: undefined,
     }
     const ics = buildMatchIcs(knockout, ctxEs, NOW)
     expect(ics).toContain('DESCRIPTION:Cuartos de final · Mundial 2026')
@@ -132,10 +133,11 @@ describe('buildMatchIcs', () => {
   })
 
   it('omits the LOCATION line entirely when the match has no venue', () => {
-    const noVenue: Match = {
-      ...baseMatch,
-      venue: undefined,
-    }
+    // `exactOptionalPropertyTypes` rejects `venue: undefined`; destructure
+    // it out instead.
+    const { venue: _v, ...rest } = baseMatch
+    void _v
+    const noVenue: Match = rest
     const ics = buildMatchIcs(noVenue, ctxEs, NOW)
     expect(ics).not.toContain('LOCATION:')
   })

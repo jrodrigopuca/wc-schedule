@@ -206,6 +206,57 @@ describe('createShowTriggerNotifier — schedule()', () => {
     ]) as unknown as Promise<void>)
     expect(reg.pending.map((p) => p.tag)).toEqual(['wc2026-new-1'])
   })
+
+  it('closes cross-session orphans — OS holds tags the in-memory Set never saw', async () => {
+    // Simulate a fresh tab where the OS already holds a notification
+    // (e.g. for `wc2026-r16-03`) registered in a prior session that the
+    // new notifier instance knows nothing about. The new plan does NOT
+    // include that match (cancelled in the daily refresh). The orphan
+    // MUST be closed; the same-tag in-plan entry MUST survive (replaced
+    // via showNotification, not pre-closed).
+    const reg = makeFakeRegistration({
+      seedTags: ['wc2026-r16-03', 'wc2026-g-c-01'],
+    })
+    const notifier = createShowTriggerNotifier({
+      registrationPromise: asRegistrationPromise(reg),
+      trigger: (ts) => new TT(ts),
+    })
+    await (notifier.schedule([
+      makeEntry({ matchId: 'g-c-01', fireAtMs: NOW + 60_000 }),
+    ]) as unknown as Promise<void>)
+    expect(reg.pending.map((p) => p.tag)).toEqual(['wc2026-g-c-01'])
+  })
+
+  it('boot scenario — empty plan + OS holds prior notifications closes all of ours', async () => {
+    // The user closed the tab; the tournament got reshuffled; the new
+    // plan would be empty (or the user revoked permission). All prior
+    // notifications must be cleaned up.
+    const reg = makeFakeRegistration({
+      seedTags: ['wc2026-g-a-01', 'wc2026-g-b-02', 'wc2026-r32-05', 'wc2026-qf-1', 'wc2026-final'],
+    })
+    const notifier = createShowTriggerNotifier({
+      registrationPromise: asRegistrationPromise(reg),
+      trigger: (ts) => new TT(ts),
+    })
+    await (notifier.schedule([]) as unknown as Promise<void>)
+    expect(reg.pending).toEqual([])
+  })
+
+  it('tag-prefix guard — leaves notifications from other code untouched', async () => {
+    // Defensive: there is no other code on this origin today, but a
+    // future feature using the same SW registration must not have its
+    // notifications yanked by our cleanup pass.
+    const reg = makeFakeRegistration({
+      seedTags: ['wc2026-g-c-01', 'other-app-notif', 'wc2026-r32-01', 'analytics-ping'],
+    })
+    const notifier = createShowTriggerNotifier({
+      registrationPromise: asRegistrationPromise(reg),
+      trigger: (ts) => new TT(ts),
+    })
+    await (notifier.schedule([]) as unknown as Promise<void>)
+    // Only the wc2026-* ones got closed; the foreign tags survive.
+    expect(reg.pending.map((p) => p.tag).sort()).toEqual(['analytics-ping', 'other-app-notif'])
+  })
 })
 
 describe('createShowTriggerNotifier — cancellation', () => {
@@ -248,15 +299,19 @@ describe('createShowTriggerNotifier — cancellation', () => {
     expect(reg.pending).toEqual([])
   })
 
-  it('cancelAll() with nothing scheduled is a no-op and does NOT call SW', async () => {
+  it('cancelAll() with no own notifications in the OS closes nothing', async () => {
+    // The OS-level enumeration is the source of truth now (cross-session
+    // cleanup, see schedule()). With an empty registration, the pass is
+    // still a query (to be safe — there could be cross-session orphans
+    // we never armed in THIS session) but nothing matches the prefix,
+    // so no `.close()` happens.
     const reg = makeFakeRegistration()
     const notifier = createShowTriggerNotifier({
       registrationPromise: asRegistrationPromise(reg),
       trigger: (ts) => new TT(ts),
     })
     await (notifier.cancelAll() as unknown as Promise<void>)
-    // Never reached out for the registration because the tracked set is
-    // empty — saves a round trip when nothing was ever scheduled.
-    expect(reg.getNotifications).not.toHaveBeenCalled()
+    expect(reg.getNotifications).toHaveBeenCalled()
+    expect(reg.pending).toEqual([])
   })
 })
