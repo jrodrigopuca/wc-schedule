@@ -113,3 +113,5 @@ This proposal expects the following SDD artifacts to follow, in order:
 - `openspec/changes/wc-2026-mvp/tasks.md` — task breakdown derived from specs + design.
 
 Per `conventions.md` §9, `specs` and `design` may be authored in parallel; `tasks` requires both.
+
+**Deploy note (added during Phase 12 deploy batch):** the deploy target is GitHub Pages using the NATIVE Pages deployment (`actions/deploy-pages@v4`), not the third-party gh-pages branch flow. The Vite `base` is locked to `/wc-schedule/` so all assets resolve under that prefix; the PWA manifest's `start_url` and `scope` mirror it. Icons are generated from a single SVG source (`public/icon-source.svg`) via `@vite-pwa/assets-generator` and emitted to `public/` so the build pipeline ships them at the deploy root. The Phase 11 daily-refresh GitHub Action is intentionally deferred — the bundled fixture covers the launch window, and `RemoteSource` falls back to the fixture if `public/data/matches.json` is absent.
