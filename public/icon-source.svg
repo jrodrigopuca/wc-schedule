@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Source PWA icon for wc-schedule — final "simple".
+
+  Design (intentionally minimal to ship the MVP):
+    - Rounded-square green gradient app tile (matches App.vue brand mark).
+    - White circle in the center (the "ball" abstraction).
+    - "26" in bold, centered, dark-green — high contrast against white.
+    - No patterns, no shadows, no masks, no fancy effects.
+    - Reads cleanly at every icon size, including 32px favicon.
+
+  Edit and run `pnpm run generate:icons`.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#16A34A" />
+      <stop offset="100%" stop-color="#14532D" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="512" height="512" rx="82" ry="82" fill="url(#bgGradient)" />
+
+  <!-- White circle -->
+  <circle cx="256" cy="256" r="170" fill="#FFFFFF" />
+
+  <!-- "26" -->
+  <text
+    x="256"
+    y="340"
+    text-anchor="middle"
+    font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+    font-weight="900"
+    font-size="220"
+    letter-spacing="-10"
+    fill="#14532D"
+  >26</text>
+</svg>
