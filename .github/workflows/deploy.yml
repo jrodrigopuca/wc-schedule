@@ -8,10 +8,13 @@
 # rebuilds and publishes; manual runs are available via the
 # Actions tab (workflow_dispatch).
 #
-# This uses GitHub's NATIVE Pages deployment (`actions/deploy-pages@v4`)
+# This uses GitHub's NATIVE Pages deployment (`actions/deploy-pages@v5`)
 # rather than the third-party gh-pages branch flow. It does not push a
 # branch — it uploads the build artifact and the Pages runtime serves it
 # directly.
+#
+# Actions run on Node 24. pnpm version comes from `packageManager` in
+# package.json (Corepack standard) so we don't repeat it here.
 name: Deploy to GitHub Pages
 
 on:
@@ -39,15 +42,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v5
         with:
           run_install: false
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: pnpm
@@ -59,7 +62,7 @@ jobs:
         run: pnpm run build
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: ./dist
 
@@ -73,4 +76,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
