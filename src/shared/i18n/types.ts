@@ -59,6 +59,7 @@ export type MessageKey =
   | 'notifications.cta.denied.title'
   | 'notifications.cta.denied.hint'
   | 'notification.body'
+  | 'data.fresh'
   | 'data.stale.history'
   | 'data.stale.fixture'
   | 'preview.section.matchesList'

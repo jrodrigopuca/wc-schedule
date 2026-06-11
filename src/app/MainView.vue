@@ -63,11 +63,19 @@ watch(
 
 const hasData = computed(() => status.value === 'ready' || status.value === 'degraded')
 
-const staleMessage = computed(() => {
-  if (status.value !== 'degraded') return null
-  if (sourceName.value === 'history') return t('data.stale.history')
-  if (sourceName.value === 'manual') return t('data.stale.fixture')
-  return null
+// Data freshness indicator. Two states:
+//   - 'fresh' (green dot): live remote fetch succeeded
+//   - 'stale' (amber dot): fell back to cached snapshot or bundled fixture
+// The label lives in the `title`/`aria-label` of the dot — no visible text
+// so the footer stays minimal and the casual viewer isn't startled.
+const dataIndicator = computed<{ kind: 'fresh' | 'stale'; label: string } | null>(() => {
+  if (!hasData.value) return null
+  if (status.value === 'degraded') {
+    if (sourceName.value === 'history') return { kind: 'stale', label: t('data.stale.history') }
+    if (sourceName.value === 'manual') return { kind: 'stale', label: t('data.stale.fixture') }
+    return { kind: 'stale', label: t('data.stale.fixture') }
+  }
+  return { kind: 'fresh', label: t('data.fresh') }
 })
 
 const todayYMD = computed(() => ymdForNow(now.value))
@@ -156,7 +164,16 @@ function onSelectDay(dayYMD: string): void {
     </section>
 
     <footer :class="$style.footer">
-      <p v-if="staleMessage !== null" :class="$style.stale">{{ staleMessage }}</p>
+      <span
+        v-if="dataIndicator !== null"
+        :class="[
+          $style.statusDot,
+          dataIndicator.kind === 'fresh' ? $style.statusDotFresh : $style.statusDotStale,
+        ]"
+        role="img"
+        :aria-label="dataIndicator.label"
+        :title="dataIndicator.label"
+      />
       <a :class="$style.galleryLink" href="#/preview" @click="openGallery">
         &rarr; {{ t('nav.openGallery') }}
       </a>
@@ -209,16 +226,31 @@ function onSelectDay(dayYMD: string): void {
 
 .footer {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  gap: 10px;
   padding: 4px 0 24px;
 }
 
-.stale {
-  font-size: 12px;
-  color: var(--text-muted);
-  font-weight: 500;
+.statusDot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  flex-shrink: 0;
+  cursor: help;
+  transition: background-color 200ms ease;
+}
+
+.statusDotFresh {
+  background-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.statusDotStale {
+  background-color: #f59e0b;
+  box-shadow: 0 0 0 3px color-mix(in srgb, #f59e0b 18%, transparent);
 }
 
 .galleryLink {

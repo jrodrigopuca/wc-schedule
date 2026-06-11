@@ -89,18 +89,22 @@ describe('MainView (smoke)', () => {
     const hasEyebrow =
       text.includes('En vivo') || text.includes('Próximo partido') || text.includes('Mundial 2026')
     expect(hasEyebrow).toBe(true)
-    // Manual mode → no stale indicator.
-    expect(text).not.toContain('Mostrando datos de respaldo')
-    expect(text).not.toContain('Mostrando datos guardados')
+    // Manual mode in dev defaults: still 'ready', dot is "fresh" via the
+    // status indicator's aria-label.
+    const dot = wrapper.find('[role="img"]')
+    expect(dot.exists()).toBe(true)
+    expect(dot.attributes('aria-label')).toBe('Datos en línea')
   })
 
-  it('renders the stale-fixture indicator in degraded mode (remote → fixture fallback)', async () => {
+  it('renders a stale data indicator in degraded mode (remote → fixture fallback)', async () => {
     vi.stubEnv('VITE_DATA_SOURCE', 'remote')
     await __reloadMatchesForTests()
     await flushPromises()
     const wrapper = mount(MainView)
     await flushPromises()
-    expect(wrapper.text()).toContain('Mostrando datos de respaldo')
+    const dot = wrapper.find('[role="img"]')
+    expect(dot.exists()).toBe(true)
+    expect(dot.attributes('aria-label')).toBe('Datos de respaldo (sin conexión)')
   })
 
   it('renders the open-gallery footer link', () => {
