@@ -123,6 +123,8 @@ The five tasks below block the largest fan-out of downstream work. Prioritize th
 
 ### Phase 11 — GitHub Actions pipeline
 
+**Status: ✓ landed.** All six tasks implemented. Pure modules run as TypeScript directly under Node's native type stripping (repo standard — `tsconfig.node.json` `erasableSyntaxOnly`), so no build step and no new dependency. Run via `pnpm refresh:matches`. Workflow aligned to the repo's pnpm + `actions/*@v5` toolchain (not the `npm` sketch in `design.md` §10.3). 29 new unit tests, full suite green (405).
+
 | ID | Title | Ref | Acceptance | Deps | Tests | Est |
 |---|---|---|---|---|---|---|
 | T11.1 | Tournament constants + `getRefreshMode` + `shouldFetch` | `design.md` §10.1 | `scripts/refresh/tournament.ts` exports `TOURNAMENT_START_UTC`, `TOURNAMENT_END_UTC`, `NEAR_LEAD_DAYS`, `NEAR_TAIL_DAYS`, `RefreshMode`; `scripts/refresh/window.ts` exports the two pure functions. | T0.1 | unit: 7 `getRefreshMode` boundary cases per `design.md` §15; `shouldFetch` table-driven cases. | M |

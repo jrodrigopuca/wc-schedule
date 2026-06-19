@@ -1,0 +1,224 @@
+// Pure transform: football-data.org v4 `/competitions/{id}/matches` response
+// → the project's `Match[]` shape (design.md §10, tasks T11.2).
+//
+// This module is PURE (no I/O) so it is unit-testable against a captured
+// upstream payload. The network call lives in `fetch.ts`.
+//
+// SAFETY CONTRACT (data-source.md §7, §10.2): every field is mapped
+// STRICTLY. An unknown status enum, stage enum, or — most importantly — a
+// team name we cannot resolve to an ISO-3166-1 alpha-2 code throws. A throw
+// here aborts the whole refresh BEFORE any rotation, so a surprising upstream
+// payload can never overwrite the last-good `matches.json`. Loud failure is
+// the feature, not a bug.
+//
+// ⚠️ VERIFY-AGAINST-LIVE-API: the exact English strings football-data.org
+// emits for team names, the set of `status`/`stage` enum values, and the
+// `group` encoding are best-effort here. The first real `workflow_dispatch`
+// run will surface any mismatch as a hard failure (never as bad data). When
+// that happens, correct the maps below — do NOT loosen the strictness.
+
+import type { Match, MatchStatus, Stage } from '../../src/matches/domain/match.ts'
+
+// ── Upstream shape (only the fields we consume) ────────────────────────────
+
+interface UpstreamTeam {
+  readonly id: number | null
+  readonly name: string | null
+  readonly tla?: string | null
+}
+
+interface UpstreamScore {
+  readonly fullTime?: {
+    readonly home: number | null
+    readonly away: number | null
+  }
+}
+
+interface UpstreamMatch {
+  readonly id: number
+  readonly utcDate: string
+  readonly status: string
+  readonly stage: string
+  readonly group?: string | null
+  readonly homeTeam: UpstreamTeam
+  readonly awayTeam: UpstreamTeam
+  readonly score?: UpstreamScore
+}
+
+export interface UpstreamResponse {
+  readonly matches: readonly UpstreamMatch[]
+}
+
+// ── Enum maps (upstream → domain) ──────────────────────────────────────────
+
+const STATUS_MAP: Readonly<Record<string, MatchStatus>> = {
+  SCHEDULED: 'scheduled',
+  TIMED: 'scheduled',
+  IN_PLAY: 'live',
+  PAUSED: 'live',
+  FINISHED: 'finished',
+  POSTPONED: 'postponed',
+  SUSPENDED: 'cancelled',
+  CANCELLED: 'cancelled',
+}
+
+const STAGE_MAP: Readonly<Record<string, Stage>> = {
+  GROUP_STAGE: 'group',
+  LAST_32: 'round-of-32',
+  LAST_16: 'round-of-16',
+  QUARTER_FINALS: 'quarter-final',
+  SEMI_FINALS: 'semi-final',
+  THIRD_PLACE: 'third-place',
+  FINAL: 'final',
+}
+
+// Team display name (as emitted by football-data.org) → ISO-3166-1 alpha-2,
+// lowercase (the domain invariant — see match.ts). Covers the 48 WC-2026
+// participants plus a few common name variants. Unknown name → throw.
+const NAME_TO_ISO: Readonly<Record<string, string>> = {
+  Argentina: 'ar',
+  Australia: 'au',
+  Austria: 'at',
+  Belgium: 'be',
+  'Bosnia-Herzegovina': 'ba',
+  Brazil: 'br',
+  Cameroon: 'cm',
+  Canada: 'ca',
+  'Cape Verde': 'cv',
+  Colombia: 'co',
+  'Costa Rica': 'cr',
+  Croatia: 'hr',
+  Curaçao: 'cw',
+  Curacao: 'cw',
+  'Czech Republic': 'cz',
+  Czechia: 'cz',
+  Denmark: 'dk',
+  'DR Congo': 'cd',
+  Ecuador: 'ec',
+  Egypt: 'eg',
+  England: 'gb-eng',
+  France: 'fr',
+  Germany: 'de',
+  Ghana: 'gh',
+  Haiti: 'ht',
+  Iran: 'ir',
+  'IR Iran': 'ir',
+  'Ivory Coast': 'ci',
+  "Cote d'Ivoire": 'ci',
+  Italy: 'it',
+  Jamaica: 'jm',
+  Japan: 'jp',
+  Jordan: 'jo',
+  'Korea Republic': 'kr',
+  'South Korea': 'kr',
+  Mexico: 'mx',
+  Morocco: 'ma',
+  Netherlands: 'nl',
+  'New Zealand': 'nz',
+  Norway: 'no',
+  Panama: 'pa',
+  Paraguay: 'py',
+  Portugal: 'pt',
+  Qatar: 'qa',
+  'Saudi Arabia': 'sa',
+  Scotland: 'gb-sct',
+  Senegal: 'sn',
+  'South Africa': 'za',
+  Spain: 'es',
+  Switzerland: 'ch',
+  Tunisia: 'tn',
+  Türkiye: 'tr',
+  Turkey: 'tr',
+  'United States': 'us',
+  USA: 'us',
+  Uruguay: 'uy',
+  Uzbekistan: 'uz',
+}
+
+const GROUP_REGEX = /^[A-L]$/
+
+function mapStatus(raw: string): MatchStatus {
+  const mapped = STATUS_MAP[raw]
+  if (mapped === undefined) {
+    throw new Error(`transform: unknown upstream status "${raw}"`)
+  }
+  return mapped
+}
+
+function mapStage(raw: string): Stage {
+  const mapped = STAGE_MAP[raw]
+  if (mapped === undefined) {
+    throw new Error(`transform: unknown upstream stage "${raw}"`)
+  }
+  return mapped
+}
+
+function mapTeam(team: UpstreamTeam): { iso: string; name: string } {
+  const name = team.name?.trim()
+  if (!name) {
+    throw new Error('transform: upstream team is missing a name')
+  }
+  const iso = NAME_TO_ISO[name]
+  if (iso === undefined) {
+    throw new Error(`transform: no ISO mapping for team "${name}" (add it to NAME_TO_ISO)`)
+  }
+  return { iso, name }
+}
+
+// "GROUP_A" → "A". Returns undefined for knockout matches (no group). Throws
+// if the group label is present but not in the A–L range the schema allows.
+function mapGroup(raw: string | null | undefined): string | undefined {
+  if (raw === null || raw === undefined) return undefined
+  const letter = raw
+    .replace(/^GROUP[_\s-]*/i, '')
+    .trim()
+    .toUpperCase()
+  if (letter === '') return undefined
+  if (!GROUP_REGEX.test(letter)) {
+    throw new Error(`transform: unexpected group label "${raw}"`)
+  }
+  return letter
+}
+
+// Only emit a score when BOTH sides are concrete non-negative integers
+// (finished or in-play matches). football-data leaves them null pre-kickoff.
+function mapScore(score: UpstreamScore | undefined): { home: number; away: number } | undefined {
+  const ft = score?.fullTime
+  if (!ft) return undefined
+  const { home, away } = ft
+  if (typeof home !== 'number' || typeof away !== 'number') return undefined
+  if (home < 0 || away < 0 || !Number.isInteger(home) || !Number.isInteger(away)) {
+    throw new Error(`transform: invalid score ${home}-${away}`)
+  }
+  return { home, away }
+}
+
+export function transform(response: UpstreamResponse): Match[] {
+  if (!Array.isArray(response.matches)) {
+    throw new Error('transform: upstream payload has no `matches` array')
+  }
+
+  return response.matches.map((m): Match => {
+    const status = mapStatus(m.status)
+    const group = mapGroup(m.group)
+    // Only FINISHED matches carry a score. football-data updates `fullTime`
+    // live, but the daily cadence cannot honestly report an in-flight score
+    // and no consumer renders one for a non-finished state (MatchCard shows
+    // a score only when finished; the featured slot never does — see
+    // featured.md §4.1, data-source.md §6.4). Persisting a live/partial score
+    // would just freeze a stale number into the snapshot.
+    const score = status === 'finished' ? mapScore(m.score) : undefined
+    return {
+      id: `fd-${m.id}`,
+      utcKickoff: m.utcDate,
+      status,
+      stage: mapStage(m.stage),
+      teamA: mapTeam(m.homeTeam),
+      teamB: mapTeam(m.awayTeam),
+      // Spread the optionals only when present — `exactOptionalPropertyTypes`
+      // forbids an explicit `undefined` for `?: T` fields.
+      ...(group !== undefined ? { group } : {}),
+      ...(score !== undefined ? { score } : {}),
+    }
+  })
+}

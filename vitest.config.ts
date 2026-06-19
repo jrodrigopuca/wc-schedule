@@ -12,7 +12,11 @@ export default defineConfig({
   test: {
     environment: 'happy-dom',
     globals: false,
-    include: ['src/**/*.{test,spec}.ts', 'src/**/__tests__/**/*.{test,spec}.ts'],
+    include: [
+      'src/**/*.{test,spec}.ts',
+      'src/**/__tests__/**/*.{test,spec}.ts',
+      'scripts/**/__tests__/**/*.{test,spec}.ts',
+    ],
     setupFiles: ['./vitest.setup.ts'],
     env: {
       // Pin the host zone so Intl.DateTimeFormat output is deterministic in
