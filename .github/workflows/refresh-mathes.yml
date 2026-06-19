@@ -1,0 +1,74 @@
+# Tournament-aware daily refresh of public/data/matches.json.
+#
+# A SINGLE daily cron fires unconditionally; the script decides at run time
+# whether to do a full fetch+rotate, skip (already refreshed within the
+# cadence), or be a complete no-op (outside both tournament windows). See
+# scripts/refresh/window.ts and design.md §10.
+#
+# SAFETY: the script validates the upstream payload with the SAME Zod schema
+# the client uses BEFORE any file is rotated. A bad run exits non-zero and
+# leaves matches.json + history untouched — the base JSON is never corrupted.
+#
+# A successful commit to `main` here is itself a push to main, which triggers
+# deploy.yml and propagates the fresh data to GitHub Pages.
+#
+# ONE-TIME SETUP: add repo secret FOOTBALL_DATA_TOKEN (Settings → Secrets and
+# variables → Actions). Without it the job fails fast and changes nothing.
+name: Refresh matches.json
+
+on:
+  schedule:
+    # 04:00 UTC — after any conceivable match day ends, before Americas peak.
+    - cron: "0 4 * * *"
+  workflow_dispatch:
+
+# Serialize refreshes so two runs never race on the same commit.
+concurrency:
+  group: refresh-matches
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    name: Refresh
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          # Full history is required to read the previous commit date of
+          # matches.json (the "last refreshed" record — design.md §10.1).
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Refresh (window-aware)
+        env:
+          FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN }}
+        run: pnpm run refresh:matches
+
+      - name: Commit if changed
+        run: |
+          if ! git diff --quiet -- public/data/; then
+            git config user.name "wc-schedule-bot"
+            git config user.email "bot@users.noreply.github.com"
+            git add public/data/
+            git commit -m "chore(data): refresh matches.json"
+            git push
+          else
+            echo "No data change — nothing to commit."
+          fi
