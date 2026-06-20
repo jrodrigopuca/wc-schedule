@@ -372,13 +372,16 @@ describe('selectFeaturedState — source-status precedence', () => {
 })
 
 describe('selectFeaturedState — integration with the bundled fixture', () => {
-  it('returns upcoming-future before the tournament starts', () => {
-    // 2026-06-10 → one day before the WC 2026 first kickoff (June 11).
+  it('returns upcoming-future pointing at the earliest still-scheduled match', () => {
+    // 2026-06-10. Matchday 1 (Jun 11–14) is already finished in the
+    // fixture, so the next UNPLAYED match is the earliest scheduled one:
+    // wc2026-g-e-01 (Germany vs Curaçao, Jun 14), on a different local day
+    // than `now` → upcoming-future.
     const now = Date.parse('2026-06-10T12:00:00Z')
     const state = selectFeaturedState(fixture, now)
     expect(state.kind).toBe('upcoming-future')
     if (state.kind === 'upcoming-future') {
-      expect(state.match.id).toBe('wc2026-g-a-01')
+      expect(state.match.id).toBe('wc2026-g-e-01')
     }
   })
 
@@ -388,14 +391,16 @@ describe('selectFeaturedState — integration with the bundled fixture', () => {
     expect(selectFeaturedState(fixture, after).kind).toBe('tournament-over')
   })
 
-  it('returns live-single during the opening match', () => {
-    // wc2026-g-a-01: Mexico vs South Africa at Estadio Azteca,
-    // 2026-06-11T19:00:00Z (3 PM ET). It has no simultaneous group match.
-    const now = Date.parse('2026-06-11T19:10:00Z')
+  it('returns live-single during a solo scheduled match', () => {
+    // wc2026-g-e-01: Germany vs Curaçao, 2026-06-14T17:00:00Z. The opening
+    // matches are finished in the fixture; this is the first still-scheduled
+    // match with no simultaneous kickoff, so ten minutes in it is the lone
+    // live match.
+    const now = Date.parse('2026-06-14T17:10:00Z')
     const state = selectFeaturedState(fixture, now)
     expect(state.kind).toBe('live-single')
     if (state.kind === 'live-single') {
-      expect(state.match.id).toBe('wc2026-g-a-01')
+      expect(state.match.id).toBe('wc2026-g-e-01')
     }
   })
 

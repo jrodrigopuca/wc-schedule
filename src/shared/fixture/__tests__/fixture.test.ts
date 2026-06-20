@@ -83,15 +83,22 @@ describe('matches.fixture.json', () => {
     }
   })
 
-  it('marks every match as scheduled (tournament has not started)', () => {
+  it('only uses scheduled or finished statuses', () => {
+    // The fixture models a tournament in progress: matchday 1 has been
+    // played (finished, with scores), the rest is still scheduled. No
+    // live/postponed/cancelled is pre-baked — those derive at runtime.
     for (const m of parsed) {
-      expect(m.status).toBe('scheduled')
+      expect(['scheduled', 'finished']).toContain(m.status)
     }
   })
 
-  it('never pre-declares a score (live + scores are computed at runtime)', () => {
+  it('carries a score on finished matches and only on those', () => {
     for (const m of parsed) {
-      expect(m.score).toBeUndefined()
+      if (m.status === 'finished') {
+        expect(m.score, `finished ${m.id} must carry a score`).toBeDefined()
+      } else {
+        expect(m.score, `non-finished ${m.id} must not pre-declare a score`).toBeUndefined()
+      }
     }
   })
 

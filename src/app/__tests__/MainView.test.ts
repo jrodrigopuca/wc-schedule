@@ -13,6 +13,7 @@ import {
   __resetNotifierForTests,
 } from '@/notifications/composables/useNotifications'
 import { __resetClockForTests, __setClockForTests } from '@/shared/time/now'
+import { __resetNowForTests } from '@/shared/time/useNow'
 
 vi.mock('@/shared/flags/resolve', () => ({
   resolveFlag: (iso: string): string | null => `/flags/${iso}.svg`,
@@ -68,6 +69,9 @@ describe('MainView (smoke)', () => {
     vi.unstubAllEnvs()
     __resetMatchesForTests()
     __resetClockForTests()
+    // Re-seed `useNow`'s singleton from the restored real clock so a stubbed
+    // `now` from one test never leaks into the next.
+    __resetNowForTests()
     window.location.hash = ''
     __resetSelectedDayForTests()
   })
@@ -182,6 +186,12 @@ describe('MainView (smoke)', () => {
   it('hides the FeaturedCard in day mode (#/day/<future-day>)', async () => {
     vi.stubEnv('VITE_DATA_SOURCE', 'manual')
     __setClockForTests(() => Date.parse('2026-06-13T17:00:00Z'))
+    // `useNow`'s singleton `now` ref is seeded at module load with the REAL
+    // clock, so it must be re-read AFTER the stub is installed — otherwise
+    // `todayYMD` tracks the real calendar date and the day-mode comparison is
+    // non-deterministic (this test broke when the real date hit 2026-06-20,
+    // colliding with the hash below).
+    __resetNowForTests()
     // Pin to a future tournament day — the featured eyebrow must NOT
     // appear when the day-mode branch is rendered.
     window.location.hash = '#/day/2026-06-20'
