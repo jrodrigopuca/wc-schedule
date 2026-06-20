@@ -35,6 +35,37 @@ describe('LIVE_WINDOW_MS', () => {
   })
 })
 
+describe('undetermined bracket slots (iso xx) are excluded from featured', () => {
+  const kickoff = '2026-06-12T20:00:00Z'
+  const tbd = makeMatch({
+    stage: 'round-of-32',
+    teamA: { iso: 'xx', name: '1º grupo A' },
+    teamB: { iso: 'xx', name: '2º grupo B' },
+  })
+
+  it('isUpcoming is false even before kickoff', () => {
+    expect(isUpcoming(tbd, Date.parse(kickoff) - 60_000)).toBe(false)
+  })
+
+  it('isLive is false even inside the live window', () => {
+    expect(isLive(tbd, Date.parse(kickoff) + 1)).toBe(false)
+  })
+
+  it('selectFeaturedState skips an earlier undetermined match for the next real one', () => {
+    const now = Date.parse('2026-06-12T10:00:00Z')
+    const real = makeMatch({ id: 'real', utcKickoff: '2026-06-12T20:00:00Z' })
+    const tbdSooner = makeMatch({
+      id: 'tbd',
+      utcKickoff: '2026-06-12T18:00:00Z',
+      teamA: { iso: 'xx', name: '1º A' },
+      teamB: { iso: 'xx', name: '2º B' },
+    })
+    const state = selectFeaturedState([tbdSooner, real], now)
+    expect(state.kind).toBe('upcoming-today')
+    if (state.kind === 'upcoming-today') expect(state.match.id).toBe('real')
+  })
+})
+
 describe('isLive', () => {
   const kickoff = '2026-06-12T20:00:00Z'
   const kickoffMs = Date.parse(kickoff)

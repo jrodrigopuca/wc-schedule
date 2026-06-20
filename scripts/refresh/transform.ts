@@ -18,6 +18,7 @@
 // that happens, correct the maps below — do NOT loosen the strictness.
 
 import type { Match, MatchStatus, Stage } from '../../src/matches/domain/match.ts'
+import { UNDETERMINED_ISO } from '../../src/matches/domain/match.ts'
 
 // ── Upstream shape (only the fields we consume) ────────────────────────────
 
@@ -76,6 +77,7 @@ const STAGE_MAP: Readonly<Record<string, Stage>> = {
 // lowercase (the domain invariant — see match.ts). Covers the 48 WC-2026
 // participants plus a few common name variants. Unknown name → throw.
 const NAME_TO_ISO: Readonly<Record<string, string>> = {
+  Algeria: 'dz',
   Argentina: 'ar',
   Australia: 'au',
   Austria: 'at',
@@ -84,6 +86,8 @@ const NAME_TO_ISO: Readonly<Record<string, string>> = {
   Brazil: 'br',
   Cameroon: 'cm',
   Canada: 'ca',
+  // football-data emits "Cape Verde Islands"; keep the short form too.
+  'Cape Verde Islands': 'cv',
   'Cape Verde': 'cv',
   Colombia: 'co',
   'Costa Rica': 'cr',
@@ -93,16 +97,21 @@ const NAME_TO_ISO: Readonly<Record<string, string>> = {
   'Czech Republic': 'cz',
   Czechia: 'cz',
   Denmark: 'dk',
+  // football-data emits "Congo DR"; keep the inverted form too.
+  'Congo DR': 'cd',
   'DR Congo': 'cd',
   Ecuador: 'ec',
   Egypt: 'eg',
-  England: 'gb-eng',
+  // 2-letter aliases — the schema's /^[a-z]{2}$/ rejects the canonical
+  // `gb-eng`/`gb-sct` subdivision codes (see country-names.ts).
+  England: 'gb',
   France: 'fr',
   Germany: 'de',
   Ghana: 'gh',
   Haiti: 'ht',
   Iran: 'ir',
   'IR Iran': 'ir',
+  Iraq: 'iq',
   'Ivory Coast': 'ci',
   "Cote d'Ivoire": 'ci',
   Italy: 'it',
@@ -121,10 +130,11 @@ const NAME_TO_ISO: Readonly<Record<string, string>> = {
   Portugal: 'pt',
   Qatar: 'qa',
   'Saudi Arabia': 'sa',
-  Scotland: 'gb-sct',
+  Scotland: 'xs',
   Senegal: 'sn',
   'South Africa': 'za',
   Spain: 'es',
+  Sweden: 'se',
   Switzerland: 'ch',
   Tunisia: 'tn',
   Türkiye: 'tr',
@@ -155,10 +165,16 @@ function mapStage(raw: string): Stage {
 
 function mapTeam(team: UpstreamTeam): { iso: string; name: string } {
   const name = team.name?.trim()
+  // An ABSENT name means the bracket slot exists but the participant is not
+  // decided yet (knockout draw pending). Emit the undetermined sentinel
+  // instead of throwing — these matches are legitimate, just not yet
+  // anticipatable. The client localizes `xx` to "Por definir".
   if (!name) {
-    throw new Error('transform: upstream team is missing a name')
+    return { iso: UNDETERMINED_ISO, name: 'Por definir' }
   }
   const iso = NAME_TO_ISO[name]
+  // A PRESENT-but-unmapped name is a genuine surprise (a participant we
+  // haven't catalogued). Throw so the run aborts and the base JSON survives.
   if (iso === undefined) {
     throw new Error(`transform: no ISO mapping for team "${name}" (add it to NAME_TO_ISO)`)
   }

@@ -14,6 +14,7 @@
 // notifications in the new locale without a re-plan.
 
 import type { Match, Stage } from '@/matches/domain/match'
+import { hasUndeterminedTeam } from '@/matches/domain/match'
 import { NOTIFICATION_LEAD_MS } from './lead-time'
 
 // Subset of `Match` carried into the fire-time renderer. Exposed as a
@@ -43,6 +44,10 @@ export function planSchedule(matches: readonly Match[], now: number): readonly S
     // `scheduled` matches qualify. live/finished/postponed/cancelled
     // never trigger pre-match reminders.
     if (m.status !== 'scheduled') continue
+    // Skip undetermined knockout slots: there is no real opponent to remind
+    // about yet, and the notification body would read "Por definir vs Por
+    // definir". A later refresh re-plans once the draw fills in.
+    if (hasUndeterminedTeam(m)) continue
     const fireAtMs = Date.parse(m.utcKickoff) - NOTIFICATION_LEAD_MS
     // Drop entries whose fire time is already in the past (or exactly
     // `now`). AC-5: no retroactive notification when boot happens

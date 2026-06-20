@@ -41,3 +41,17 @@ export interface Match {
   readonly score?: Score
   readonly venue?: Venue
 }
+
+// Sentinel `iso` for a knockout participant that isn't determined yet (the
+// bracket slot is known, the team is not). It passes the schema's
+// `/^[a-z]{2}$/` and routes to the neutral `xx.svg` flag + "Por definir"
+// label (see `shared/flags/team-colors.ts`, `shared/i18n/country-names.ts`).
+export const UNDETERMINED_ISO = 'xx'
+
+// True when either side of the match is still an undetermined bracket slot.
+// Such matches render in the list (with a neutral placeholder) but are
+// excluded from the featured slot and pre-match notifications — there is no
+// real opponent to anticipate yet.
+export function hasUndeterminedTeam(match: Match): boolean {
+  return match.teamA.iso === UNDETERMINED_ISO || match.teamB.iso === UNDETERMINED_ISO
+}

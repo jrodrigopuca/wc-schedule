@@ -41,6 +41,22 @@ describe('planSchedule — eligibility filtering', () => {
     expect(out.map((e) => e.matchId)).toEqual(['m-0-scheduled'])
   })
 
+  it('skips matches with an undetermined team (iso xx)', () => {
+    const future = new Date(NOW + 4 * 60 * 60 * 1000).toISOString()
+    const matches = [
+      makeMatch({ id: 'real', utcKickoff: future }),
+      makeMatch({
+        id: 'tbd',
+        utcKickoff: future,
+        stage: 'round-of-32',
+        teamA: { iso: 'xx', name: '1º A' },
+        teamB: { iso: 'xx', name: '2º B' },
+      }),
+    ]
+    const out = planSchedule(matches, NOW)
+    expect(out.map((e) => e.matchId)).toEqual(['real'])
+  })
+
   it('excludes entries whose fireAtMs is already in the past', () => {
     // Kickoff is 5 min in the future → fireAt = kickoff - 15min = -10min
     // (past). MUST be filtered (AC-5 "no retroactive notification").

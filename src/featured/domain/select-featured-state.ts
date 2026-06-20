@@ -1,4 +1,5 @@
 import type { Match } from '@/matches/domain/match'
+import { hasUndeterminedTeam } from '@/matches/domain/match'
 import { byKickoffThenId } from '@/matches/domain/sort'
 import { isSameLocalDay } from '@/matches/domain/today'
 import type { FeaturedState } from './featured-state'
@@ -13,6 +14,10 @@ export { byKickoffThenId }
 //  - `live`                    → forced live regardless of clock (data wins).
 //  - `scheduled`               → derive from clock against the 110-min window.
 export function isLive(match: Match, now: number): boolean {
+  // A bracket slot with an undetermined team is never a featured candidate:
+  // there is no real derby to headline (featured.md §3). It still counts for
+  // tournament-end detection below, so it is NOT filtered there.
+  if (hasUndeterminedTeam(match)) return false
   if (match.status === 'cancelled' || match.status === 'postponed') return false
   if (match.status === 'finished') return false
   if (match.status === 'live') return true
@@ -22,6 +27,7 @@ export function isLive(match: Match, now: number): boolean {
 }
 
 export function isUpcoming(match: Match, now: number): boolean {
+  if (hasUndeterminedTeam(match)) return false
   if (match.status !== 'scheduled') return false
   return now < Date.parse(match.utcKickoff)
 }
