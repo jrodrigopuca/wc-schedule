@@ -648,7 +648,7 @@
   {
     "id": "fd-537354",
     "utcKickoff": "2026-06-21T00:00:00Z",
-    "status": "finished",
+    "status": "scheduled",
     "stage": "group",
     "group": "E",
     "teamA": {
@@ -658,16 +658,12 @@
     "teamB": {
       "iso": "cw",
       "name": "Curaçao"
-    },
-    "score": {
-      "home": 0,
-      "away": 0
     }
   },
   {
     "id": "fd-537360",
     "utcKickoff": "2026-06-21T04:00:00Z",
-    "status": "live",
+    "status": "scheduled",
     "stage": "group",
     "group": "F",
     "teamA": {
