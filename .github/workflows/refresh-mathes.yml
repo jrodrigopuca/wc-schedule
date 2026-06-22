@@ -1,6 +1,6 @@
-# Tournament-aware daily refresh of public/data/matches.json.
+# Tournament-aware 4-hourly refresh of public/data/matches.json.
 #
-# A SINGLE daily cron fires unconditionally; the script decides at run time
+# A cron fires every 4 hours; the script decides at run time
 # whether to do a full fetch+rotate, skip (already refreshed within the
 # cadence), or be a complete no-op (outside both tournament windows). See
 # scripts/refresh/window.ts and design.md §10.
@@ -18,8 +18,8 @@ name: Refresh matches.json
 
 on:
   schedule:
-    # 04:00 UTC — after any conceivable match day ends, before Americas peak.
-    - cron: "0 4 * * *"
+    # Every 4 hours (00:00, 04:00, 08:00, 12:00, 16:00, 20:00 UTC)
+    - cron: "0 0,4,8,12,16,20 * * *"
   workflow_dispatch:
 
 # Serialize refreshes so two runs never race on the same commit.
