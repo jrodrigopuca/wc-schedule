@@ -667,7 +667,7 @@
   {
     "id": "fd-537360",
     "utcKickoff": "2026-06-21T04:00:00Z",
-    "status": "finished",
+    "status": "live",
     "stage": "group",
     "group": "F",
     "teamA": {
@@ -677,16 +677,12 @@
     "teamB": {
       "iso": "jp",
       "name": "Japan"
-    },
-    "score": {
-      "home": 0,
-      "away": 4
     }
   },
   {
     "id": "fd-537371",
     "utcKickoff": "2026-06-21T16:00:00Z",
-    "status": "finished",
+    "status": "scheduled",
     "stage": "group",
     "group": "H",
     "teamA": {
@@ -696,16 +692,12 @@
     "teamB": {
       "iso": "sa",
       "name": "Saudi Arabia"
-    },
-    "score": {
-      "home": 4,
-      "away": 0
     }
   },
   {
     "id": "fd-537365",
     "utcKickoff": "2026-06-21T19:00:00Z",
-    "status": "finished",
+    "status": "scheduled",
     "stage": "group",
     "group": "G",
     "teamA": {
@@ -715,16 +707,12 @@
     "teamB": {
       "iso": "ir",
       "name": "Iran"
-    },
-    "score": {
-      "home": 0,
-      "away": 0
     }
   },
   {
     "id": "fd-537372",
     "utcKickoff": "2026-06-21T22:00:00Z",
-    "status": "finished",
+    "status": "scheduled",
     "stage": "group",
     "group": "H",
     "teamA": {
@@ -734,16 +722,12 @@
     "teamB": {
       "iso": "cv",
       "name": "Cape Verde Islands"
-    },
-    "score": {
-      "home": 2,
-      "away": 2
     }
   },
   {
     "id": "fd-537366",
     "utcKickoff": "2026-06-22T01:00:00Z",
-    "status": "finished",
+    "status": "scheduled",
     "stage": "group",
     "group": "G",
     "teamA": {
@@ -753,10 +737,6 @@
     "teamB": {
       "iso": "eg",
       "name": "Egypt"
-    },
-    "score": {
-      "home": 1,
-      "away": 3
     }
   },
   {
