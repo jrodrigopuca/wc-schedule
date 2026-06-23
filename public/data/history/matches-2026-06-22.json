@@ -762,7 +762,7 @@
   {
     "id": "fd-537399",
     "utcKickoff": "2026-06-22T17:00:00Z",
-    "status": "finished",
+    "status": "scheduled",
     "stage": "group",
     "group": "J",
     "teamA": {
@@ -772,16 +772,12 @@
     "teamB": {
       "iso": "at",
       "name": "Austria"
-    },
-    "score": {
-      "home": 2,
-      "away": 0
     }
   },
   {
     "id": "fd-537393",
     "utcKickoff": "2026-06-22T21:00:00Z",
-    "status": "finished",
+    "status": "scheduled",
     "stage": "group",
     "group": "I",
     "teamA": {
@@ -791,16 +787,12 @@
     "teamB": {
       "iso": "iq",
       "name": "Iraq"
-    },
-    "score": {
-      "home": 3,
-      "away": 0
     }
   },
   {
     "id": "fd-537394",
     "utcKickoff": "2026-06-23T00:00:00Z",
-    "status": "live",
+    "status": "scheduled",
     "stage": "group",
     "group": "I",
     "teamA": {
