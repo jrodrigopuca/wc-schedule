@@ -800,7 +800,7 @@
   {
     "id": "fd-537394",
     "utcKickoff": "2026-06-23T00:00:00Z",
-    "status": "finished",
+    "status": "live",
     "stage": "group",
     "group": "I",
     "teamA": {
@@ -810,16 +810,12 @@
     "teamB": {
       "iso": "sn",
       "name": "Senegal"
-    },
-    "score": {
-      "home": 3,
-      "away": 2
     }
   },
   {
     "id": "fd-537400",
     "utcKickoff": "2026-06-23T03:00:00Z",
-    "status": "finished",
+    "status": "scheduled",
     "stage": "group",
     "group": "J",
     "teamA": {
@@ -829,16 +825,12 @@
     "teamB": {
       "iso": "dz",
       "name": "Algeria"
-    },
-    "score": {
-      "home": 1,
-      "away": 2
     }
   },
   {
     "id": "fd-537405",
     "utcKickoff": "2026-06-23T17:00:00Z",
-    "status": "finished",
+    "status": "scheduled",
     "stage": "group",
     "group": "K",
     "teamA": {
@@ -848,16 +840,12 @@
     "teamB": {
       "iso": "uz",
       "name": "Uzbekistan"
-    },
-    "score": {
-      "home": 5,
-      "away": 0
     }
   },
   {
     "id": "fd-537411",
     "utcKickoff": "2026-06-23T20:00:00Z",
-    "status": "finished",
+    "status": "scheduled",
     "stage": "group",
     "group": "L",
     "teamA": {
@@ -867,16 +855,12 @@
     "teamB": {
       "iso": "gh",
       "name": "Ghana"
-    },
-    "score": {
-      "home": 0,
-      "away": 0
     }
   },
   {
     "id": "fd-537412",
     "utcKickoff": "2026-06-23T23:00:00Z",
-    "status": "finished",
+    "status": "scheduled",
     "stage": "group",
     "group": "L",
     "teamA": {
@@ -886,10 +870,6 @@
     "teamB": {
       "iso": "hr",
       "name": "Croatia"
-    },
-    "score": {
-      "home": 0,
-      "away": 1
     }
   },
   {
