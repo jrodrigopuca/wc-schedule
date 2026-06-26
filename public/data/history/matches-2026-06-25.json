@@ -990,7 +990,7 @@
   {
     "id": "fd-537331",
     "utcKickoff": "2026-06-25T01:00:00Z",
-    "status": "finished",
+    "status": "scheduled",
     "stage": "group",
     "group": "A",
     "teamA": {
@@ -1000,16 +1000,12 @@
     "teamB": {
       "iso": "mx",
       "name": "Mexico"
-    },
-    "score": {
-      "home": 0,
-      "away": 3
     }
   },
   {
     "id": "fd-537332",
     "utcKickoff": "2026-06-25T01:00:00Z",
-    "status": "finished",
+    "status": "scheduled",
     "stage": "group",
     "group": "A",
     "teamA": {
@@ -1019,16 +1015,12 @@
     "teamB": {
       "iso": "kr",
       "name": "South Korea"
-    },
-    "score": {
-      "home": 1,
-      "away": 0
     }
   },
   {
     "id": "fd-537355",
     "utcKickoff": "2026-06-25T20:00:00Z",
-    "status": "finished",
+    "status": "scheduled",
     "stage": "group",
     "group": "E",
     "teamA": {
@@ -1038,16 +1030,12 @@
     "teamB": {
       "iso": "de",
       "name": "Germany"
-    },
-    "score": {
-      "home": 2,
-      "away": 1
     }
   },
   {
     "id": "fd-537356",
     "utcKickoff": "2026-06-25T20:00:00Z",
-    "status": "finished",
+    "status": "scheduled",
     "stage": "group",
     "group": "E",
     "teamA": {
@@ -1057,16 +1045,12 @@
     "teamB": {
       "iso": "ci",
       "name": "Ivory Coast"
-    },
-    "score": {
-      "home": 0,
-      "away": 2
     }
   },
   {
     "id": "fd-537361",
     "utcKickoff": "2026-06-25T23:00:00Z",
-    "status": "finished",
+    "status": "scheduled",
     "stage": "group",
     "group": "F",
     "teamA": {
@@ -1076,16 +1060,12 @@
     "teamB": {
       "iso": "nl",
       "name": "Netherlands"
-    },
-    "score": {
-      "home": 1,
-      "away": 3
     }
   },
   {
     "id": "fd-537362",
     "utcKickoff": "2026-06-25T23:00:00Z",
-    "status": "finished",
+    "status": "scheduled",
     "stage": "group",
     "group": "F",
     "teamA": {
@@ -1095,10 +1075,6 @@
     "teamB": {
       "iso": "se",
       "name": "Sweden"
-    },
-    "score": {
-      "home": 1,
-      "away": 1
     }
   },
   {
