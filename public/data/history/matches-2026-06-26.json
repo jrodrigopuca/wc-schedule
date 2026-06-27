@@ -1,350 +1,350 @@
 [
   {
-    "id": "wc2026-g-a-01",
+    "id": "fd-537327",
     "utcKickoff": "2026-06-11T19:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "A",
     "teamA": {
       "iso": "mx",
-      "name": "México"
+      "name": "Mexico"
     },
     "teamB": {
       "iso": "za",
-      "name": "Sudáfrica"
+      "name": "South Africa"
     },
-    "venue": {
-      "city": "Ciudad de México",
-      "country": "México"
+    "score": {
+      "home": 2,
+      "away": 0
     }
   },
   {
-    "id": "wc2026-g-a-02",
+    "id": "fd-537328",
     "utcKickoff": "2026-06-12T02:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "A",
     "teamA": {
       "iso": "kr",
-      "name": "Corea del Sur"
+      "name": "South Korea"
     },
     "teamB": {
       "iso": "cz",
-      "name": "República Checa"
+      "name": "Czechia"
     },
-    "venue": {
-      "city": "Guadalajara",
-      "country": "México"
+    "score": {
+      "home": 2,
+      "away": 1
     }
   },
   {
-    "id": "wc2026-g-b-01",
+    "id": "fd-537333",
     "utcKickoff": "2026-06-12T19:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "B",
     "teamA": {
       "iso": "ca",
-      "name": "Canadá"
+      "name": "Canada"
     },
     "teamB": {
       "iso": "ba",
-      "name": "Bosnia y Herzegovina"
+      "name": "Bosnia-Herzegovina"
     },
-    "venue": {
-      "city": "Toronto",
-      "country": "Canadá"
+    "score": {
+      "home": 1,
+      "away": 1
     }
   },
   {
-    "id": "wc2026-g-d-01",
+    "id": "fd-537345",
     "utcKickoff": "2026-06-13T01:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "D",
     "teamA": {
       "iso": "us",
-      "name": "Estados Unidos"
+      "name": "United States"
     },
     "teamB": {
       "iso": "py",
       "name": "Paraguay"
     },
-    "venue": {
-      "city": "Los Ángeles",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 4,
+      "away": 1
     }
   },
   {
-    "id": "wc2026-g-d-02",
-    "utcKickoff": "2026-06-13T04:00:00Z",
-    "status": "scheduled",
-    "stage": "group",
-    "group": "D",
-    "teamA": {
-      "iso": "au",
-      "name": "Australia"
-    },
-    "teamB": {
-      "iso": "tr",
-      "name": "Turquía"
-    },
-    "venue": {
-      "city": "Vancouver",
-      "country": "Canadá"
-    }
-  },
-  {
-    "id": "wc2026-g-b-02",
+    "id": "fd-537334",
     "utcKickoff": "2026-06-13T19:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "B",
     "teamA": {
       "iso": "qa",
-      "name": "Catar"
+      "name": "Qatar"
     },
     "teamB": {
       "iso": "ch",
-      "name": "Suiza"
+      "name": "Switzerland"
     },
-    "venue": {
-      "city": "San Francisco",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 1,
+      "away": 1
     }
   },
   {
-    "id": "wc2026-g-c-01",
+    "id": "fd-537339",
     "utcKickoff": "2026-06-13T22:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "C",
     "teamA": {
       "iso": "br",
-      "name": "Brasil"
+      "name": "Brazil"
     },
     "teamB": {
       "iso": "ma",
-      "name": "Marruecos"
+      "name": "Morocco"
     },
-    "venue": {
-      "city": "East Rutherford",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 1,
+      "away": 1
     }
   },
   {
-    "id": "wc2026-g-c-02",
+    "id": "fd-537340",
     "utcKickoff": "2026-06-14T01:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "C",
     "teamA": {
       "iso": "ht",
-      "name": "Haití"
+      "name": "Haiti"
     },
     "teamB": {
       "iso": "xs",
-      "name": "Escocia"
+      "name": "Scotland"
     },
-    "venue": {
-      "city": "Boston",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 0,
+      "away": 1
     }
   },
   {
-    "id": "wc2026-g-e-01",
+    "id": "fd-537346",
+    "utcKickoff": "2026-06-14T04:00:00Z",
+    "status": "finished",
+    "stage": "group",
+    "group": "D",
+    "teamA": {
+      "iso": "au",
+      "name": "Australia"
+    },
+    "teamB": {
+      "iso": "tr",
+      "name": "Turkey"
+    },
+    "score": {
+      "home": 2,
+      "away": 0
+    }
+  },
+  {
+    "id": "fd-537351",
     "utcKickoff": "2026-06-14T17:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "E",
     "teamA": {
       "iso": "de",
-      "name": "Alemania"
+      "name": "Germany"
     },
     "teamB": {
       "iso": "cw",
-      "name": "Curazao"
+      "name": "Curaçao"
     },
-    "venue": {
-      "city": "Houston",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 7,
+      "away": 1
     }
   },
   {
-    "id": "wc2026-g-f-01",
+    "id": "fd-537357",
     "utcKickoff": "2026-06-14T20:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "F",
     "teamA": {
       "iso": "nl",
-      "name": "Países Bajos"
+      "name": "Netherlands"
     },
     "teamB": {
       "iso": "jp",
-      "name": "Japón"
+      "name": "Japan"
     },
-    "venue": {
-      "city": "Dallas",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 2,
+      "away": 2
     }
   },
   {
-    "id": "wc2026-g-e-02",
+    "id": "fd-537352",
     "utcKickoff": "2026-06-14T23:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "E",
     "teamA": {
       "iso": "ci",
-      "name": "Costa de Marfil"
+      "name": "Ivory Coast"
     },
     "teamB": {
       "iso": "ec",
       "name": "Ecuador"
     },
-    "venue": {
-      "city": "Filadelfia",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 1,
+      "away": 0
     }
   },
   {
-    "id": "wc2026-g-f-02",
+    "id": "fd-537358",
     "utcKickoff": "2026-06-15T02:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "F",
     "teamA": {
       "iso": "se",
-      "name": "Suecia"
+      "name": "Sweden"
     },
     "teamB": {
       "iso": "tn",
-      "name": "Túnez"
+      "name": "Tunisia"
     },
-    "venue": {
-      "city": "Monterrey",
-      "country": "México"
+    "score": {
+      "home": 5,
+      "away": 1
     }
   },
   {
-    "id": "wc2026-g-h-01",
+    "id": "fd-537369",
     "utcKickoff": "2026-06-15T16:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "H",
     "teamA": {
       "iso": "es",
-      "name": "España"
+      "name": "Spain"
     },
     "teamB": {
       "iso": "cv",
-      "name": "Cabo Verde"
+      "name": "Cape Verde Islands"
     },
-    "venue": {
-      "city": "Atlanta",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 0,
+      "away": 0
     }
   },
   {
-    "id": "wc2026-g-g-01",
+    "id": "fd-537363",
     "utcKickoff": "2026-06-15T19:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "G",
     "teamA": {
       "iso": "be",
-      "name": "Bélgica"
+      "name": "Belgium"
     },
     "teamB": {
       "iso": "eg",
-      "name": "Egipto"
+      "name": "Egypt"
     },
-    "venue": {
-      "city": "Seattle",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 1,
+      "away": 1
     }
   },
   {
-    "id": "wc2026-g-h-02",
+    "id": "fd-537370",
     "utcKickoff": "2026-06-15T22:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "H",
     "teamA": {
       "iso": "sa",
-      "name": "Arabia Saudita"
+      "name": "Saudi Arabia"
     },
     "teamB": {
       "iso": "uy",
       "name": "Uruguay"
     },
-    "venue": {
-      "city": "Miami",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 1,
+      "away": 1
     }
   },
   {
-    "id": "wc2026-g-g-02",
+    "id": "fd-537364",
     "utcKickoff": "2026-06-16T01:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "G",
     "teamA": {
       "iso": "ir",
-      "name": "Irán"
+      "name": "Iran"
     },
     "teamB": {
       "iso": "nz",
-      "name": "Nueva Zelanda"
+      "name": "New Zealand"
     },
-    "venue": {
-      "city": "Los Ángeles",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 2,
+      "away": 2
     }
   },
   {
-    "id": "wc2026-g-i-01",
+    "id": "fd-537391",
     "utcKickoff": "2026-06-16T19:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "I",
     "teamA": {
       "iso": "fr",
-      "name": "Francia"
+      "name": "France"
     },
     "teamB": {
       "iso": "sn",
       "name": "Senegal"
     },
-    "venue": {
-      "city": "East Rutherford",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 3,
+      "away": 1
     }
   },
   {
-    "id": "wc2026-g-i-02",
+    "id": "fd-537392",
     "utcKickoff": "2026-06-16T22:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "I",
     "teamA": {
       "iso": "iq",
-      "name": "Irak"
+      "name": "Iraq"
     },
     "teamB": {
       "iso": "no",
-      "name": "Noruega"
+      "name": "Norway"
     },
-    "venue": {
-      "city": "Boston",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 1,
+      "away": 4
     }
   },
   {
-    "id": "wc2026-g-j-01",
+    "id": "fd-537397",
     "utcKickoff": "2026-06-17T01:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "J",
     "teamA": {
@@ -353,17 +353,17 @@
     },
     "teamB": {
       "iso": "dz",
-      "name": "Argelia"
+      "name": "Algeria"
     },
-    "venue": {
-      "city": "Kansas City",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 3,
+      "away": 0
     }
   },
   {
-    "id": "wc2026-g-j-02",
+    "id": "fd-537398",
     "utcKickoff": "2026-06-17T04:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "J",
     "teamA": {
@@ -372,17 +372,17 @@
     },
     "teamB": {
       "iso": "jo",
-      "name": "Jordania"
+      "name": "Jordan"
     },
-    "venue": {
-      "city": "San Francisco",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 3,
+      "away": 1
     }
   },
   {
-    "id": "wc2026-g-k-01",
+    "id": "fd-537403",
     "utcKickoff": "2026-06-17T17:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "K",
     "teamA": {
@@ -391,36 +391,36 @@
     },
     "teamB": {
       "iso": "cd",
-      "name": "República Democrática del Congo"
+      "name": "Congo DR"
     },
-    "venue": {
-      "city": "Houston",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 1,
+      "away": 1
     }
   },
   {
-    "id": "wc2026-g-l-01",
+    "id": "fd-537409",
     "utcKickoff": "2026-06-17T20:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "L",
     "teamA": {
       "iso": "gb",
-      "name": "Inglaterra"
+      "name": "England"
     },
     "teamB": {
       "iso": "hr",
-      "name": "Croacia"
+      "name": "Croatia"
     },
-    "venue": {
-      "city": "Dallas",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 4,
+      "away": 2
     }
   },
   {
-    "id": "wc2026-g-l-02",
+    "id": "fd-537410",
     "utcKickoff": "2026-06-17T23:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "L",
     "teamA": {
@@ -429,226 +429,226 @@
     },
     "teamB": {
       "iso": "pa",
-      "name": "Panamá"
+      "name": "Panama"
     },
-    "venue": {
-      "city": "Toronto",
-      "country": "Canadá"
+    "score": {
+      "home": 1,
+      "away": 0
     }
   },
   {
-    "id": "wc2026-g-k-02",
+    "id": "fd-537404",
     "utcKickoff": "2026-06-18T02:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "K",
     "teamA": {
       "iso": "uz",
-      "name": "Uzbekistán"
+      "name": "Uzbekistan"
     },
     "teamB": {
       "iso": "co",
       "name": "Colombia"
     },
-    "venue": {
-      "city": "Ciudad de México",
-      "country": "México"
+    "score": {
+      "home": 1,
+      "away": 3
     }
   },
   {
-    "id": "wc2026-g-a-03",
+    "id": "fd-537329",
     "utcKickoff": "2026-06-18T16:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "A",
     "teamA": {
       "iso": "cz",
-      "name": "República Checa"
+      "name": "Czechia"
     },
     "teamB": {
       "iso": "za",
-      "name": "Sudáfrica"
+      "name": "South Africa"
     },
-    "venue": {
-      "city": "Atlanta",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 1,
+      "away": 1
     }
   },
   {
-    "id": "wc2026-g-b-03",
+    "id": "fd-537335",
     "utcKickoff": "2026-06-18T19:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "B",
     "teamA": {
       "iso": "ch",
-      "name": "Suiza"
+      "name": "Switzerland"
     },
     "teamB": {
       "iso": "ba",
-      "name": "Bosnia y Herzegovina"
+      "name": "Bosnia-Herzegovina"
     },
-    "venue": {
-      "city": "Los Ángeles",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 4,
+      "away": 1
     }
   },
   {
-    "id": "wc2026-g-b-04",
+    "id": "fd-537336",
     "utcKickoff": "2026-06-18T22:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "B",
     "teamA": {
       "iso": "ca",
-      "name": "Canadá"
+      "name": "Canada"
     },
     "teamB": {
       "iso": "qa",
-      "name": "Catar"
+      "name": "Qatar"
     },
-    "venue": {
-      "city": "Vancouver",
-      "country": "Canadá"
+    "score": {
+      "home": 6,
+      "away": 0
     }
   },
   {
-    "id": "wc2026-g-a-04",
+    "id": "fd-537330",
     "utcKickoff": "2026-06-19T01:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "A",
     "teamA": {
       "iso": "mx",
-      "name": "México"
+      "name": "Mexico"
     },
     "teamB": {
       "iso": "kr",
-      "name": "Corea del Sur"
+      "name": "South Korea"
     },
-    "venue": {
-      "city": "Guadalajara",
-      "country": "México"
+    "score": {
+      "home": 1,
+      "away": 0
     }
   },
   {
-    "id": "wc2026-g-d-03",
+    "id": "fd-537348",
     "utcKickoff": "2026-06-19T19:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "D",
     "teamA": {
       "iso": "us",
-      "name": "Estados Unidos"
+      "name": "United States"
     },
     "teamB": {
       "iso": "au",
       "name": "Australia"
     },
-    "venue": {
-      "city": "Seattle",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 2,
+      "away": 0
     }
   },
   {
-    "id": "wc2026-g-c-03",
+    "id": "fd-537342",
     "utcKickoff": "2026-06-19T22:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "C",
     "teamA": {
       "iso": "xs",
-      "name": "Escocia"
+      "name": "Scotland"
     },
     "teamB": {
       "iso": "ma",
-      "name": "Marruecos"
+      "name": "Morocco"
     },
-    "venue": {
-      "city": "Boston",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 0,
+      "away": 1
     }
   },
   {
-    "id": "wc2026-g-c-04",
-    "utcKickoff": "2026-06-20T01:00:00Z",
-    "status": "scheduled",
+    "id": "fd-537341",
+    "utcKickoff": "2026-06-20T00:30:00Z",
+    "status": "finished",
     "stage": "group",
     "group": "C",
     "teamA": {
       "iso": "br",
-      "name": "Brasil"
+      "name": "Brazil"
     },
     "teamB": {
       "iso": "ht",
-      "name": "Haití"
+      "name": "Haiti"
     },
-    "venue": {
-      "city": "Filadelfia",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 3,
+      "away": 0
     }
   },
   {
-    "id": "wc2026-g-d-04",
-    "utcKickoff": "2026-06-20T04:00:00Z",
-    "status": "scheduled",
+    "id": "fd-537347",
+    "utcKickoff": "2026-06-20T03:00:00Z",
+    "status": "finished",
     "stage": "group",
     "group": "D",
     "teamA": {
       "iso": "tr",
-      "name": "Turquía"
+      "name": "Turkey"
     },
     "teamB": {
       "iso": "py",
       "name": "Paraguay"
     },
-    "venue": {
-      "city": "San Francisco",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 0,
+      "away": 1
     }
   },
   {
-    "id": "wc2026-g-f-03",
+    "id": "fd-537359",
     "utcKickoff": "2026-06-20T17:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "F",
     "teamA": {
       "iso": "nl",
-      "name": "Países Bajos"
+      "name": "Netherlands"
     },
     "teamB": {
       "iso": "se",
-      "name": "Suecia"
+      "name": "Sweden"
     },
-    "venue": {
-      "city": "Houston",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 5,
+      "away": 1
     }
   },
   {
-    "id": "wc2026-g-e-03",
+    "id": "fd-537353",
     "utcKickoff": "2026-06-20T20:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "E",
     "teamA": {
       "iso": "de",
-      "name": "Alemania"
+      "name": "Germany"
     },
     "teamB": {
       "iso": "ci",
-      "name": "Costa de Marfil"
+      "name": "Ivory Coast"
     },
-    "venue": {
-      "city": "Toronto",
-      "country": "Canadá"
+    "score": {
+      "home": 2,
+      "away": 1
     }
   },
   {
-    "id": "wc2026-g-e-04",
+    "id": "fd-537354",
     "utcKickoff": "2026-06-21T00:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "E",
     "teamA": {
@@ -657,74 +657,74 @@
     },
     "teamB": {
       "iso": "cw",
-      "name": "Curazao"
+      "name": "Curaçao"
     },
-    "venue": {
-      "city": "Kansas City",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 0,
+      "away": 0
     }
   },
   {
-    "id": "wc2026-g-f-04",
+    "id": "fd-537360",
     "utcKickoff": "2026-06-21T04:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "F",
     "teamA": {
       "iso": "tn",
-      "name": "Túnez"
+      "name": "Tunisia"
     },
     "teamB": {
       "iso": "jp",
-      "name": "Japón"
+      "name": "Japan"
     },
-    "venue": {
-      "city": "Monterrey",
-      "country": "México"
+    "score": {
+      "home": 0,
+      "away": 4
     }
   },
   {
-    "id": "wc2026-g-h-03",
+    "id": "fd-537371",
     "utcKickoff": "2026-06-21T16:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "H",
     "teamA": {
       "iso": "es",
-      "name": "España"
+      "name": "Spain"
     },
     "teamB": {
       "iso": "sa",
-      "name": "Arabia Saudita"
+      "name": "Saudi Arabia"
     },
-    "venue": {
-      "city": "Atlanta",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 4,
+      "away": 0
     }
   },
   {
-    "id": "wc2026-g-g-03",
+    "id": "fd-537365",
     "utcKickoff": "2026-06-21T19:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "G",
     "teamA": {
       "iso": "be",
-      "name": "Bélgica"
+      "name": "Belgium"
     },
     "teamB": {
       "iso": "ir",
-      "name": "Irán"
+      "name": "Iran"
     },
-    "venue": {
-      "city": "Los Ángeles",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 0,
+      "away": 0
     }
   },
   {
-    "id": "wc2026-g-h-04",
+    "id": "fd-537372",
     "utcKickoff": "2026-06-21T22:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "H",
     "teamA": {
@@ -733,36 +733,36 @@
     },
     "teamB": {
       "iso": "cv",
-      "name": "Cabo Verde"
+      "name": "Cape Verde Islands"
     },
-    "venue": {
-      "city": "Miami",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 2,
+      "away": 2
     }
   },
   {
-    "id": "wc2026-g-g-04",
+    "id": "fd-537366",
     "utcKickoff": "2026-06-22T01:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "G",
     "teamA": {
       "iso": "nz",
-      "name": "Nueva Zelanda"
+      "name": "New Zealand"
     },
     "teamB": {
       "iso": "eg",
-      "name": "Egipto"
+      "name": "Egypt"
     },
-    "venue": {
-      "city": "Vancouver",
-      "country": "Canadá"
+    "score": {
+      "home": 1,
+      "away": 3
     }
   },
   {
-    "id": "wc2026-g-j-03",
+    "id": "fd-537399",
     "utcKickoff": "2026-06-22T17:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "J",
     "teamA": {
@@ -773,72 +773,72 @@
       "iso": "at",
       "name": "Austria"
     },
-    "venue": {
-      "city": "Dallas",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 2,
+      "away": 0
     }
   },
   {
-    "id": "wc2026-g-i-03",
+    "id": "fd-537393",
     "utcKickoff": "2026-06-22T21:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "I",
     "teamA": {
       "iso": "fr",
-      "name": "Francia"
+      "name": "France"
     },
     "teamB": {
       "iso": "iq",
-      "name": "Irak"
+      "name": "Iraq"
     },
-    "venue": {
-      "city": "Filadelfia",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 3,
+      "away": 0
     }
   },
   {
-    "id": "wc2026-g-i-04",
+    "id": "fd-537394",
     "utcKickoff": "2026-06-23T00:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "I",
     "teamA": {
       "iso": "no",
-      "name": "Noruega"
+      "name": "Norway"
     },
     "teamB": {
       "iso": "sn",
       "name": "Senegal"
     },
-    "venue": {
-      "city": "East Rutherford",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 3,
+      "away": 2
     }
   },
   {
-    "id": "wc2026-g-j-04",
+    "id": "fd-537400",
     "utcKickoff": "2026-06-23T03:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "J",
     "teamA": {
       "iso": "jo",
-      "name": "Jordania"
+      "name": "Jordan"
     },
     "teamB": {
       "iso": "dz",
-      "name": "Argelia"
+      "name": "Algeria"
     },
-    "venue": {
-      "city": "San Francisco",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 1,
+      "away": 2
     }
   },
   {
-    "id": "wc2026-g-k-03",
+    "id": "fd-537405",
     "utcKickoff": "2026-06-23T17:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "K",
     "teamA": {
@@ -847,55 +847,55 @@
     },
     "teamB": {
       "iso": "uz",
-      "name": "Uzbekistán"
+      "name": "Uzbekistan"
     },
-    "venue": {
-      "city": "Houston",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 5,
+      "away": 0
     }
   },
   {
-    "id": "wc2026-g-l-03",
+    "id": "fd-537411",
     "utcKickoff": "2026-06-23T20:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "L",
     "teamA": {
       "iso": "gb",
-      "name": "Inglaterra"
+      "name": "England"
     },
     "teamB": {
       "iso": "gh",
       "name": "Ghana"
     },
-    "venue": {
-      "city": "Boston",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 0,
+      "away": 0
     }
   },
   {
-    "id": "wc2026-g-l-04",
+    "id": "fd-537412",
     "utcKickoff": "2026-06-23T23:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "L",
     "teamA": {
       "iso": "pa",
-      "name": "Panamá"
+      "name": "Panama"
     },
     "teamB": {
       "iso": "hr",
-      "name": "Croacia"
+      "name": "Croatia"
     },
-    "venue": {
-      "city": "Toronto",
-      "country": "Canadá"
+    "score": {
+      "home": 0,
+      "away": 1
     }
   },
   {
-    "id": "wc2026-g-k-04",
+    "id": "fd-537406",
     "utcKickoff": "2026-06-24T02:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "K",
     "teamA": {
@@ -904,131 +904,131 @@
     },
     "teamB": {
       "iso": "cd",
-      "name": "República Democrática del Congo"
+      "name": "Congo DR"
     },
-    "venue": {
-      "city": "Guadalajara",
-      "country": "México"
+    "score": {
+      "home": 1,
+      "away": 0
     }
   },
   {
-    "id": "wc2026-g-b-05",
+    "id": "fd-537337",
     "utcKickoff": "2026-06-24T19:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "B",
     "teamA": {
       "iso": "ch",
-      "name": "Suiza"
+      "name": "Switzerland"
     },
     "teamB": {
       "iso": "ca",
-      "name": "Canadá"
+      "name": "Canada"
     },
-    "venue": {
-      "city": "Vancouver",
-      "country": "Canadá"
+    "score": {
+      "home": 2,
+      "away": 1
     }
   },
   {
-    "id": "wc2026-g-b-06",
+    "id": "fd-537338",
     "utcKickoff": "2026-06-24T19:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "B",
     "teamA": {
       "iso": "ba",
-      "name": "Bosnia y Herzegovina"
+      "name": "Bosnia-Herzegovina"
     },
     "teamB": {
       "iso": "qa",
-      "name": "Catar"
+      "name": "Qatar"
     },
-    "venue": {
-      "city": "Seattle",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 3,
+      "away": 1
     }
   },
   {
-    "id": "wc2026-g-c-05",
+    "id": "fd-537343",
     "utcKickoff": "2026-06-24T22:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "C",
     "teamA": {
       "iso": "xs",
-      "name": "Escocia"
+      "name": "Scotland"
     },
     "teamB": {
       "iso": "br",
-      "name": "Brasil"
+      "name": "Brazil"
     },
-    "venue": {
-      "city": "Miami",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 0,
+      "away": 3
     }
   },
   {
-    "id": "wc2026-g-c-06",
+    "id": "fd-537344",
     "utcKickoff": "2026-06-24T22:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "C",
     "teamA": {
       "iso": "ma",
-      "name": "Marruecos"
+      "name": "Morocco"
     },
     "teamB": {
       "iso": "ht",
-      "name": "Haití"
+      "name": "Haiti"
     },
-    "venue": {
-      "city": "Atlanta",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 4,
+      "away": 2
     }
   },
   {
-    "id": "wc2026-g-a-05",
+    "id": "fd-537331",
     "utcKickoff": "2026-06-25T01:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "A",
     "teamA": {
       "iso": "cz",
-      "name": "República Checa"
+      "name": "Czechia"
     },
     "teamB": {
       "iso": "mx",
-      "name": "México"
+      "name": "Mexico"
     },
-    "venue": {
-      "city": "Ciudad de México",
-      "country": "México"
+    "score": {
+      "home": 0,
+      "away": 3
     }
   },
   {
-    "id": "wc2026-g-a-06",
+    "id": "fd-537332",
     "utcKickoff": "2026-06-25T01:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "A",
     "teamA": {
       "iso": "za",
-      "name": "Sudáfrica"
+      "name": "South Africa"
     },
     "teamB": {
       "iso": "kr",
-      "name": "Corea del Sur"
+      "name": "South Korea"
     },
-    "venue": {
-      "city": "Monterrey",
-      "country": "México"
+    "score": {
+      "home": 1,
+      "away": 0
     }
   },
   {
-    "id": "wc2026-g-e-05",
+    "id": "fd-537355",
     "utcKickoff": "2026-06-25T20:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "E",
     "teamA": {
@@ -1037,91 +1037,87 @@
     },
     "teamB": {
       "iso": "de",
-      "name": "Alemania"
+      "name": "Germany"
     },
-    "venue": {
-      "city": "East Rutherford",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 2,
+      "away": 1
     }
   },
   {
-    "id": "wc2026-g-e-06",
+    "id": "fd-537356",
     "utcKickoff": "2026-06-25T20:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "E",
     "teamA": {
       "iso": "cw",
-      "name": "Curazao"
+      "name": "Curaçao"
     },
     "teamB": {
       "iso": "ci",
-      "name": "Costa de Marfil"
+      "name": "Ivory Coast"
     },
-    "venue": {
-      "city": "Filadelfia",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 0,
+      "away": 2
     }
   },
   {
-    "id": "wc2026-g-f-05",
+    "id": "fd-537361",
     "utcKickoff": "2026-06-25T23:00:00Z",
-    "status": "scheduled",
-    "stage": "group",
-    "group": "F",
-    "teamA": {
-      "iso": "jp",
-      "name": "Japón"
-    },
-    "teamB": {
-      "iso": "se",
-      "name": "Suecia"
-    },
-    "venue": {
-      "city": "Dallas",
-      "country": "Estados Unidos"
-    }
-  },
-  {
-    "id": "wc2026-g-f-06",
-    "utcKickoff": "2026-06-25T23:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "F",
     "teamA": {
       "iso": "tn",
-      "name": "Túnez"
+      "name": "Tunisia"
     },
     "teamB": {
       "iso": "nl",
-      "name": "Países Bajos"
+      "name": "Netherlands"
     },
-    "venue": {
-      "city": "Kansas City",
-      "country": "Estados Unidos"
+    "score": {
+      "home": 1,
+      "away": 3
     }
   },
   {
-    "id": "wc2026-g-d-05",
+    "id": "fd-537362",
+    "utcKickoff": "2026-06-25T23:00:00Z",
+    "status": "finished",
+    "stage": "group",
+    "group": "F",
+    "teamA": {
+      "iso": "jp",
+      "name": "Japan"
+    },
+    "teamB": {
+      "iso": "se",
+      "name": "Sweden"
+    },
+    "score": {
+      "home": 1,
+      "away": 1
+    }
+  },
+  {
+    "id": "fd-537349",
     "utcKickoff": "2026-06-26T02:00:00Z",
     "status": "scheduled",
     "stage": "group",
     "group": "D",
     "teamA": {
       "iso": "tr",
-      "name": "Turquía"
+      "name": "Turkey"
     },
     "teamB": {
       "iso": "us",
-      "name": "Estados Unidos"
-    },
-    "venue": {
-      "city": "Los Ángeles",
-      "country": "Estados Unidos"
+      "name": "United States"
     }
   },
   {
-    "id": "wc2026-g-d-06",
+    "id": "fd-537350",
     "utcKickoff": "2026-06-26T02:00:00Z",
     "status": "scheduled",
     "stage": "group",
@@ -1133,33 +1129,25 @@
     "teamB": {
       "iso": "au",
       "name": "Australia"
-    },
-    "venue": {
-      "city": "San Francisco",
-      "country": "Estados Unidos"
     }
   },
   {
-    "id": "wc2026-g-i-05",
+    "id": "fd-537395",
     "utcKickoff": "2026-06-26T19:00:00Z",
     "status": "scheduled",
     "stage": "group",
     "group": "I",
     "teamA": {
       "iso": "no",
-      "name": "Noruega"
+      "name": "Norway"
     },
     "teamB": {
       "iso": "fr",
-      "name": "Francia"
-    },
-    "venue": {
-      "city": "Boston",
-      "country": "Estados Unidos"
+      "name": "France"
     }
   },
   {
-    "id": "wc2026-g-i-06",
+    "id": "fd-537396",
     "utcKickoff": "2026-06-26T19:00:00Z",
     "status": "scheduled",
     "stage": "group",
@@ -1170,34 +1158,11 @@
     },
     "teamB": {
       "iso": "iq",
-      "name": "Irak"
-    },
-    "venue": {
-      "city": "Toronto",
-      "country": "Canadá"
+      "name": "Iraq"
     }
   },
   {
-    "id": "wc2026-g-h-05",
-    "utcKickoff": "2026-06-27T00:00:00Z",
-    "status": "scheduled",
-    "stage": "group",
-    "group": "H",
-    "teamA": {
-      "iso": "cv",
-      "name": "Cabo Verde"
-    },
-    "teamB": {
-      "iso": "sa",
-      "name": "Arabia Saudita"
-    },
-    "venue": {
-      "city": "Houston",
-      "country": "Estados Unidos"
-    }
-  },
-  {
-    "id": "wc2026-g-h-06",
+    "id": "fd-537373",
     "utcKickoff": "2026-06-27T00:00:00Z",
     "status": "scheduled",
     "stage": "group",
@@ -1208,91 +1173,86 @@
     },
     "teamB": {
       "iso": "es",
-      "name": "España"
-    },
-    "venue": {
-      "city": "Guadalajara",
-      "country": "México"
+      "name": "Spain"
     }
   },
   {
-    "id": "wc2026-g-g-05",
-    "utcKickoff": "2026-06-27T03:00:00Z",
+    "id": "fd-537374",
+    "utcKickoff": "2026-06-27T00:00:00Z",
     "status": "scheduled",
     "stage": "group",
-    "group": "G",
+    "group": "H",
     "teamA": {
-      "iso": "eg",
-      "name": "Egipto"
+      "iso": "cv",
+      "name": "Cape Verde Islands"
     },
     "teamB": {
-      "iso": "ir",
-      "name": "Irán"
-    },
-    "venue": {
-      "city": "Seattle",
-      "country": "Estados Unidos"
+      "iso": "sa",
+      "name": "Saudi Arabia"
     }
   },
   {
-    "id": "wc2026-g-g-06",
+    "id": "fd-537367",
     "utcKickoff": "2026-06-27T03:00:00Z",
     "status": "scheduled",
     "stage": "group",
     "group": "G",
     "teamA": {
       "iso": "nz",
-      "name": "Nueva Zelanda"
+      "name": "New Zealand"
     },
     "teamB": {
       "iso": "be",
-      "name": "Bélgica"
-    },
-    "venue": {
-      "city": "Vancouver",
-      "country": "Canadá"
+      "name": "Belgium"
     }
   },
   {
-    "id": "wc2026-g-l-05",
+    "id": "fd-537368",
+    "utcKickoff": "2026-06-27T03:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "G",
+    "teamA": {
+      "iso": "eg",
+      "name": "Egypt"
+    },
+    "teamB": {
+      "iso": "ir",
+      "name": "Iran"
+    }
+  },
+  {
+    "id": "fd-537413",
     "utcKickoff": "2026-06-27T21:00:00Z",
     "status": "scheduled",
     "stage": "group",
     "group": "L",
     "teamA": {
       "iso": "pa",
-      "name": "Panamá"
+      "name": "Panama"
     },
     "teamB": {
       "iso": "gb",
-      "name": "Inglaterra"
-    },
-    "venue": {
-      "city": "East Rutherford",
-      "country": "Estados Unidos"
+      "name": "England"
     }
   },
   {
-    "id": "wc2026-g-l-06",
+    "id": "fd-537414",
     "utcKickoff": "2026-06-27T21:00:00Z",
     "status": "scheduled",
     "stage": "group",
     "group": "L",
     "teamA": {
       "iso": "hr",
-      "name": "Croacia"
+      "name": "Croatia"
     },
     "teamB": {
       "iso": "gh",
       "name": "Ghana"
-    },
-    "venue": {
-      "city": "Filadelfia",
-      "country": "Estados Unidos"
     }
   },
   {
-    "id": "wc2026-g-k-05",
+    "id": "fd-537407",
     "utcKickoff": "2026-06-27T23:30:00Z",
     "status": "scheduled",
     "stage": "group",
@@ -1304,643 +1264,499 @@
     "teamB": {
       "iso": "pt",
       "name": "Portugal"
-    },
-    "venue": {
-      "city": "Miami",
-      "country": "Estados Unidos"
     }
   },
   {
-    "id": "wc2026-g-k-06",
+    "id": "fd-537408",
     "utcKickoff": "2026-06-27T23:30:00Z",
     "status": "scheduled",
     "stage": "group",
     "group": "K",
     "teamA": {
       "iso": "cd",
-      "name": "República Democrática del Congo"
+      "name": "Congo DR"
     },
     "teamB": {
       "iso": "uz",
-      "name": "Uzbekistán"
-    },
-    "venue": {
-      "city": "Atlanta",
-      "country": "Estados Unidos"
+      "name": "Uzbekistan"
     }
   },
   {
-    "id": "wc2026-g-j-05",
-    "utcKickoff": "2026-06-28T02:00:00Z",
-    "status": "scheduled",
-    "stage": "group",
-    "group": "J",
-    "teamA": {
-      "iso": "dz",
-      "name": "Argelia"
-    },
-    "teamB": {
-      "iso": "at",
-      "name": "Austria"
-    },
-    "venue": {
-      "city": "Kansas City",
-      "country": "Estados Unidos"
-    }
-  },
-  {
-    "id": "wc2026-g-j-06",
+    "id": "fd-537401",
     "utcKickoff": "2026-06-28T02:00:00Z",
     "status": "scheduled",
     "stage": "group",
     "group": "J",
     "teamA": {
       "iso": "jo",
-      "name": "Jordania"
+      "name": "Jordan"
     },
     "teamB": {
       "iso": "ar",
       "name": "Argentina"
-    },
-    "venue": {
-      "city": "Dallas",
-      "country": "Estados Unidos"
     }
   },
   {
-    "id": "wc2026-r32-01",
+    "id": "fd-537402",
+    "utcKickoff": "2026-06-28T02:00:00Z",
+    "status": "scheduled",
+    "stage": "group",
+    "group": "J",
+    "teamA": {
+      "iso": "dz",
+      "name": "Algeria"
+    },
+    "teamB": {
+      "iso": "at",
+      "name": "Austria"
+    }
+  },
+  {
+    "id": "fd-537417",
     "utcKickoff": "2026-06-28T19:00:00Z",
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
       "iso": "xx",
-      "name": "2º grupo A"
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
-      "name": "2º grupo B"
-    },
-    "venue": {
-      "city": "Los Ángeles",
-      "country": "Estados Unidos"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-r32-02",
+    "id": "fd-537423",
     "utcKickoff": "2026-06-29T17:00:00Z",
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
       "iso": "xx",
-      "name": "1º grupo C"
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
-      "name": "2º grupo F"
-    },
-    "venue": {
-      "city": "Houston",
-      "country": "Estados Unidos"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-r32-03",
+    "id": "fd-537415",
     "utcKickoff": "2026-06-29T20:30:00Z",
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
-      "iso": "xx",
-      "name": "1º grupo E"
+      "iso": "de",
+      "name": "Germany"
     },
     "teamB": {
       "iso": "xx",
-      "name": "Mejor tercero (A/B/C/D/F)"
-    },
-    "venue": {
-      "city": "Boston",
-      "country": "Estados Unidos"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-r32-04",
+    "id": "fd-537418",
     "utcKickoff": "2026-06-30T01:00:00Z",
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
       "iso": "xx",
-      "name": "1º grupo F"
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
-      "name": "2º grupo C"
-    },
-    "venue": {
-      "city": "Monterrey",
-      "country": "México"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-r32-05",
+    "id": "fd-537424",
     "utcKickoff": "2026-06-30T17:00:00Z",
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
       "iso": "xx",
-      "name": "2º grupo E"
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
-      "name": "2º grupo I"
-    },
-    "venue": {
-      "city": "Dallas",
-      "country": "Estados Unidos"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-r32-06",
+    "id": "fd-537416",
     "utcKickoff": "2026-06-30T21:00:00Z",
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
       "iso": "xx",
-      "name": "1º grupo I"
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
-      "name": "Mejor tercero (C/D/F/G/H)"
-    },
-    "venue": {
-      "city": "East Rutherford",
-      "country": "Estados Unidos"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-r32-07",
+    "id": "fd-537425",
     "utcKickoff": "2026-07-01T01:00:00Z",
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
-      "iso": "xx",
-      "name": "1º grupo A"
+      "iso": "mx",
+      "name": "Mexico"
     },
     "teamB": {
       "iso": "xx",
-      "name": "Mejor tercero (C/E/F/H/I)"
-    },
-    "venue": {
-      "city": "Ciudad de México",
-      "country": "México"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-r32-08",
+    "id": "fd-537426",
     "utcKickoff": "2026-07-01T16:00:00Z",
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
       "iso": "xx",
-      "name": "1º grupo L"
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
-      "name": "Mejor tercero (E/H/I/J/K)"
-    },
-    "venue": {
-      "city": "Atlanta",
-      "country": "Estados Unidos"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-r32-09",
+    "id": "fd-537422",
     "utcKickoff": "2026-07-01T20:00:00Z",
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
       "iso": "xx",
-      "name": "1º grupo G"
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
-      "name": "Mejor tercero (A/E/H/I/J)"
-    },
-    "venue": {
-      "city": "Seattle",
-      "country": "Estados Unidos"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-r32-10",
+    "id": "fd-537421",
     "utcKickoff": "2026-07-02T00:00:00Z",
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
-      "iso": "xx",
-      "name": "1º grupo D"
+      "iso": "us",
+      "name": "United States"
     },
     "teamB": {
       "iso": "xx",
-      "name": "Mejor tercero (B/E/F/I/J)"
-    },
-    "venue": {
-      "city": "San Francisco",
-      "country": "Estados Unidos"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-r32-11",
+    "id": "fd-537420",
     "utcKickoff": "2026-07-02T19:00:00Z",
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
       "iso": "xx",
-      "name": "1º grupo H"
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
-      "name": "2º grupo J"
-    },
-    "venue": {
-      "city": "Los Ángeles",
-      "country": "Estados Unidos"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-r32-12",
+    "id": "fd-537419",
     "utcKickoff": "2026-07-02T23:00:00Z",
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
       "iso": "xx",
-      "name": "2º grupo K"
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
-      "name": "2º grupo L"
-    },
-    "venue": {
-      "city": "Toronto",
-      "country": "Canadá"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-r32-13",
+    "id": "fd-537429",
     "utcKickoff": "2026-07-03T03:00:00Z",
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
       "iso": "xx",
-      "name": "1º grupo B"
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
-      "name": "Mejor tercero (E/F/G/I/J)"
-    },
-    "venue": {
-      "city": "Vancouver",
-      "country": "Canadá"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-r32-14",
+    "id": "fd-537428",
     "utcKickoff": "2026-07-03T18:00:00Z",
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
       "iso": "xx",
-      "name": "2º grupo D"
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
-      "name": "2º grupo G"
-    },
-    "venue": {
-      "city": "Dallas",
-      "country": "Estados Unidos"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-r32-15",
+    "id": "fd-537427",
     "utcKickoff": "2026-07-03T22:00:00Z",
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
-      "iso": "xx",
-      "name": "1º grupo J"
+      "iso": "ar",
+      "name": "Argentina"
     },
     "teamB": {
       "iso": "xx",
-      "name": "2º grupo H"
-    },
-    "venue": {
-      "city": "Miami",
-      "country": "Estados Unidos"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-r32-16",
+    "id": "fd-537430",
     "utcKickoff": "2026-07-04T01:30:00Z",
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
       "iso": "xx",
-      "name": "1º grupo K"
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
-      "name": "Mejor tercero (D/E/I/J/L)"
-    },
-    "venue": {
-      "city": "Kansas City",
-      "country": "Estados Unidos"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-r16-01",
+    "id": "fd-537376",
     "utcKickoff": "2026-07-04T17:00:00Z",
     "status": "scheduled",
     "stage": "round-of-16",
     "teamA": {
       "iso": "xx",
-      "name": "Ganador R32-02"
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
-      "name": "Ganador R32-04"
-    },
-    "venue": {
-      "city": "Houston",
-      "country": "Estados Unidos"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-r16-02",
+    "id": "fd-537375",
     "utcKickoff": "2026-07-04T21:00:00Z",
     "status": "scheduled",
     "stage": "round-of-16",
     "teamA": {
       "iso": "xx",
-      "name": "Ganador R32-03"
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
-      "name": "Ganador R32-06"
-    },
-    "venue": {
-      "city": "Filadelfia",
-      "country": "Estados Unidos"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-r16-03",
+    "id": "fd-537377",
     "utcKickoff": "2026-07-05T20:00:00Z",
     "status": "scheduled",
     "stage": "round-of-16",
     "teamA": {
       "iso": "xx",
-      "name": "Ganador R32-05"
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
-      "name": "Ganador R32-07"
-    },
-    "venue": {
-      "city": "East Rutherford",
-      "country": "Estados Unidos"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-r16-04",
+    "id": "fd-537378",
     "utcKickoff": "2026-07-06T00:00:00Z",
     "status": "scheduled",
     "stage": "round-of-16",
     "teamA": {
       "iso": "xx",
-      "name": "Ganador R32-08"
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
-      "name": "Ganador R32-09"
-    },
-    "venue": {
-      "city": "Ciudad de México",
-      "country": "México"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-r16-05",
+    "id": "fd-537379",
     "utcKickoff": "2026-07-06T19:00:00Z",
     "status": "scheduled",
     "stage": "round-of-16",
     "teamA": {
       "iso": "xx",
-      "name": "Ganador R32-12"
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
-      "name": "Ganador R32-13"
-    },
-    "venue": {
-      "city": "Dallas",
-      "country": "Estados Unidos"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-r16-06",
+    "id": "fd-537380",
     "utcKickoff": "2026-07-07T00:00:00Z",
     "status": "scheduled",
     "stage": "round-of-16",
     "teamA": {
       "iso": "xx",
-      "name": "Ganador R32-10"
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
-      "name": "Ganador R32-11"
-    },
-    "venue": {
-      "city": "Seattle",
-      "country": "Estados Unidos"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-r16-07",
+    "id": "fd-537381",
     "utcKickoff": "2026-07-07T16:00:00Z",
     "status": "scheduled",
     "stage": "round-of-16",
     "teamA": {
       "iso": "xx",
-      "name": "Ganador R32-15"
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
-      "name": "Ganador R32-01"
-    },
-    "venue": {
-      "city": "Atlanta",
-      "country": "Estados Unidos"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-r16-08",
+    "id": "fd-537382",
     "utcKickoff": "2026-07-07T20:00:00Z",
     "status": "scheduled",
     "stage": "round-of-16",
     "teamA": {
       "iso": "xx",
-      "name": "Ganador R32-14"
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
-      "name": "Ganador R32-16"
-    },
-    "venue": {
-      "city": "Vancouver",
-      "country": "Canadá"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-qf-01",
+    "id": "fd-537383",
     "utcKickoff": "2026-07-09T20:00:00Z",
     "status": "scheduled",
     "stage": "quarter-final",
     "teamA": {
       "iso": "xx",
-      "name": "Ganador R16-01"
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
-      "name": "Ganador R16-02"
-    },
-    "venue": {
-      "city": "Boston",
-      "country": "Estados Unidos"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-qf-02",
+    "id": "fd-537384",
     "utcKickoff": "2026-07-10T19:00:00Z",
     "status": "scheduled",
     "stage": "quarter-final",
     "teamA": {
       "iso": "xx",
-      "name": "Ganador R16-05"
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
-      "name": "Ganador R16-06"
-    },
-    "venue": {
-      "city": "Los Ángeles",
-      "country": "Estados Unidos"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-qf-03",
+    "id": "fd-537385",
     "utcKickoff": "2026-07-11T21:00:00Z",
     "status": "scheduled",
     "stage": "quarter-final",
     "teamA": {
       "iso": "xx",
-      "name": "Ganador R16-03"
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
-      "name": "Ganador R16-04"
-    },
-    "venue": {
-      "city": "Miami",
-      "country": "Estados Unidos"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-qf-04",
+    "id": "fd-537386",
     "utcKickoff": "2026-07-12T01:00:00Z",
     "status": "scheduled",
     "stage": "quarter-final",
     "teamA": {
       "iso": "xx",
-      "name": "Ganador R16-07"
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
-      "name": "Ganador R16-08"
-    },
-    "venue": {
-      "city": "Kansas City",
-      "country": "Estados Unidos"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-sf-01",
+    "id": "fd-537387",
     "utcKickoff": "2026-07-14T19:00:00Z",
     "status": "scheduled",
     "stage": "semi-final",
     "teamA": {
       "iso": "xx",
-      "name": "Ganador QF-01"
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
-      "name": "Ganador QF-02"
-    },
-    "venue": {
-      "city": "Dallas",
-      "country": "Estados Unidos"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-sf-02",
+    "id": "fd-537388",
     "utcKickoff": "2026-07-15T19:00:00Z",
     "status": "scheduled",
     "stage": "semi-final",
     "teamA": {
       "iso": "xx",
-      "name": "Ganador QF-03"
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
-      "name": "Ganador QF-04"
-    },
-    "venue": {
-      "city": "Atlanta",
-      "country": "Estados Unidos"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-3rd",
+    "id": "fd-537389",
     "utcKickoff": "2026-07-18T21:00:00Z",
     "status": "scheduled",
     "stage": "third-place",
     "teamA": {
       "iso": "xx",
-      "name": "Perdedor SF-01"
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
-      "name": "Perdedor SF-02"
-    },
-    "venue": {
-      "city": "Miami",
-      "country": "Estados Unidos"
+      "name": "Por definir"
     }
   },
   {
-    "id": "wc2026-final",
+    "id": "fd-537390",
     "utcKickoff": "2026-07-19T19:00:00Z",
     "status": "scheduled",
     "stage": "final",
     "teamA": {
       "iso": "xx",
-      "name": "Ganador SF-01"
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
-      "name": "Ganador SF-02"
-    },
-    "venue": {
-      "city": "East Rutherford",
-      "country": "Estados Unidos"
+      "name": "Por definir"
     }
   }
 ]

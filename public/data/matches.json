@@ -1104,7 +1104,7 @@
   {
     "id": "fd-537349",
     "utcKickoff": "2026-06-26T02:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "D",
     "teamA": {
@@ -1114,12 +1114,16 @@
     "teamB": {
       "iso": "us",
       "name": "United States"
+    },
+    "score": {
+      "home": 3,
+      "away": 2
     }
   },
   {
     "id": "fd-537350",
     "utcKickoff": "2026-06-26T02:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "D",
     "teamA": {
@@ -1129,12 +1133,16 @@
     "teamB": {
       "iso": "au",
       "name": "Australia"
+    },
+    "score": {
+      "home": 0,
+      "away": 0
     }
   },
   {
     "id": "fd-537395",
     "utcKickoff": "2026-06-26T19:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "I",
     "teamA": {
@@ -1144,12 +1152,16 @@
     "teamB": {
       "iso": "fr",
       "name": "France"
+    },
+    "score": {
+      "home": 1,
+      "away": 4
     }
   },
   {
     "id": "fd-537396",
     "utcKickoff": "2026-06-26T19:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "I",
     "teamA": {
@@ -1159,12 +1171,16 @@
     "teamB": {
       "iso": "iq",
       "name": "Iraq"
+    },
+    "score": {
+      "home": 5,
+      "away": 0
     }
   },
   {
     "id": "fd-537373",
     "utcKickoff": "2026-06-27T00:00:00Z",
-    "status": "scheduled",
+    "status": "live",
     "stage": "group",
     "group": "H",
     "teamA": {
@@ -1179,7 +1195,7 @@
   {
     "id": "fd-537374",
     "utcKickoff": "2026-06-27T00:00:00Z",
-    "status": "scheduled",
+    "status": "live",
     "stage": "group",
     "group": "H",
     "teamA": {
@@ -1345,8 +1361,8 @@
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
-      "iso": "de",
-      "name": "Germany"
+      "iso": "xx",
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
@@ -1401,8 +1417,8 @@
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
-      "iso": "mx",
-      "name": "Mexico"
+      "iso": "xx",
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
@@ -1443,8 +1459,8 @@
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
-      "iso": "us",
-      "name": "United States"
+      "iso": "xx",
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
@@ -1513,8 +1529,8 @@
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
-      "iso": "ar",
-      "name": "Argentina"
+      "iso": "xx",
+      "name": "Por definir"
     },
     "teamB": {
       "iso": "xx",
