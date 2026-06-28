@@ -1180,7 +1180,7 @@
   {
     "id": "fd-537373",
     "utcKickoff": "2026-06-27T00:00:00Z",
-    "status": "live",
+    "status": "finished",
     "stage": "group",
     "group": "H",
     "teamA": {
@@ -1190,12 +1190,16 @@
     "teamB": {
       "iso": "es",
       "name": "Spain"
+    },
+    "score": {
+      "home": 0,
+      "away": 1
     }
   },
   {
     "id": "fd-537374",
     "utcKickoff": "2026-06-27T00:00:00Z",
-    "status": "live",
+    "status": "finished",
     "stage": "group",
     "group": "H",
     "teamA": {
@@ -1205,12 +1209,16 @@
     "teamB": {
       "iso": "sa",
       "name": "Saudi Arabia"
+    },
+    "score": {
+      "home": 0,
+      "away": 0
     }
   },
   {
     "id": "fd-537367",
     "utcKickoff": "2026-06-27T03:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "G",
     "teamA": {
@@ -1220,12 +1228,16 @@
     "teamB": {
       "iso": "be",
       "name": "Belgium"
+    },
+    "score": {
+      "home": 1,
+      "away": 5
     }
   },
   {
     "id": "fd-537368",
     "utcKickoff": "2026-06-27T03:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "G",
     "teamA": {
@@ -1235,12 +1247,16 @@
     "teamB": {
       "iso": "ir",
       "name": "Iran"
+    },
+    "score": {
+      "home": 1,
+      "away": 1
     }
   },
   {
     "id": "fd-537413",
     "utcKickoff": "2026-06-27T21:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "L",
     "teamA": {
@@ -1250,12 +1266,16 @@
     "teamB": {
       "iso": "gb",
       "name": "England"
+    },
+    "score": {
+      "home": 0,
+      "away": 2
     }
   },
   {
     "id": "fd-537414",
     "utcKickoff": "2026-06-27T21:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "group",
     "group": "L",
     "teamA": {
@@ -1265,12 +1285,16 @@
     "teamB": {
       "iso": "gh",
       "name": "Ghana"
+    },
+    "score": {
+      "home": 2,
+      "away": 1
     }
   },
   {
     "id": "fd-537407",
     "utcKickoff": "2026-06-27T23:30:00Z",
-    "status": "scheduled",
+    "status": "live",
     "stage": "group",
     "group": "K",
     "teamA": {
@@ -1285,7 +1309,7 @@
   {
     "id": "fd-537408",
     "utcKickoff": "2026-06-27T23:30:00Z",
-    "status": "scheduled",
+    "status": "live",
     "stage": "group",
     "group": "K",
     "teamA": {
@@ -1333,12 +1357,12 @@
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "za",
+      "name": "South Africa"
     },
     "teamB": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "ca",
+      "name": "Canada"
     }
   },
   {
@@ -1347,12 +1371,12 @@
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "br",
+      "name": "Brazil"
     },
     "teamB": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "jp",
+      "name": "Japan"
     }
   },
   {
@@ -1361,8 +1385,8 @@
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "de",
+      "name": "Germany"
     },
     "teamB": {
       "iso": "xx",
@@ -1375,12 +1399,12 @@
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "nl",
+      "name": "Netherlands"
     },
     "teamB": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "ma",
+      "name": "Morocco"
     }
   },
   {
@@ -1389,8 +1413,8 @@
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "ci",
+      "name": "Ivory Coast"
     },
     "teamB": {
       "iso": "xx",
@@ -1417,8 +1441,8 @@
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "mx",
+      "name": "Mexico"
     },
     "teamB": {
       "iso": "xx",
@@ -1459,12 +1483,12 @@
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "us",
+      "name": "United States"
     },
     "teamB": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "ba",
+      "name": "Bosnia-Herzegovina"
     }
   },
   {
@@ -1501,8 +1525,8 @@
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "ch",
+      "name": "Switzerland"
     },
     "teamB": {
       "iso": "xx",
@@ -1515,8 +1539,8 @@
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "au",
+      "name": "Australia"
     },
     "teamB": {
       "iso": "xx",
@@ -1529,8 +1553,8 @@
     "status": "scheduled",
     "stage": "round-of-32",
     "teamA": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "ar",
+      "name": "Argentina"
     },
     "teamB": {
       "iso": "xx",
