@@ -1,6 +1,6 @@
-# Tournament-aware 4-hourly refresh of public/data/matches.json.
+# Tournament-aware 2-hourly refresh of public/data/matches.json.
 #
-# A cron fires every 4 hours; the script decides at run time
+# A cron fires every 2 hours; the script decides at run time
 # whether to do a full fetch+rotate, skip (already refreshed within the
 # cadence), or be a complete no-op (outside both tournament windows). See
 # scripts/refresh/window.ts and design.md §10.
@@ -18,8 +18,13 @@ name: Refresh matches.json
 
 on:
   schedule:
-    # Every 4 hours (00:00, 04:00, 08:00, 12:00, 16:00, 20:00 UTC)
-    - cron: "0 0,4,8,12,16,20 * * *"
+    # Every 2 hours — low lag for finished scores + freshly-drawn bracket
+    # slots during the tournament, while avoiding the congested on-the-hour
+    # slot. window.ts gates the real work: tournament runs fetch every time,
+    # near runs still throttle to 48h, and off-season runs are a complete
+    # no-op. (GitHub may delay/skip scheduled runs under load, so treat ~2h
+    # as best-case, not a hard guarantee.)
+    - cron: "0 */2 * * *"
   workflow_dispatch:
 
 # Serialize refreshes so two runs never race on the same commit.
