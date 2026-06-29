@@ -271,6 +271,65 @@ describe('selectFeaturedState — AC-6: tournament-over', () => {
     const state = selectFeaturedState([past], now)
     expect(state.kind).toBe('tournament-over')
   })
+
+  it('does NOT report tournament-over during the knockout gap (next round is undetermined)', () => {
+    // Regression: once every group-stage match with determined teams has been
+    // played, the only future matches are undetermined bracket slots (iso xx).
+    // The tournament has NOT ended, so we must surface the next pending round
+    // instead of falsely declaring the cup over.
+    const playedGroup = makeMatch({
+      id: 'group-last',
+      utcKickoff: '2026-06-27T19:00:00Z',
+      status: 'finished',
+    })
+    const knockout = makeMatch({
+      id: 'r32-1',
+      stage: 'round-of-32',
+      utcKickoff: '2026-07-05T16:00:00Z',
+      teamA: { iso: 'xx', name: '1º grupo A' },
+      teamB: { iso: 'xx', name: '2º grupo B' },
+    })
+    const final = makeMatch({
+      id: 'final',
+      stage: 'final',
+      utcKickoff: '2026-07-19T19:00:00Z',
+      teamA: { iso: 'xx', name: 'Por definir' },
+      teamB: { iso: 'xx', name: 'Por definir' },
+    })
+    // After the last group match, before the first knockout kickoff.
+    const now = Date.parse('2026-06-28T12:00:00Z')
+    const state = selectFeaturedState([playedGroup, knockout, final], now)
+    expect(state.kind).toBe('upcoming-future')
+    if (state.kind === 'upcoming-future') {
+      expect(state.match.id).toBe('r32-1')
+      expect(state.msUntilKickoff).toBe(Date.parse('2026-07-05T16:00:00Z') - now)
+    }
+  })
+
+  it('reports upcoming-today when the next undetermined match kicks off today', () => {
+    // Same knockout gap, but the next pending bracket slot is TODAY: it must
+    // read as upcoming-today (time only), not upcoming-future (with a date),
+    // matching how the rest of the selector treats same-local-day fixtures.
+    const playedGroup = makeMatch({
+      id: 'group-last',
+      utcKickoff: '2026-07-04T19:00:00Z',
+      status: 'finished',
+    })
+    const knockoutToday = makeMatch({
+      id: 'r32-today',
+      stage: 'round-of-32',
+      utcKickoff: '2026-07-05T19:00:00Z',
+      teamA: { iso: 'xx', name: '1º grupo A' },
+      teamB: { iso: 'xx', name: '2º grupo B' },
+    })
+    // Now = 2026-07-05T16:00:00Z → 13:00 BA → same local day as the kickoff.
+    const now = Date.parse('2026-07-05T16:00:00Z')
+    const state = selectFeaturedState([playedGroup, knockoutToday], now)
+    expect(state.kind).toBe('upcoming-today')
+    if (state.kind === 'upcoming-today') {
+      expect(state.match.id).toBe('r32-today')
+    }
+  })
 })
 
 describe('selectFeaturedState — AC-7: kickoff transition (boundary inclusive)', () => {

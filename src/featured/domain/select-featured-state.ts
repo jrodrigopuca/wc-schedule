@@ -83,5 +83,26 @@ export function selectFeaturedState(matches: readonly Match[], now: number): Fea
     }
   }
 
+  // `tournament-over` is governed by the real tournament end (last playable
+  // kickoff + live window), NOT by the absence of matches with determined
+  // teams. During the knockout stage the bracket fills round by round, so
+  // future rounds legitimately exist as `xx` placeholders. While the
+  // tournament has not ended, surface the next scheduled match even if its
+  // teams are still undetermined (featured.md §2, §5).
+  const tournamentEnd = computeTournamentEnd(matches)
+  if (tournamentEnd !== null && now < tournamentEnd) {
+    const nextPending = matches
+      .filter((m) => m.status === 'scheduled' && now < Date.parse(m.utcKickoff))
+      .slice()
+      .sort(byKickoffThenId)[0]
+    if (nextPending !== undefined) {
+      return {
+        kind: isSameLocalDay(nextPending.utcKickoff, now) ? 'upcoming-today' : 'upcoming-future',
+        match: nextPending,
+        msUntilKickoff: Date.parse(nextPending.utcKickoff) - now,
+      }
+    }
+  }
+
   return { kind: 'tournament-over' }
 }
