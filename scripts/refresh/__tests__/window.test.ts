@@ -41,11 +41,14 @@ describe('shouldFetch — cadence table', () => {
     expect(shouldFetch('near', day('2026-06-01'), null)).toBe(true)
   })
 
-  it('tournament: same UTC day → skip', () => {
-    expect(shouldFetch('tournament', day('2026-06-12'), day('2026-06-12'))).toBe(false)
+  it('tournament: always fetches, even within the same UTC day (~4h cadence)', () => {
+    // The cron fires every ~4h; during the tournament every run fetches so
+    // results and bracket slots go live fast. The no-change short-circuit in
+    // rotate.ts absorbs unchanged re-fetches (no commit), so this is cheap.
+    expect(shouldFetch('tournament', day('2026-06-12'), day('2026-06-12'))).toBe(true)
   })
 
-  it('tournament: 1 day elapsed → fetch (24h cadence)', () => {
+  it('tournament: fetches regardless of how long since the last refresh', () => {
     expect(shouldFetch('tournament', day('2026-06-12'), day('2026-06-11'))).toBe(true)
   })
 

@@ -16,5 +16,5 @@ export const TOURNAMENT_END_UTC = '2026-07-19' // final, UTC date
 export const NEAR_LEAD_DAYS = 30 // lead-in before kickoff (data-source.md §6.2)
 export const NEAR_TAIL_DAYS = 7 // tail-off after the final (data-source.md §6.2)
 
-// "tournament" → refresh every 24h; "near" → every 48h; "off" → no-op.
+// "tournament" → refresh every cron run (~4h); "near" → every 48h; "off" → no-op.
 export type RefreshMode = 'tournament' | 'near' | 'off'

@@ -51,8 +51,12 @@ export function getRefreshMode(now: number): RefreshMode {
 // refresh, decide whether this run should fetch upstream.
 //
 // - "off"  → never fetch (the cron is a complete no-op outside both windows).
+// - "tournament" → fetch on EVERY cron run (~4h). Results and bracket slots
+//   resolve fast upstream, so during the tournament we want them live within
+//   one cron tick, not up to 24h later. The no-change short-circuit in
+//   `rotate.ts` makes an unchanged re-fetch a no-op (no rotation, no commit),
+//   so polling every 4h costs 6 cheap upstream calls/day and zero junk commits.
 // - first-ever run (no previous refresh) → always fetch.
-// - "tournament" → fetch when ≥ 1 UTC day has elapsed (24h cadence).
 // - "near"       → fetch when ≥ 2 UTC days have elapsed (48h cadence).
 export function shouldFetch(
   mode: RefreshMode,
@@ -60,8 +64,8 @@ export function shouldFetch(
   lastRefreshUtcMs: number | null,
 ): boolean {
   if (mode === 'off') return false
+  if (mode === 'tournament') return true
   if (lastRefreshUtcMs === null) return true
   const diffDays = Math.round((todayUtcMs - lastRefreshUtcMs) / DAY_MS)
-  if (mode === 'tournament') return diffDays >= 1
   return diffDays >= 2
 }

@@ -22,9 +22,9 @@ const TEAM_NAMES_ES: Record<string, string> = {
 
 const STAGE_LABELS_ES: Record<Stage, string> = {
   group: 'Fase de grupos',
-  'round-of-32': 'Dieciseisavos',
+  'round-of-32': '32avos',
   'round-of-16': 'Octavos',
-  'quarter-final': 'Cuartos de final',
+  'quarter-final': 'Cuartos',
   'semi-final': 'Semifinales',
   'third-place': 'Tercer puesto',
   final: 'Final',
@@ -108,7 +108,7 @@ describe('buildMatchIcs', () => {
       stage: 'quarter-final',
     }
     const ics = buildMatchIcs(knockout, ctxEs, NOW)
-    expect(ics).toContain('DESCRIPTION:Cuartos de final · Mundial 2026')
+    expect(ics).toContain('DESCRIPTION:Cuartos · Mundial 2026')
     expect(ics).not.toContain('Grupo')
   })
 
