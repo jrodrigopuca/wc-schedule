@@ -1388,7 +1388,7 @@
   {
     "id": "fd-537423",
     "utcKickoff": "2026-06-29T17:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "round-of-32",
     "teamA": {
       "iso": "br",
@@ -1397,12 +1397,16 @@
     "teamB": {
       "iso": "jp",
       "name": "Japan"
+    },
+    "score": {
+      "home": 2,
+      "away": 1
     }
   },
   {
     "id": "fd-537415",
     "utcKickoff": "2026-06-29T20:30:00Z",
-    "status": "scheduled",
+    "status": "live",
     "stage": "round-of-32",
     "teamA": {
       "iso": "de",
@@ -1601,8 +1605,8 @@
     "status": "scheduled",
     "stage": "round-of-16",
     "teamA": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "ca",
+      "name": "Canada"
     },
     "teamB": {
       "iso": "xx",
