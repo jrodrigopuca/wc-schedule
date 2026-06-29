@@ -2,6 +2,10 @@
   "version": 1,
   "entries": [
     {
+      "date": "2026-06-29",
+      "file": "matches-2026-06-29.json"
+    },
+    {
       "date": "2026-06-28",
       "file": "matches-2026-06-28.json"
     },
@@ -24,10 +28,6 @@
     {
       "date": "2026-06-23",
       "file": "matches-2026-06-23.json"
-    },
-    {
-      "date": "2026-06-22",
-      "file": "matches-2026-06-22.json"
     }
   ]
 }
