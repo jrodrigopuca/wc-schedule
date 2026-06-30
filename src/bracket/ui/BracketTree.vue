@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from '@/shared/i18n/useI18n'
+import type { MessageKey } from '@/shared/i18n/types'
 import type {
   BracketMatchViewModel,
   BracketModel,
@@ -35,7 +36,7 @@ const props = defineProps<{
 
 const { t } = useI18n()
 
-const BRACKET_STAGE_LABEL: Readonly<Record<BracketRoundStage, string>> = {
+const BRACKET_STAGE_LABEL: Readonly<Record<BracketRoundStage, MessageKey>> = {
   [BRACKET_ROUND_STAGE.ROUND_OF_32]: 'bracket.stage.roundOf32',
   [BRACKET_ROUND_STAGE.ROUND_OF_16]: 'bracket.stage.roundOf16',
   [BRACKET_ROUND_STAGE.QUARTER_FINAL]: 'bracket.stage.quarterFinal',
