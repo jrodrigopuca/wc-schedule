@@ -223,6 +223,7 @@ function mapScore(score: UpstreamScore | undefined): { home: number; away: numbe
   const duration = score?.duration
   const regularTime = mapScoreLine(score?.regularTime)
   const extraTime = mapScoreLine(score?.extraTime)
+  const fullTime = mapScoreLine(score?.fullTime)
 
   if (duration === 'PENALTY_SHOOTOUT') {
     if (regularTime === undefined) return undefined
@@ -233,13 +234,52 @@ function mapScore(score: UpstreamScore | undefined): { home: number; away: numbe
     }
   }
 
-  return mapScoreLine(score?.fullTime)
+  return fullTime
 }
 
 function mapPenalties(
   score: UpstreamScore | undefined,
 ): { home: number; away: number } | undefined {
-  return mapScoreLine(score?.penalties)
+  const duration = score?.duration
+  if (duration !== 'PENALTY_SHOOTOUT') return undefined
+
+  const regularTime = mapScoreLine(score?.regularTime)
+  if (regularTime === undefined) return mapScoreLine(score?.penalties)
+  const extraTime = mapScoreLine(score?.extraTime)
+  const fullTime = mapScoreLine(score?.fullTime)
+  const rawPenalties = mapScoreLine(score?.penalties)
+  const baseScore =
+    extraTime === undefined
+      ? regularTime
+      : {
+          home: regularTime.home + extraTime.home,
+          away: regularTime.away + extraTime.away,
+        }
+
+  if (fullTime === undefined) return rawPenalties
+  const derivedPenalties = derivePenaltiesFromFullTime(baseScore, fullTime)
+  if (derivedPenalties === undefined) return rawPenalties
+  if (rawPenalties === undefined) return derivedPenalties
+  if (isSameScore(rawPenalties, derivedPenalties)) return rawPenalties
+  return derivedPenalties
+}
+
+function derivePenaltiesFromFullTime(
+  baseScore: { home: number; away: number },
+  fullTime: { home: number; away: number },
+): { home: number; away: number } | undefined {
+  const home = fullTime.home - baseScore.home
+  const away = fullTime.away - baseScore.away
+  if (home < 0 || away < 0) return undefined
+  if (!Number.isInteger(home) || !Number.isInteger(away)) return undefined
+  return { home, away }
+}
+
+function isSameScore(
+  left: { home: number; away: number },
+  right: { home: number; away: number },
+): boolean {
+  return left.home === right.home && left.away === right.away
 }
 
 function mapScoreLine(line: UpstreamScore['fullTime']): { home: number; away: number } | undefined {

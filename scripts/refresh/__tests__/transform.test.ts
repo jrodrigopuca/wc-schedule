@@ -68,6 +68,24 @@ describe('transform — happy path', () => {
     expect(m?.penalties).toEqual({ home: 5, away: 4 })
   })
 
+  it('derives penalties from fullTime when the upstream penalties node is inconsistent', () => {
+    const [m] = transform({
+      matches: [
+        {
+          ...finalMatch,
+          score: {
+            duration: 'PENALTY_SHOOTOUT',
+            fullTime: { homeTeam: 5, awayTeam: 6 },
+            regularTime: { homeTeam: 1, awayTeam: 1 },
+            penalties: { homeTeam: 5, awayTeam: 5 },
+          },
+        },
+      ],
+    } as UpstreamResponse)
+    expect(m?.score).toEqual({ home: 1, away: 1 })
+    expect(m?.penalties).toEqual({ home: 4, away: 5 })
+  })
+
   it('omits score when fullTime values are null (pre-kickoff)', () => {
     const m = transform({
       matches: [{ ...groupMatch, score: { fullTime: { home: null, away: null } } }],
