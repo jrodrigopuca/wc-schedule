@@ -1428,7 +1428,7 @@
   {
     "id": "fd-537418",
     "utcKickoff": "2026-06-30T01:00:00Z",
-    "status": "scheduled",
+    "status": "live",
     "stage": "round-of-32",
     "teamA": {
       "iso": "nl",
