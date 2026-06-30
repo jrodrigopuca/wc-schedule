@@ -333,6 +333,18 @@ function toParticipant(
     line-height: 1.1;
   }
 
+  /* PDF shows the full team name instead of the 3-letter code. At ~8.5px in a
+     full-width print column (~180px of text room) the longest WC names still
+     fit on one line, so the card height — and the single-page fit — is
+     unaffected. */
+  .teamCodeText {
+    display: none;
+  }
+
+  .teamFullName {
+    display: inline;
+  }
+
   .teamNameEmpty {
     min-height: 1.45em;
     border-bottom-color: #aeb6c0;
