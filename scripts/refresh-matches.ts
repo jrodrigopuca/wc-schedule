@@ -21,6 +21,7 @@ import { fileURLToPath } from 'node:url'
 import { getRefreshMode, shouldFetch, utcDateOf, utcMidnight } from './refresh/window.ts'
 import { fetchMatches } from './refresh/fetch.ts'
 import { rotateAndWrite } from './refresh/rotate.ts'
+import { persistRefreshReport, REFRESH_REASON, type RefreshRunReport } from './refresh/report.ts'
 import { matchListSchema } from '../src/matches/domain/match.schema.ts'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -50,53 +51,136 @@ function readLastCommitUtcDate(): string | null {
 async function main(): Promise<void> {
   const now = Date.now()
   const mode = getRefreshMode(now)
-
-  if (mode === 'off') {
-    log('outside tournament windows — no-op')
-    return
-  }
-
+  const timestamp = new Date(now).toISOString()
   const lastDate = readLastCommitUtcDate()
-  const lastRefreshMs = lastDate === null ? null : utcMidnight(lastDate)
-  const todayMs = utcDateOf(now)
+  let fetched = false
+  let fetchedCount = 0
 
-  if (!shouldFetch(mode, todayMs, lastRefreshMs)) {
-    log(`mode=${mode}: already refreshed within cadence (last=${lastDate}) — no-op`)
-    return
+  try {
+    if (mode === 'off') {
+      log('outside tournament windows — no-op')
+      await persistRefreshReport({
+        timestamp,
+        mode,
+        lastRefreshDate: lastDate,
+        fetched: false,
+        fetchedCount: 0,
+        changed: false,
+        reason: REFRESH_REASON.OFF_WINDOW,
+        pruned: [],
+      })
+      return
+    }
+
+    const lastRefreshMs = lastDate === null ? null : utcMidnight(lastDate)
+    const todayMs = utcDateOf(now)
+
+    if (!shouldFetch(mode, todayMs, lastRefreshMs)) {
+      log(`mode=${mode}: already refreshed within cadence (last=${lastDate}) — no-op`)
+      await persistRefreshReport({
+        timestamp,
+        mode,
+        lastRefreshDate: lastDate,
+        fetched: false,
+        fetchedCount: 0,
+        changed: false,
+        reason: REFRESH_REASON.CADENCE_SKIP,
+        pruned: [],
+      })
+      return
+    }
+
+    log(`mode=${mode}: fetching upstream…`)
+    const transformed = await fetchMatches()
+    fetched = true
+    fetchedCount = transformed.length
+
+    // Same schema the CLIENT trusts. A violation throws → non-zero exit →
+    // workflow fails → no rotation, no commit.
+    const validated = matchListSchema.parse(transformed)
+    log(`fetched + validated ${validated.length} matches`)
+
+    // History filename uses the PREVIOUS commit's UTC date (the data that was
+    // live). Fall back to today only if the current file is untracked.
+    const prevCommitDate = lastDate ?? utcDateOnly(now)
+
+    const result = await rotateAndWrite({
+      dataDir: DATA_DIR,
+      newPayload: validated,
+      prevCommitDate,
+    })
+
+    if (!result.changed) {
+      log('payload identical to current matches.json — no rotation, no commit')
+      await persistRefreshReport({
+        timestamp,
+        mode,
+        lastRefreshDate: lastDate,
+        fetched,
+        fetchedCount,
+        changed: false,
+        reason: REFRESH_REASON.IDENTICAL_PAYLOAD,
+        pruned: [],
+      })
+      return
+    }
+
+    log(
+      `rotated: wrote matches.json` +
+        (result.historyFile ? `, archived ${result.historyFile}` : '') +
+        (result.pruned.length > 0 ? `, pruned ${result.pruned.join(', ')}` : ''),
+    )
+
+    await persistRefreshReport(
+      toChangedReport({
+        timestamp,
+        mode,
+        lastRefreshDate: lastDate,
+        fetchedCount,
+        result,
+      }),
+    )
+  } catch (err: unknown) {
+    await persistRefreshReport({
+      timestamp,
+      mode,
+      lastRefreshDate: lastDate,
+      fetched,
+      fetchedCount,
+      changed: false,
+      reason: REFRESH_REASON.FAILED,
+      pruned: [],
+      errorMessage: err instanceof Error ? err.message : String(err),
+    })
+    throw err
   }
-
-  log(`mode=${mode}: fetching upstream…`)
-  const transformed = await fetchMatches()
-
-  // Same schema the CLIENT trusts. A violation throws → non-zero exit →
-  // workflow fails → no rotation, no commit.
-  const validated = matchListSchema.parse(transformed)
-  log(`fetched + validated ${validated.length} matches`)
-
-  // History filename uses the PREVIOUS commit's UTC date (the data that was
-  // live). Fall back to today only if the current file is untracked.
-  const prevCommitDate = lastDate ?? utcDateOnly(now)
-
-  const result = await rotateAndWrite({
-    dataDir: DATA_DIR,
-    newPayload: validated,
-    prevCommitDate,
-  })
-
-  if (!result.changed) {
-    log('payload identical to current matches.json — no rotation, no commit')
-    return
-  }
-
-  log(
-    `rotated: wrote matches.json` +
-      (result.historyFile ? `, archived ${result.historyFile}` : '') +
-      (result.pruned.length > 0 ? `, pruned ${result.pruned.join(', ')}` : ''),
-  )
 }
 
 function utcDateOnly(now: number): string {
   return new Date(now).toISOString().slice(0, 10)
+}
+
+interface ChangedReportInput {
+  readonly timestamp: string
+  readonly mode: RefreshRunReport['mode']
+  readonly lastRefreshDate: string | null
+  readonly fetchedCount: number
+  readonly result: Awaited<ReturnType<typeof rotateAndWrite>>
+}
+
+function toChangedReport(input: ChangedReportInput): RefreshRunReport {
+  const { timestamp, mode, lastRefreshDate, fetchedCount, result } = input
+  return {
+    timestamp,
+    mode,
+    lastRefreshDate,
+    fetched: true,
+    fetchedCount,
+    changed: true,
+    reason: REFRESH_REASON.UPDATED_PAYLOAD,
+    ...(result.historyFile !== undefined ? { historyFile: result.historyFile } : {}),
+    pruned: result.pruned,
+  }
 }
 
 main().catch((err: unknown) => {
