@@ -24,7 +24,7 @@ on:
     # near runs still throttle to 48h, and off-season runs are a complete
     # no-op. (GitHub may delay/skip scheduled runs under load, so treat ~2h
     # as best-case, not a hard guarantee.)
-    - cron: "0 */2 * * *"
+    - cron: '0 */2 * * *'
   workflow_dispatch:
 
 # Serialize refreshes so two runs never race on the same commit.
@@ -39,6 +39,16 @@ jobs:
   refresh:
     name: Refresh
     runs-on: ubuntu-latest
+    outputs:
+      mode: ${{ steps.refresh_run.outputs.refresh_mode }}
+      fetched: ${{ steps.refresh_run.outputs.refresh_fetched }}
+      fetched_count: ${{ steps.refresh_run.outputs.refresh_fetched_count }}
+      changed: ${{ steps.refresh_run.outputs.refresh_changed }}
+      reason: ${{ steps.refresh_run.outputs.refresh_reason }}
+      last_date: ${{ steps.refresh_run.outputs.refresh_last_date }}
+      history_file: ${{ steps.refresh_run.outputs.refresh_history_file }}
+      pruned_count: ${{ steps.refresh_run.outputs.refresh_pruned_count }}
+      outcome: ${{ steps.refresh_run.outcome }}
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -62,11 +72,27 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Refresh (window-aware)
+        id: refresh_run
+        continue-on-error: true
         env:
           FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN }}
+          REFRESH_REPORT_PATH: .artifacts/refresh-report.json
         run: pnpm run refresh:matches
 
+      - name: Upload refresh artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: refresh-report
+          path: .artifacts/refresh-report.json
+          if-no-files-found: ignore
+
+      - name: Fail workflow when refresh script fails
+        if: steps.refresh_run.outcome == 'failure'
+        run: exit 1
+
       - name: Commit if changed
+        if: steps.refresh_run.outcome == 'success'
         run: |
           if ! git diff --quiet -- public/data/; then
             git config user.name "wc-schedule-bot"
@@ -77,3 +103,41 @@ jobs:
           else
             echo "No data change — nothing to commit."
           fi
+
+  refresh-report:
+    name: Refresh report
+    runs-on: ubuntu-latest
+    needs: refresh
+    if: always()
+    steps:
+      - name: Download refresh artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: refresh-report
+          path: .artifacts
+        continue-on-error: true
+
+      - name: Summarize refresh outcome
+        env:
+          REFRESH_OUTCOME: ${{ needs.refresh.outputs.outcome }}
+          REFRESH_MODE: ${{ needs.refresh.outputs.mode }}
+          REFRESH_FETCHED: ${{ needs.refresh.outputs.fetched }}
+          REFRESH_FETCHED_COUNT: ${{ needs.refresh.outputs.fetched_count }}
+          REFRESH_CHANGED: ${{ needs.refresh.outputs.changed }}
+          REFRESH_REASON: ${{ needs.refresh.outputs.reason }}
+          REFRESH_LAST_DATE: ${{ needs.refresh.outputs.last_date }}
+          REFRESH_HISTORY_FILE: ${{ needs.refresh.outputs.history_file }}
+          REFRESH_PRUNED_COUNT: ${{ needs.refresh.outputs.pruned_count }}
+        run: |
+          {
+            printf '## Refresh verdict\n\n'
+            printf -- '- outcome: `%s`\n' "$REFRESH_OUTCOME"
+            printf -- '- mode: `%s`\n' "$REFRESH_MODE"
+            printf -- '- fetched upstream: `%s`\n' "$REFRESH_FETCHED"
+            printf -- '- matches received: `%s`\n' "$REFRESH_FETCHED_COUNT"
+            printf -- '- changed dataset: `%s`\n' "$REFRESH_CHANGED"
+            printf -- '- reason: `%s`\n' "$REFRESH_REASON"
+            printf -- '- previous refresh date: `%s`\n' "$REFRESH_LAST_DATE"
+            printf -- '- rotated history file: `%s`\n' "$REFRESH_HISTORY_FILE"
+            printf -- '- pruned snapshots: `%s`\n' "$REFRESH_PRUNED_COUNT"
+          } >> "$GITHUB_STEP_SUMMARY"
