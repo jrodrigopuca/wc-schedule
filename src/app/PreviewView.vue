@@ -75,7 +75,8 @@ const upcomingFutureState = computed<FeaturedState>(() => {
 
 const tournamentOverState: FeaturedState = { kind: 'tournament-over' }
 
-// Sample match cards: scheduled / live (no score, by design) / finished / postponed.
+// Sample match cards: scheduled / live (no score, by design) / finished /
+// finished on penalties / postponed.
 const sampleMatches = computed<readonly Match[]>(() => {
   const a = fixtureById.value['wc2026-g-a-01']
   const b = fixtureById.value['wc2026-g-b-01']
@@ -86,6 +87,12 @@ const sampleMatches = computed<readonly Match[]>(() => {
     { ...clone(a), status: 'scheduled' },
     { ...clone(b), status: 'live' },
     { ...clone(c), status: 'finished', score: { home: 3, away: 0 } },
+    {
+      ...clone(d),
+      status: 'finished',
+      score: { home: 1, away: 1 },
+      penalties: { home: 5, away: 4 },
+    },
     { ...clone(d), status: 'postponed' },
   ]
 })
