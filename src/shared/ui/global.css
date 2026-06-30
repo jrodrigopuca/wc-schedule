@@ -28,3 +28,27 @@ body {
     background-color 200ms ease,
     color 200ms ease;
 }
+
+@page {
+  size: landscape;
+  margin: 5mm;
+}
+
+@media print {
+  html,
+  body {
+    min-height: auto;
+    background: #fff;
+  }
+
+  body {
+    color: #000;
+  }
+
+  *,
+  *::before,
+  *::after {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

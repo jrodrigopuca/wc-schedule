@@ -129,6 +129,24 @@ describe('transform — happy path', () => {
     expect(() => matchListSchema.parse(out)).not.toThrow()
   })
 
+  it('preserves structured unresolved-slot labels instead of collapsing them to Por definir', () => {
+    const out = transform({
+      matches: [
+        {
+          id: 201,
+          utcDate: '2026-07-05T19:00:00Z',
+          status: 'SCHEDULED',
+          stage: 'QUARTER_FINALS',
+          group: null,
+          homeTeam: { id: null, name: 'Winner Match 49' },
+          awayTeam: { id: null, name: 'Runner-up Group A' },
+        },
+      ],
+    } as UpstreamResponse)
+    expect(out[0]?.teamA).toEqual({ iso: 'xx', name: 'Winner Match 49' })
+    expect(out[0]?.teamB).toEqual({ iso: 'xx', name: 'Runner-up Group A' })
+  })
+
   it('omits score for a live (in-play) match even when fullTime carries one', () => {
     const m = transform({
       matches: [{ ...groupMatch, status: 'IN_PLAY', score: { fullTime: { home: 1, away: 0 } } }],

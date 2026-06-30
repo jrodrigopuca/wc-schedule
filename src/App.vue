@@ -1,24 +1,33 @@
 <script setup lang="ts">
-// App shell. Routes to MainView ('/') or PreviewView ('#/preview').
+// App shell. Routes to MainView ('/'), PreviewView ('#/preview'), or
+// BracketView ('#/bracket'). The bracket route gets a wider content shell so
+// the knockout tree can print and scroll safely without affecting the compact
+// day-to-day views.
 import { computed } from 'vue'
+import BracketView from '@/app/BracketView.vue'
 import MainView from '@/app/MainView.vue'
 import PreviewView from '@/app/PreviewView.vue'
 import LocaleToggle from '@/shared/ui/LocaleToggle.vue'
 import ThemeToggle from '@/shared/ui/ThemeToggle.vue'
 import { useI18n } from '@/shared/i18n/useI18n'
-import { useRoute } from '@/app/router'
+import { ROUTE, useRoute } from '@/app/router'
 import { APP_NAME } from '@/shared/types/app-name'
 
 const { t } = useI18n()
 const { current: route } = useRoute()
 
-const isPreview = computed(() => route.value === 'preview')
+const isPreview = computed(() => route.value === ROUTE.PREVIEW)
+const isBracket = computed(() => route.value === ROUTE.BRACKET)
 </script>
 
 <template>
-  <div :class="$style.shell">
-    <main :class="$style.main">
-      <header :class="$style.header">
+  <div :class="[$style.shell, isBracket && $style.shellBracket]" :data-route="route">
+    <main
+      :class="[$style.main, isBracket ? $style.mainWide : $style.mainCompact]"
+      data-app-main
+      :data-shell-width="isBracket ? 'wide' : 'compact'"
+    >
+      <header :class="$style.header" data-app-header>
         <div :class="$style.brand">
           <div :class="$style.mark">26</div>
           <div :class="$style.brandText">
@@ -33,6 +42,7 @@ const isPreview = computed(() => route.value === 'preview')
       </header>
 
       <PreviewView v-if="isPreview" />
+      <BracketView v-else-if="isBracket" />
       <MainView v-else />
     </main>
   </div>
@@ -46,12 +56,19 @@ const isPreview = computed(() => route.value === 'preview')
 }
 
 .main {
-  max-width: 480px;
   margin: 0 auto;
   padding: 28px 22px 64px;
   display: flex;
   flex-direction: column;
   gap: 24px;
+}
+
+.mainCompact {
+  max-width: 480px;
+}
+
+.mainWide {
+  max-width: 1360px;
 }
 
 .header {
@@ -112,6 +129,33 @@ const isPreview = computed(() => route.value === 'preview')
   .headerToggles {
     flex-basis: 100%;
     justify-content: flex-end;
+  }
+}
+
+@media (min-width: 900px) {
+  .mainWide {
+    padding-inline: 28px;
+  }
+}
+
+@media print {
+  .shellBracket {
+    min-height: auto;
+    background: #fff;
+  }
+
+  .shellBracket .header {
+    display: none;
+  }
+
+  .mainWide {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .mainCompact {
+    max-width: none;
   }
 }
 </style>

@@ -115,6 +115,11 @@ function openGallery(event: Event): void {
   navigate('preview')
 }
 
+function openBracket(event: Event): void {
+  event.preventDefault()
+  navigate('bracket')
+}
+
 function onSelectDay(dayYMD: string): void {
   // Clicking today's chip resets to the canonical main route (empty hash).
   if (dayYMD === todayYMD.value) {
@@ -174,9 +179,14 @@ function onSelectDay(dayYMD: string): void {
         :aria-label="dataIndicator.label"
         :title="dataIndicator.label"
       />
-      <a :class="$style.galleryLink" href="#/preview" @click="openGallery">
-        &rarr; {{ t('nav.openGallery') }}
-      </a>
+      <div :class="$style.quickLinks">
+        <a :class="$style.quickLink" href="#/bracket" @click="openBracket">
+          &rarr; {{ t('nav.openBracket') }}
+        </a>
+        <a :class="$style.quickLink" href="#/preview" @click="openGallery">
+          &rarr; {{ t('nav.openGallery') }}
+        </a>
+      </div>
     </footer>
   </div>
 </template>
@@ -230,7 +240,16 @@ function onSelectDay(dayYMD: string): void {
   align-items: center;
   justify-content: center;
   gap: 10px;
+  flex-wrap: wrap;
   padding: 4px 0 24px;
+}
+
+.quickLinks {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .statusDot {
@@ -253,7 +272,7 @@ function onSelectDay(dayYMD: string): void {
   box-shadow: 0 0 0 3px color-mix(in srgb, #f59e0b 18%, transparent);
 }
 
-.galleryLink {
+.quickLink {
   display: inline-block;
   font-size: 13px;
   font-weight: 600;
@@ -266,13 +285,13 @@ function onSelectDay(dayYMD: string): void {
     background 160ms ease;
 }
 
-.galleryLink:hover,
-.galleryLink:focus-visible {
+.quickLink:hover,
+.quickLink:focus-visible {
   color: var(--text-strong);
   background: var(--bg-pill);
 }
 
-.galleryLink:focus-visible {
+.quickLink:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }

@@ -34,6 +34,13 @@ describe('parseHash', () => {
     expect(parseHash('#/preview?foo=bar')).toBe('preview')
   })
 
+  it('returns "bracket" for "#/bracket" variants', async () => {
+    const { parseHash } = await loadRouter()
+    expect(parseHash('#/bracket')).toBe('bracket')
+    expect(parseHash('#/bracket/')).toBe('bracket')
+    expect(parseHash('#/bracket?print=1')).toBe('bracket')
+  })
+
   it('returns "main" for an unknown hash', async () => {
     const { parseHash } = await loadRouter()
     expect(parseHash('#/something-else')).toBe('main')
@@ -61,6 +68,13 @@ describe('useRoute', () => {
     expect(window.location.hash).toBe('#/preview')
   })
 
+  it('navigate("bracket") updates the location hash', async () => {
+    const { useRoute } = await loadRouter()
+    const route = useRoute()
+    route.navigate('bracket')
+    expect(window.location.hash).toBe('#/bracket')
+  })
+
   it('navigate("main") clears the location hash', async () => {
     window.location.hash = '#/preview'
     const { useRoute } = await loadRouter()
@@ -77,6 +91,9 @@ describe('useRoute', () => {
     window.location.hash = '#/preview'
     window.dispatchEvent(new HashChangeEvent('hashchange'))
     expect(route.current.value).toBe('preview')
+    window.location.hash = '#/bracket'
+    window.dispatchEvent(new HashChangeEvent('hashchange'))
+    expect(route.current.value).toBe('bracket')
     window.location.hash = ''
     window.dispatchEvent(new HashChangeEvent('hashchange'))
     expect(route.current.value).toBe('main')

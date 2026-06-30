@@ -1,5 +1,12 @@
 /// <reference types="vite/client" />
 
+declare module '*.vue' {
+  import type { DefineComponent } from 'vue'
+
+  const component: DefineComponent<Record<string, never>, Record<string, never>, unknown>
+  export default component
+}
+
 // `VITE_DATA_SOURCE` selects the runtime data layer at build time
 // (see openspec data-source.md §3, design.md §4.2):
 // - `"manual"`: the bundled fixture is the ONLY source — no network I/O.

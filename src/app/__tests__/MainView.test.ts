@@ -111,8 +111,9 @@ describe('MainView (smoke)', () => {
     expect(dot.attributes('aria-label')).toBe('Datos de respaldo (sin conexión)')
   })
 
-  it('renders the open-gallery footer link', () => {
+  it('renders the bracket and gallery quick links', () => {
     const wrapper = mount(MainView)
+    expect(wrapper.text()).toContain('Ver cuadro final')
     expect(wrapper.text()).toContain('Galería de componentes')
   })
 

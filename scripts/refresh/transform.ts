@@ -193,6 +193,9 @@ function mapTeam(team: UpstreamTeam): { iso: string; name: string } {
   if (!name) {
     return { iso: UNDETERMINED_ISO, name: 'Por definir' }
   }
+  if (isUndeterminedLabel(name)) {
+    return { iso: UNDETERMINED_ISO, name }
+  }
   const iso = NAME_TO_ISO[name]
   // A PRESENT-but-unmapped name is a genuine surprise (a participant we
   // haven't catalogued). Throw so the run aborts and the base JSON survives.
@@ -200,6 +203,12 @@ function mapTeam(team: UpstreamTeam): { iso: string; name: string } {
     throw new Error(`transform: no ISO mapping for team "${name}" (add it to NAME_TO_ISO)`)
   }
   return { iso, name }
+}
+
+function isUndeterminedLabel(name: string): boolean {
+  return /^(winner|loser|runner-up|best third|best 3rd|group [a-l]|[1-4](st|nd|rd|th) group|ganador|perdedor|mejor tercero|mejor 3ro|[1-4][º°] grupo)/i.test(
+    name,
+  )
 }
 
 // "GROUP_A" → "A". Returns undefined for knockout matches (no group). Throws

@@ -3,13 +3,21 @@
 // at module load, a one-shot environment listener, and a `useX()` composable
 // that exposes a `ComputedRef` plus an imperative setter (`navigate`).
 //
-// Two routes only: 'main' (the real app) and 'preview' (the component gallery).
+// Three routes only: 'main' (the real app), 'preview' (the component
+// gallery), and 'bracket' (the printable knockout screen).
 
 import { computed, ref, type ComputedRef } from 'vue'
 
-export type Route = 'main' | 'preview'
+export const ROUTE = {
+  MAIN: 'main',
+  PREVIEW: 'preview',
+  BRACKET: 'bracket',
+} as const
+
+export type Route = (typeof ROUTE)[keyof typeof ROUTE]
 
 const PREVIEW_PREFIX = '#/preview'
+const BRACKET_PREFIX = '#/bracket'
 
 const current = ref<Route>(parseHash(readHash()))
 
@@ -29,15 +37,14 @@ export function useRoute(): UseRouteReturn {
 
 export function parseHash(rawHash?: string): Route {
   const raw = rawHash ?? ''
-  if (raw === PREVIEW_PREFIX) return 'preview'
-  if (raw.startsWith(`${PREVIEW_PREFIX}/`)) return 'preview'
-  if (raw.startsWith(`${PREVIEW_PREFIX}?`)) return 'preview'
-  return 'main'
+  if (matchesRoutePrefix(raw, PREVIEW_PREFIX)) return ROUTE.PREVIEW
+  if (matchesRoutePrefix(raw, BRACKET_PREFIX)) return ROUTE.BRACKET
+  return ROUTE.MAIN
 }
 
 function navigate(route: Route): void {
   if (typeof window === 'undefined') return
-  const target = route === 'preview' ? PREVIEW_PREFIX : ''
+  const target = toHash(route)
   if (window.location.hash === target) {
     // No event fires when the hash is identical — update the ref directly so
     // programmatic re-navigation still re-renders.
@@ -50,6 +57,16 @@ function navigate(route: Route): void {
 function readHash(): string {
   if (typeof window === 'undefined') return ''
   return window.location.hash
+}
+
+function matchesRoutePrefix(rawHash: string, prefix: string): boolean {
+  return rawHash === prefix || rawHash.startsWith(`${prefix}/`) || rawHash.startsWith(`${prefix}?`)
+}
+
+function toHash(route: Route): string {
+  if (route === ROUTE.PREVIEW) return PREVIEW_PREFIX
+  if (route === ROUTE.BRACKET) return BRACKET_PREFIX
+  return ''
 }
 
 function attachHashChangeListener(): void {
