@@ -36,5 +36,37 @@ export async function fetchMatches(env: NodeJS.ProcessEnv = process.env): Promis
   }
 
   const payload = (await response.json()) as UpstreamResponse
-  return transform(payload)
+  const matches = transform(payload)
+  logPenaltyShootoutPayloads(payload, matches)
+  return matches
+}
+
+function logPenaltyShootoutPayloads(payload: UpstreamResponse, matches: readonly Match[]): void {
+  const transformedById = new Map(matches.map((match) => [match.id, match] as const))
+
+  for (const match of payload.matches) {
+    if (match.score?.duration !== 'PENALTY_SHOOTOUT') continue
+
+    const transformed = transformedById.get(toMatchId(match.id))
+    console.log(
+      `[refresh] penalty-shootout raw=${JSON.stringify({
+        id: match.id,
+        utcDate: match.utcDate,
+        homeTeam: match.homeTeam.name,
+        awayTeam: match.awayTeam.name,
+        score: match.score,
+      })}`,
+    )
+    console.log(
+      `[refresh] penalty-shootout normalized=${JSON.stringify({
+        id: transformed?.id ?? toMatchId(match.id),
+        score: transformed?.score,
+        penalties: transformed?.penalties,
+      })}`,
+    )
+  }
+}
+
+function toMatchId(id: number): string {
+  return `fd-${id}`
 }
