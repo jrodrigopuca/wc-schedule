@@ -24,7 +24,7 @@ describe('BracketTree', () => {
     })
 
     expect(wrapper.text()).toContain('32avos')
-    expect(wrapper.text()).toContain('Octavos')
+    expect(wrapper.text()).toContain('16avos')
     expect(wrapper.text()).toContain('Cuartos de final')
     expect(wrapper.text()).toContain('Semifinales')
     expect(wrapper.text()).toContain('Final')
@@ -80,7 +80,7 @@ describe('BracketTree', () => {
       wrapper
         .find('[data-stage-track="third-place"] [data-match-id="wc2026-3rd"]')
         .attributes('data-row-start'),
-    ).toBe('26')
+    ).toBe('20')
 
     expect(wrapper.findAll('article')).toHaveLength(32)
   })

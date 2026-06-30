@@ -221,6 +221,15 @@ function printBracket(): void {
 }
 
 @media print {
+  /* Single-sheet bracket: the cuadro is wide (5 columns), so landscape A4
+     with tight margins gives the most horizontal room. Combined with the
+     compact print `--slot-size` in BracketTree, the whole tree targets one
+     page. @page is document-level even inside a CSS module. */
+  @page {
+    size: A4 landscape;
+    margin: 8mm;
+  }
+
   .view {
     gap: 0;
   }

@@ -73,7 +73,9 @@ const BRACKET_STAGE_LAYOUT: Readonly<Record<BracketRoundStage, BracketTrackLayou
     connectorSpan: 16,
   },
   [BRACKET_ROUND_STAGE.THIRD_PLACE]: {
-    rowStarts: [26],
+    // Grouped just below the final (row 16) instead of hanging near the
+    // bottom (row 26), so the two terminal matches read as a pair.
+    rowStarts: [20],
     connectorSpan: 0,
   },
 }
@@ -195,10 +197,15 @@ function slotStyle(slot: BracketTrackSlotViewModel): Readonly<Record<string, str
       </section>
 
       <section :class="[$style.roundColumn, $style.terminalColumn]" data-round-column="terminal">
-        <div v-for="track in terminalTracks" :key="track.stage" :class="$style.terminalStage">
-          <header :class="$style.roundHeader">{{ track.label }}</header>
+        <header :class="$style.roundHeader" aria-hidden="true">&#8203;</header>
 
-          <div :class="$style.roundTrack" :data-stage-track="track.stage">
+        <div :class="$style.terminalTracks">
+          <div
+            v-for="(track, trackIndex) in terminalTracks"
+            :key="track.stage"
+            :class="[$style.roundTrack, trackIndex > 0 ? $style.terminalOverlay : null]"
+            :data-stage-track="track.stage"
+          >
             <div
               v-for="slot in track.slots"
               :key="slot.roundMatch.id"
@@ -212,6 +219,7 @@ function slotStyle(slot: BracketTrackSlotViewModel): Readonly<Record<string, str
               :data-row-start="slot.rowStart"
               :style="slotStyle(slot)"
             >
+              <span :class="$style.terminalLabel">{{ track.label }}</span>
               <span v-if="slot.hasIncomingConnector" :class="$style.connectorStem"></span>
               <BracketNode :round-match="slot.roundMatch" :now="props.now" />
             </div>
@@ -231,11 +239,11 @@ function slotStyle(slot: BracketTrackSlotViewModel): Readonly<Record<string, str
 }
 
 .columns {
-  --column-gap: 26px;
-  --slot-size: 84px;
+  --column-gap: 22px;
+  --slot-size: 56px;
   --connector-size: calc(var(--column-gap) / 2 + 2px);
   display: grid;
-  grid-template-columns: repeat(4, minmax(220px, 1fr)) minmax(220px, 1.02fr);
+  grid-template-columns: repeat(4, minmax(132px, 1fr)) minmax(132px, 1.02fr);
   gap: var(--column-gap);
   align-items: start;
   min-width: max-content;
@@ -247,12 +255,38 @@ function slotStyle(slot: BracketTrackSlotViewModel): Readonly<Record<string, str
 }
 
 .terminalColumn {
-  gap: 20px;
+  min-width: 0;
 }
 
-.terminalStage {
-  display: grid;
-  gap: 12px;
+.terminalTracks {
+  /* Final and Third place share ONE column height: the first track is in flow
+     and the second overlays it absolutely, so the third-place node sits at its
+     row (26) within the same 32-row column instead of floating below a second
+     full-height track. */
+  position: relative;
+}
+
+/* Scoped (0,2,0) so it beats `.roundTrack { position: relative }` (0,1,0),
+   which is declared later in this file — otherwise source order wins and the
+   overlay stays in flow, stacking the third-place track ~32 rows below the
+   final (the "floating" bug + the extra page height in print). */
+.terminalTracks .terminalOverlay {
+  position: absolute;
+  inset: 0;
+}
+
+.terminalLabel {
+  /* Option B: per-node inline label (no column header). Absolutely positioned
+     above the node so it does NOT alter the slot geometry the connectors rely
+     on. */
+  position: absolute;
+  bottom: calc(100% + 3px);
+  left: 2px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--text-muted);
+  white-space: nowrap;
 }
 
 .roundHeader {
@@ -315,14 +349,14 @@ function slotStyle(slot: BracketTrackSlotViewModel): Readonly<Record<string, str
 
 @media (min-width: 1400px) {
   .columns {
-    grid-template-columns: repeat(4, minmax(236px, 1fr)) minmax(232px, 1.04fr);
+    grid-template-columns: repeat(4, minmax(150px, 1fr)) minmax(148px, 1.04fr);
   }
 }
 
 @media (max-width: 960px) {
   .columns {
-    --column-gap: 18px;
-    --slot-size: 78px;
+    --column-gap: 16px;
+    --slot-size: 52px;
   }
 
   .roundHeader {
@@ -338,21 +372,36 @@ function slotStyle(slot: BracketTrackSlotViewModel): Readonly<Record<string, str
 
   .columns {
     --column-gap: 6px;
-    --slot-size: 34px;
+    /* 32 rows must fit the printable height of one A4 landscape page
+       (~190mm ≈ 718px). 32 × 20px ≈ 640px leaves room for the header band.
+       Tune this number against the actual print preview. */
+    --slot-size: 20px;
     grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(0, 1fr);
     min-width: 0;
   }
 
   .roundColumn,
-  .terminalColumn,
-  .terminalStage {
+  .terminalColumn {
     gap: 4px;
+    /* Grid items default to `min-width: auto` (content width), which stops the
+       columns shrinking and overflows the page width → spills to a 2nd sheet.
+       `min-width: 0` lets the `minmax(0, 1fr)` tracks actually shrink to fit
+       one A4 landscape page. */
+    min-width: 0;
+  }
+
+  .roundTrack {
+    min-width: 0;
   }
 
   .roundHeader {
     padding: 0;
     font-size: 8px;
     line-height: 1.1;
+  }
+
+  .terminalLabel {
+    font-size: 6px;
   }
 }
 </style>

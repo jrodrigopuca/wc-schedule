@@ -6,12 +6,14 @@ import { resolveState } from '@/matches/domain/resolve-state'
 import { resolveFlag } from '@/shared/flags/resolve'
 import { resolveGlow } from '@/shared/flags/team-colors'
 import { useI18n } from '@/shared/i18n/useI18n'
+import { resolveCode3 } from '@/shared/i18n/country-code3'
 import { formatDate, formatTime } from '@/shared/time/format'
 
 type HaloStyle = { [K in `--${string}`]: string }
 
 interface BracketParticipantViewModel {
   readonly label: string
+  readonly code: string
   readonly flag: string | null
   readonly glow: string
   readonly isEmpty: boolean
@@ -98,6 +100,7 @@ function toParticipant(
     const isEmpty = team.iso === 'xx'
     return {
       label: isEmpty ? '' : (country(team.iso) ?? team.name),
+      code: isEmpty ? '' : (resolveCode3(team.iso) ?? team.iso.toUpperCase()),
       flag: isEmpty ? null : resolveFlag(team.iso),
       glow: isEmpty ? 'transparent' : resolveGlow(team.iso),
       isEmpty,
@@ -106,6 +109,7 @@ function toParticipant(
 
   return {
     label: '',
+    code: '',
     flag: null,
     glow: 'transparent',
     isEmpty: true,
@@ -118,14 +122,9 @@ function toParticipant(
     :class="[$style.node, hasWritablePlaceholder ? $style.nodeWritable : null]"
     :style="haloStyle"
   >
-    <header :class="$style.header">
-      <div v-if="kickoffLabel !== null" :class="$style.kickoff">
-        <span :class="$style.kickoffDate">{{ kickoffDate }}</span>
-        <span :class="$style.kickoffTime">{{ kickoffTime }}</span>
-      </div>
-      <span v-if="badge !== null" :class="[$style.badge, $style[`badge_${badge.variant}`]]">
-        {{ badge.text }}
-      </span>
+    <header v-if="kickoffLabel !== null" :class="$style.header">
+      <span :class="$style.kickoffDate">{{ kickoffDate }}</span>
+      <span :class="$style.kickoffTime">{{ kickoffTime }}</span>
     </header>
 
     <div :class="$style.teams">
@@ -133,8 +132,12 @@ function toParticipant(
         <div :class="$style.flagWrap">
           <img v-if="teamA.flag !== null" :src="teamA.flag" :alt="teamA.label" />
         </div>
-        <span :class="[$style.teamName, teamA.isEmpty ? $style.teamNameEmpty : null]">
-          {{ teamA.label }}
+        <span
+          :class="[$style.teamName, teamA.isEmpty ? $style.teamNameEmpty : null]"
+          :title="teamA.label"
+        >
+          <span :class="$style.teamCodeText">{{ teamA.code }}</span>
+          <span :class="$style.teamFullName">{{ teamA.label }}</span>
         </span>
         <span v-if="showScore && match?.score" :class="$style.scoreWrap">
           <span :class="$style.score">{{ match.score.home }}</span>
@@ -148,8 +151,12 @@ function toParticipant(
         <div :class="$style.flagWrap">
           <img v-if="teamB.flag !== null" :src="teamB.flag" :alt="teamB.label" />
         </div>
-        <span :class="[$style.teamName, teamB.isEmpty ? $style.teamNameEmpty : null]">
-          {{ teamB.label }}
+        <span
+          :class="[$style.teamName, teamB.isEmpty ? $style.teamNameEmpty : null]"
+          :title="teamB.label"
+        >
+          <span :class="$style.teamCodeText">{{ teamB.code }}</span>
+          <span :class="$style.teamFullName">{{ teamB.label }}</span>
         </span>
         <span v-if="showScore && match?.score" :class="$style.scoreWrap">
           <span :class="$style.score">{{ match.score.away }}</span>
@@ -168,9 +175,9 @@ function toParticipant(
 .node {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 5px;
   min-width: 0;
-  padding: 12px;
+  padding: 8px 9px;
   border-radius: var(--radius-md);
   border: 1px solid var(--border);
   background:
@@ -194,19 +201,13 @@ function toParticipant(
 
 .header {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.kickoff {
-  display: grid;
-  gap: 2px;
+  align-items: baseline;
+  gap: 6px;
   font-variant-numeric: tabular-nums;
 }
 
 .kickoffDate {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   color: var(--text-muted);
   text-transform: uppercase;
@@ -214,7 +215,7 @@ function toParticipant(
 }
 
 .kickoffTime {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   color: var(--text-strong);
 }
@@ -222,19 +223,19 @@ function toParticipant(
 .teams {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 }
 
 .row {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   min-width: 0;
 }
 
 .flagWrap {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   flex-shrink: 0;
   border-radius: var(--radius-pill);
   overflow: hidden;
@@ -255,14 +256,22 @@ function toParticipant(
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
   color: var(--text-base);
 }
 
 .teamNameEmpty {
   min-height: 1.2em;
   border-bottom: 1px solid color-mix(in srgb, var(--border) 88%, transparent);
+}
+
+/* On screen the compact 3-letter code is shown; the full name is print-only
+   (the PDF has the horizontal room for it and reads better on paper). The
+   toggle is pure CSS so there's no print-detection logic in JS. */
+.teamFullName {
+  display: none;
 }
 
 .scoreWrap {
@@ -283,38 +292,6 @@ function toParticipant(
   font-size: 11px;
   font-weight: 600;
   color: var(--text-muted);
-}
-
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 8px;
-  border-radius: var(--radius-pill);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.badge_scheduled {
-  background: color-mix(in srgb, var(--text-muted) 12%, transparent);
-  color: var(--text-muted);
-}
-
-.badge_live {
-  background: color-mix(in srgb, #dc2626 14%, transparent);
-  color: #dc2626;
-}
-
-.badge_finished {
-  background: color-mix(in srgb, var(--accent) 14%, transparent);
-  color: var(--accent);
-}
-
-.badge_postponed {
-  background: color-mix(in srgb, #f59e0b 18%, transparent);
-  color: #b45309;
 }
 
 .printMeta {
@@ -381,11 +358,6 @@ function toParticipant(
     color: #6b7280;
     text-transform: uppercase;
     letter-spacing: 0.02em;
-  }
-
-  .kickoff,
-  .badge {
-    display: none;
   }
 }
 </style>

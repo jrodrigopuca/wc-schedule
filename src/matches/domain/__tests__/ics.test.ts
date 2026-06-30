@@ -23,7 +23,7 @@ const TEAM_NAMES_ES: Record<string, string> = {
 const STAGE_LABELS_ES: Record<Stage, string> = {
   group: 'Fase de grupos',
   'round-of-32': '32avos',
-  'round-of-16': 'Octavos',
+  'round-of-16': '16avos',
   'quarter-final': 'Cuartos',
   'semi-final': 'Semifinales',
   'third-place': 'Tercer puesto',

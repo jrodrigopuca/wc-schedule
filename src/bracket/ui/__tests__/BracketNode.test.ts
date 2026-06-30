@@ -35,9 +35,13 @@ describe('BracketNode', () => {
       },
     })
 
-    expect(wrapper.text()).toContain('Argentina')
-    expect(wrapper.text()).toContain('Brasil')
-    expect(wrapper.text()).toContain('Final')
+    // Cells now show FIFA-style 3-letter codes, not full names; the full
+    // name moves to the `title` attribute for accessibility.
+    expect(wrapper.text()).toContain('ARG')
+    expect(wrapper.text()).toContain('BRA')
+    // No status badge on screen anymore (status is implied by the score /
+    // print-only meta), so 'Final' must NOT appear as a badge.
+    expect(wrapper.text()).not.toContain('Final')
     expect(wrapper.text()).toContain('2')
     expect(wrapper.text()).toContain('1')
     expect(wrapper.find('header').text()).toContain(formatDate(kickoff, 'es'))
