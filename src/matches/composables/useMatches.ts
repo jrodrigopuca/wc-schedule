@@ -142,6 +142,22 @@ if (typeof document !== 'undefined') {
   })
 }
 
+// Periodic poll — every POLL_INTERVAL_MS while the tab is visible.
+// During the tournament scores and bracket slots can change at any moment;
+// this ensures open tabs pick up fresh data without a manual reload or a
+// tab-switch. The guard on `visibilityState` skips background tabs so we
+// don't burn requests when the user isn't watching.
+// The `refreshPromise` dedup inside `refresh()` makes concurrent ticks safe.
+const POLL_INTERVAL_MS = 5 * 60 * 1000 // 5 min
+
+if (typeof window !== 'undefined') {
+  setInterval(() => {
+    if (document.visibilityState === 'visible') {
+      void refresh()
+    }
+  }, POLL_INTERVAL_MS)
+}
+
 // Kick the load off at module init — singleton lifecycle. We do NOT await:
 // consumers observe the refs and re-render as `status` flips. SSR-safe
 // because `import.meta.env` and the adapters are isomorphic; the only
