@@ -1417,8 +1417,12 @@
       "name": "Paraguay"
     },
     "score": {
+      "home": 1,
+      "away": 1
+    },
+    "penalties": {
       "home": 5,
-      "away": 6
+      "away": 5
     }
   },
   {

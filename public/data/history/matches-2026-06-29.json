@@ -1406,7 +1406,7 @@
   {
     "id": "fd-537415",
     "utcKickoff": "2026-06-29T20:30:00Z",
-    "status": "live",
+    "status": "finished",
     "stage": "round-of-32",
     "teamA": {
       "iso": "de",
@@ -1415,6 +1415,10 @@
     "teamB": {
       "iso": "py",
       "name": "Paraguay"
+    },
+    "score": {
+      "home": 5,
+      "away": 6
     }
   },
   {
