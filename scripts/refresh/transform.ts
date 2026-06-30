@@ -29,9 +29,30 @@ interface UpstreamTeam {
 }
 
 interface UpstreamScore {
+  readonly duration?: string | null
   readonly fullTime?: {
-    readonly home: number | null
-    readonly away: number | null
+    readonly home?: number | null
+    readonly away?: number | null
+    readonly homeTeam?: number | null
+    readonly awayTeam?: number | null
+  }
+  readonly regularTime?: {
+    readonly home?: number | null
+    readonly away?: number | null
+    readonly homeTeam?: number | null
+    readonly awayTeam?: number | null
+  }
+  readonly extraTime?: {
+    readonly home?: number | null
+    readonly away?: number | null
+    readonly homeTeam?: number | null
+    readonly awayTeam?: number | null
+  }
+  readonly penalties?: {
+    readonly home?: number | null
+    readonly away?: number | null
+    readonly homeTeam?: number | null
+    readonly awayTeam?: number | null
   }
 }
 
@@ -199,10 +220,37 @@ function mapGroup(raw: string | null | undefined): string | undefined {
 // Only emit a score when BOTH sides are concrete non-negative integers
 // (finished or in-play matches). football-data leaves them null pre-kickoff.
 function mapScore(score: UpstreamScore | undefined): { home: number; away: number } | undefined {
-  const ft = score?.fullTime
-  if (!ft) return undefined
-  const { home, away } = ft
-  if (typeof home !== 'number' || typeof away !== 'number') return undefined
+  const duration = score?.duration
+  const regularTime = mapScoreLine(score?.regularTime)
+  const extraTime = mapScoreLine(score?.extraTime)
+
+  if (duration === 'PENALTY_SHOOTOUT') {
+    if (regularTime === undefined) return undefined
+    if (extraTime === undefined) return regularTime
+    return {
+      home: regularTime.home + extraTime.home,
+      away: regularTime.away + extraTime.away,
+    }
+  }
+
+  return mapScoreLine(score?.fullTime)
+}
+
+function mapPenalties(
+  score: UpstreamScore | undefined,
+): { home: number; away: number } | undefined {
+  return mapScoreLine(score?.penalties)
+}
+
+function mapScoreLine(line: UpstreamScore['fullTime']): { home: number; away: number } | undefined {
+  if (!line) return undefined
+  const home = line.home ?? line.homeTeam
+  const away = line.away ?? line.awayTeam
+  if (home === null || away === null || home === undefined || away === undefined) return undefined
+  return parseScorePair(home, away)
+}
+
+function parseScorePair(home: number, away: number): { home: number; away: number } {
   if (home < 0 || away < 0 || !Number.isInteger(home) || !Number.isInteger(away)) {
     throw new Error(`transform: invalid score ${home}-${away}`)
   }
@@ -224,6 +272,7 @@ export function transform(response: UpstreamResponse): Match[] {
     // featured.md §4.1, data-source.md §6.4). Persisting a live/partial score
     // would just freeze a stale number into the snapshot.
     const score = status === 'finished' ? mapScore(m.score) : undefined
+    const penalties = status === 'finished' ? mapPenalties(m.score) : undefined
     return {
       id: `fd-${m.id}`,
       utcKickoff: m.utcDate,
@@ -235,6 +284,7 @@ export function transform(response: UpstreamResponse): Match[] {
       // forbids an explicit `undefined` for `?: T` fields.
       ...(group !== undefined ? { group } : {}),
       ...(score !== undefined ? { score } : {}),
+      ...(penalties !== undefined ? { penalties } : {}),
     }
   })
 }

@@ -16,6 +16,11 @@ const scoreSchema = z.object({
   away: z.number().int().nonnegative(),
 })
 
+const penaltyScoreSchema = z.object({
+  home: z.number().int().nonnegative(),
+  away: z.number().int().nonnegative(),
+})
+
 const venueSchema = z.object({
   city: z.string().min(1),
   country: z.string().min(1),
@@ -53,6 +58,7 @@ export const matchSchema = z
     teamA: teamSchema,
     teamB: teamSchema,
     score: scoreSchema.optional(),
+    penalties: penaltyScoreSchema.optional(),
     venue: venueSchema.optional(),
   })
   .transform((m): Match => stripUndefined(m) as Match)

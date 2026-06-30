@@ -25,6 +25,11 @@ export interface Score {
   readonly away: number
 }
 
+export interface PenaltyScore {
+  readonly home: number
+  readonly away: number
+}
+
 export interface Venue {
   readonly city: string
   readonly country: string
@@ -39,6 +44,7 @@ export interface Match {
   readonly teamA: Team
   readonly teamB: Team
   readonly score?: Score
+  readonly penalties?: PenaltyScore
   readonly venue?: Venue
 }
 

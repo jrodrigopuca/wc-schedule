@@ -63,6 +63,24 @@ describe('MatchCard', () => {
     expect(wrapper.text()).toContain('1')
   })
 
+  it('renders penalty shootout scores separately from the match score', () => {
+    const finishedOnPenalties: Match = {
+      ...baseMatch,
+      status: 'finished',
+      score: { home: 1, away: 1 },
+      penalties: { home: 5, away: 4 },
+    }
+    const wrapper = mount(MatchCard, { props: { match: finishedOnPenalties, now: NOW } })
+    expect(wrapper.findAll(`[class*="scoreWrap"]`).map((node) => node.text())).toEqual([
+      '1 (5)',
+      '1 (4)',
+    ])
+    expect(wrapper.findAll(`[class*="penalties"]`).map((node) => node.text())).toEqual([
+      '(5)',
+      '(4)',
+    ])
+  })
+
   it('renders a postponed match with the "Postergado" badge', () => {
     const postponedMatch: Match = { ...baseMatch, status: 'postponed' }
     const wrapper = mount(MatchCard, { props: { match: postponedMatch, now: NOW } })

@@ -10,6 +10,7 @@ const validFull = {
   teamA: { iso: 'mx', name: 'México' },
   teamB: { iso: 'ar', name: 'Argentina' },
   score: { home: 0, away: 0 },
+  penalties: { home: 5, away: 4 },
   venue: { city: 'Ciudad de México', country: 'México' },
 }
 

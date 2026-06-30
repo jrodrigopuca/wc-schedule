@@ -49,6 +49,25 @@ describe('transform — happy path', () => {
     expect(m?.score).toEqual({ home: 3, away: 2 })
   })
 
+  it('keeps regular/extra-time score separate from penalties', () => {
+    const [m] = transform({
+      matches: [
+        {
+          ...finalMatch,
+          score: {
+            duration: 'PENALTY_SHOOTOUT',
+            fullTime: { homeTeam: 6, awayTeam: 5 },
+            regularTime: { homeTeam: 1, awayTeam: 1 },
+            extraTime: { homeTeam: 0, awayTeam: 0 },
+            penalties: { homeTeam: 5, awayTeam: 4 },
+          },
+        },
+      ],
+    } as UpstreamResponse)
+    expect(m?.score).toEqual({ home: 1, away: 1 })
+    expect(m?.penalties).toEqual({ home: 5, away: 4 })
+  })
+
   it('omits score when fullTime values are null (pre-kickoff)', () => {
     const m = transform({
       matches: [{ ...groupMatch, score: { fullTime: { home: null, away: null } } }],
@@ -98,6 +117,7 @@ describe('transform — happy path', () => {
     } as UpstreamResponse)[0]
     expect(m?.status).toBe('live')
     expect(m && 'score' in m).toBe(false)
+    expect(m && 'penalties' in m).toBe(false)
   })
 })
 

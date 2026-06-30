@@ -30,6 +30,7 @@ const teamBName = computed(() => country(props.match.teamB.iso) ?? props.match.t
 const showScore = computed(
   () => resolvedStatus.value === 'finished' && props.match.score !== undefined,
 )
+const showPenalties = computed(() => showScore.value && props.match.penalties !== undefined)
 
 interface BadgeDescriptor {
   readonly text: string
@@ -82,14 +83,24 @@ const haloStyle = computed<HaloStyle>(() => ({
           <img v-if="flagA !== null" :src="flagA" :alt="teamAName" />
         </div>
         <span :class="$style.teamName">{{ teamAName }}</span>
-        <span v-if="showScore && match.score" :class="$style.score">{{ match.score.home }}</span>
+        <span v-if="showScore && match.score" :class="$style.scoreWrap">
+          <span :class="$style.score">{{ match.score.home }}</span>
+          <span v-if="showPenalties && match.penalties" :class="$style.penalties">
+            ({{ match.penalties.home }})
+          </span>
+        </span>
       </div>
       <div :class="$style.row">
         <div :class="$style.miniFlag">
           <img v-if="flagB !== null" :src="flagB" :alt="teamBName" />
         </div>
         <span :class="$style.teamName">{{ teamBName }}</span>
-        <span v-if="showScore && match.score" :class="$style.score">{{ match.score.away }}</span>
+        <span v-if="showScore && match.score" :class="$style.scoreWrap">
+          <span :class="$style.score">{{ match.score.away }}</span>
+          <span v-if="showPenalties && match.penalties" :class="$style.penalties">
+            ({{ match.penalties.away }})
+          </span>
+        </span>
       </div>
     </div>
     <div :class="$style.actions">
@@ -209,12 +220,24 @@ const haloStyle = computed<HaloStyle>(() => ({
   white-space: nowrap;
 }
 
-.score {
+.scoreWrap {
   margin-left: auto;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.score {
   font-size: 14px;
   font-weight: 700;
   color: var(--text-strong);
-  font-variant-numeric: tabular-nums;
+}
+
+.penalties {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
 }
 
 .actions {
