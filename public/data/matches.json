@@ -1468,7 +1468,7 @@
   {
     "id": "fd-537416",
     "utcKickoff": "2026-06-30T21:00:00Z",
-    "status": "live",
+    "status": "finished",
     "stage": "round-of-32",
     "teamA": {
       "iso": "fr",
@@ -1477,6 +1477,10 @@
     "teamB": {
       "iso": "se",
       "name": "Sweden"
+    },
+    "score": {
+      "home": 3,
+      "away": 0
     }
   },
   {
