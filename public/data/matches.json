@@ -1625,8 +1625,8 @@
       "name": "Canada"
     },
     "teamB": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "ma",
+      "name": "Morocco"
     }
   },
   {
@@ -1635,8 +1635,8 @@
     "status": "scheduled",
     "stage": "round-of-16",
     "teamA": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "py",
+      "name": "Paraguay"
     },
     "teamB": {
       "iso": "xx",
@@ -1649,8 +1649,8 @@
     "status": "scheduled",
     "stage": "round-of-16",
     "teamA": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "br",
+      "name": "Brazil"
     },
     "teamB": {
       "iso": "xx",

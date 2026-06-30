@@ -1428,7 +1428,7 @@
   {
     "id": "fd-537418",
     "utcKickoff": "2026-06-30T01:00:00Z",
-    "status": "live",
+    "status": "finished",
     "stage": "round-of-32",
     "teamA": {
       "iso": "nl",
@@ -1437,6 +1437,14 @@
     "teamB": {
       "iso": "ma",
       "name": "Morocco"
+    },
+    "score": {
+      "home": 1,
+      "away": 1
+    },
+    "penalties": {
+      "home": 2,
+      "away": 3
     }
   },
   {
