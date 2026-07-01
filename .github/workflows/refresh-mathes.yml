@@ -9,8 +9,9 @@
 # the client uses BEFORE any file is rotated. A bad run exits non-zero and
 # leaves matches.json + history untouched — the base JSON is never corrupted.
 #
-# A successful commit to `main` here is itself a push to main, which triggers
-# deploy.yml and propagates the fresh data to GitHub Pages.
+# DEPLOY: GITHUB_TOKEN pushes do NOT trigger other workflow runs (GitHub's
+# anti-loop policy). After a successful data commit we explicitly dispatch
+# deploy.yml via `gh workflow run` so the new matches.json reaches GitHub Pages.
 #
 # ONE-TIME SETUP: add repo secret FOOTBALL_DATA_TOKEN (Settings → Secrets and
 # variables → Actions). Without it the job fails fast and changes nothing.
@@ -34,6 +35,7 @@ concurrency:
 
 permissions:
   contents: write
+  actions: write   # required for `gh workflow run` (workflow_dispatch trigger)
 
 jobs:
   refresh:
@@ -91,8 +93,10 @@ jobs:
         if: steps.refresh_run.outcome == 'failure'
         run: exit 1
 
-      - name: Commit if changed
+      - name: Commit and deploy if changed
         if: steps.refresh_run.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if ! git diff --quiet -- public/data/; then
             git config user.name "wc-schedule-bot"
@@ -100,9 +104,17 @@ jobs:
             git add public/data/
             git commit -m "chore(data): refresh matches.json"
             git push
+            # GITHUB_TOKEN pushes don't trigger other workflows (GitHub anti-loop
+            # policy), so we dispatch deploy.yml explicitly here.
+            gh workflow run deploy.yml
+            echo "Data changed — committed, pushed, and deploy dispatched."
           else
             echo "No data change — nothing to commit."
           fi
+
+      - name: Data snapshot
+        if: always()
+        run: node scripts/data-snapshot.cjs
 
   refresh-report:
     name: Refresh report
