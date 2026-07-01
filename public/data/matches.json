@@ -1486,7 +1486,7 @@
   {
     "id": "fd-537425",
     "utcKickoff": "2026-07-01T01:00:00Z",
-    "status": "live",
+    "status": "finished",
     "stage": "round-of-32",
     "teamA": {
       "iso": "mx",
@@ -1495,6 +1495,10 @@
     "teamB": {
       "iso": "ec",
       "name": "Ecuador"
+    },
+    "score": {
+      "home": 2,
+      "away": 0
     }
   },
   {
