@@ -1522,7 +1522,7 @@
   {
     "id": "fd-537422",
     "utcKickoff": "2026-07-01T20:00:00Z",
-    "status": "scheduled",
+    "status": "live",
     "stage": "round-of-32",
     "teamA": {
       "iso": "be",

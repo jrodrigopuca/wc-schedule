@@ -1504,7 +1504,7 @@
   {
     "id": "fd-537426",
     "utcKickoff": "2026-07-01T16:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "round-of-32",
     "teamA": {
       "iso": "gb",
@@ -1513,6 +1513,10 @@
     "teamB": {
       "iso": "cd",
       "name": "Congo DR"
+    },
+    "score": {
+      "home": 2,
+      "away": 1
     }
   },
   {
