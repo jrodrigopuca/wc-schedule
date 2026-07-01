@@ -88,19 +88,23 @@ describe('createRemoteSource', () => {
     await expect(source.load()).rejects.toThrow()
   })
 
-  it('passes cache: "no-store" to fetch', async () => {
+  it('passes cache: "no-store" and a cache-busting _ param to fetch', async () => {
     const fetchFn = mockFetch({ ok: true, status: 200 })
     const source = createRemoteSource('/somewhere/matches.json')
     await source.load()
-    expect(fetchFn).toHaveBeenCalledWith('/somewhere/matches.json', {
-      cache: 'no-store',
-    })
+    expect(fetchFn).toHaveBeenCalledWith(
+      expect.stringMatching(/^\/somewhere\/matches\.json\?_=\d+$/),
+      { cache: 'no-store' },
+    )
   })
 
-  it('defaults the URL to /wc-schedule/data/matches.json', async () => {
+  it('defaults the URL to /wc-schedule/data/matches.json with cache-busting', async () => {
     const fetchFn = mockFetch({ ok: true, status: 200 })
     const source = createRemoteSource()
     await source.load()
-    expect(fetchFn).toHaveBeenCalledWith('/wc-schedule/data/matches.json', { cache: 'no-store' })
+    expect(fetchFn).toHaveBeenCalledWith(
+      expect.stringMatching(/^\/wc-schedule\/data\/matches\.json\?_=\d+$/),
+      { cache: 'no-store' },
+    )
   })
 })

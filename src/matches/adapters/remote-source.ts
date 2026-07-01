@@ -18,12 +18,13 @@ export function createRemoteSource(url: string = DEFAULT_REMOTE_URL): MatchSourc
   return {
     name: 'remote',
     async load() {
-      // `no-store` defeats both the HTTP cache and the service-worker
-      // runtime cache for this request. The SW's StaleWhileRevalidate
-      // strategy (design.md §9) still ensures last-known data is
-      // available through the cache layer; the fetch here always asks
-      // the network first when online.
-      const response = await fetch(url, { cache: 'no-store' })
+      // Cache-busting query param guarantees that CDN intermediaries (GitHub
+      // Pages / Fastly, Cache-Control: max-age=600) cannot serve a stale
+      // snapshot. `no-store` is kept for the browser layer; the unique `_`
+      // param handles CDN-level staleness.
+      const separator = url.includes('?') ? '&' : '?'
+      const bustedUrl = `${url}${separator}_=${Date.now()}`
+      const response = await fetch(bustedUrl, { cache: 'no-store' })
       if (!response.ok) {
         throw new Error(`remote: ${response.status}`)
       }
