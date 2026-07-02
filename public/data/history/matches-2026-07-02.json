@@ -1540,7 +1540,7 @@
   {
     "id": "fd-537421",
     "utcKickoff": "2026-07-02T00:00:00Z",
-    "status": "live",
+    "status": "finished",
     "stage": "round-of-32",
     "teamA": {
       "iso": "us",
@@ -1549,6 +1549,10 @@
     "teamB": {
       "iso": "ba",
       "name": "Bosnia-Herzegovina"
+    },
+    "score": {
+      "home": 2,
+      "away": 0
     }
   },
   {
