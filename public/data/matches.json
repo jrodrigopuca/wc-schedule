@@ -1558,7 +1558,7 @@
   {
     "id": "fd-537420",
     "utcKickoff": "2026-07-02T19:00:00Z",
-    "status": "live",
+    "status": "finished",
     "stage": "round-of-32",
     "teamA": {
       "iso": "es",
@@ -1567,6 +1567,10 @@
     "teamB": {
       "iso": "at",
       "name": "Austria"
+    },
+    "score": {
+      "home": 3,
+      "away": 0
     }
   },
   {
