@@ -1687,12 +1687,12 @@
     "status": "scheduled",
     "stage": "round-of-16",
     "teamA": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "mx",
+      "name": "Mexico"
     },
     "teamB": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "gb",
+      "name": "England"
     }
   },
   {
@@ -1715,12 +1715,12 @@
     "status": "scheduled",
     "stage": "round-of-16",
     "teamA": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "us",
+      "name": "United States"
     },
     "teamB": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "be",
+      "name": "Belgium"
     }
   },
   {
