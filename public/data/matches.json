@@ -1522,7 +1522,7 @@
   {
     "id": "fd-537422",
     "utcKickoff": "2026-07-01T20:00:00Z",
-    "status": "live",
+    "status": "finished",
     "stage": "round-of-32",
     "teamA": {
       "iso": "be",
@@ -1531,12 +1531,16 @@
     "teamB": {
       "iso": "sn",
       "name": "Senegal"
+    },
+    "score": {
+      "home": 3,
+      "away": 2
     }
   },
   {
     "id": "fd-537421",
     "utcKickoff": "2026-07-02T00:00:00Z",
-    "status": "scheduled",
+    "status": "live",
     "stage": "round-of-32",
     "teamA": {
       "iso": "us",
