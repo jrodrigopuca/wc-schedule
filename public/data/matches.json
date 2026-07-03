@@ -1594,7 +1594,7 @@
   {
     "id": "fd-537429",
     "utcKickoff": "2026-07-03T03:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "round-of-32",
     "teamA": {
       "iso": "ch",
@@ -1603,6 +1603,10 @@
     "teamB": {
       "iso": "dz",
       "name": "Algeria"
+    },
+    "score": {
+      "home": 2,
+      "away": 0
     }
   },
   {
