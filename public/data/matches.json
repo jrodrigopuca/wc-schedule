@@ -1576,7 +1576,7 @@
   {
     "id": "fd-537419",
     "utcKickoff": "2026-07-02T23:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "round-of-32",
     "teamA": {
       "iso": "pt",
@@ -1585,6 +1585,10 @@
     "teamB": {
       "iso": "hr",
       "name": "Croatia"
+    },
+    "score": {
+      "home": 2,
+      "away": 1
     }
   },
   {
