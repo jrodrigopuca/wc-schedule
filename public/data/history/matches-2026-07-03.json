@@ -1612,7 +1612,7 @@
   {
     "id": "fd-537428",
     "utcKickoff": "2026-07-03T18:00:00Z",
-    "status": "scheduled",
+    "status": "live",
     "stage": "round-of-32",
     "teamA": {
       "iso": "au",
