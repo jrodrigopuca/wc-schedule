@@ -1612,7 +1612,7 @@
   {
     "id": "fd-537428",
     "utcKickoff": "2026-07-03T18:00:00Z",
-    "status": "live",
+    "status": "finished",
     "stage": "round-of-32",
     "teamA": {
       "iso": "au",
@@ -1621,12 +1621,20 @@
     "teamB": {
       "iso": "eg",
       "name": "Egypt"
+    },
+    "score": {
+      "home": 1,
+      "away": 1
+    },
+    "penalties": {
+      "home": 2,
+      "away": 4
     }
   },
   {
     "id": "fd-537427",
     "utcKickoff": "2026-07-03T22:00:00Z",
-    "status": "scheduled",
+    "status": "live",
     "stage": "round-of-32",
     "teamA": {
       "iso": "ar",

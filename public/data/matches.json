@@ -1634,7 +1634,7 @@
   {
     "id": "fd-537427",
     "utcKickoff": "2026-07-03T22:00:00Z",
-    "status": "live",
+    "status": "finished",
     "stage": "round-of-32",
     "teamA": {
       "iso": "ar",
@@ -1643,12 +1643,16 @@
     "teamB": {
       "iso": "cv",
       "name": "Cape Verde Islands"
+    },
+    "score": {
+      "home": 3,
+      "away": 2
     }
   },
   {
     "id": "fd-537430",
     "utcKickoff": "2026-07-04T01:30:00Z",
-    "status": "scheduled",
+    "status": "live",
     "stage": "round-of-32",
     "teamA": {
       "iso": "co",
