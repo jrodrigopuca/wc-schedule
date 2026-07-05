@@ -1688,7 +1688,7 @@
   {
     "id": "fd-537375",
     "utcKickoff": "2026-07-04T21:00:00Z",
-    "status": "live",
+    "status": "finished",
     "stage": "round-of-16",
     "teamA": {
       "iso": "py",
@@ -1697,6 +1697,10 @@
     "teamB": {
       "iso": "fr",
       "name": "France"
+    },
+    "score": {
+      "home": 0,
+      "away": 1
     }
   },
   {
