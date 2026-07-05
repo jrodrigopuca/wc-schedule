@@ -1793,12 +1793,12 @@
     "status": "scheduled",
     "stage": "quarter-final",
     "teamA": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "fr",
+      "name": "France"
     },
     "teamB": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "ma",
+      "name": "Morocco"
     }
   },
   {
