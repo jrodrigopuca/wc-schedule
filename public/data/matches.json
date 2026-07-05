@@ -1706,7 +1706,7 @@
   {
     "id": "fd-537377",
     "utcKickoff": "2026-07-05T20:00:00Z",
-    "status": "live",
+    "status": "finished",
     "stage": "round-of-16",
     "teamA": {
       "iso": "br",
@@ -1715,6 +1715,10 @@
     "teamB": {
       "iso": "no",
       "name": "Norway"
+    },
+    "score": {
+      "home": 1,
+      "away": 2
     }
   },
   {
