@@ -1742,7 +1742,7 @@
   {
     "id": "fd-537379",
     "utcKickoff": "2026-07-06T19:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "round-of-16",
     "teamA": {
       "iso": "pt",
@@ -1751,6 +1751,10 @@
     "teamB": {
       "iso": "es",
       "name": "Spain"
+    },
+    "score": {
+      "home": 0,
+      "away": 1
     }
   },
   {

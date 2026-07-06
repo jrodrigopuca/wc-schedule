@@ -1724,7 +1724,7 @@
   {
     "id": "fd-537378",
     "utcKickoff": "2026-07-06T01:00:00Z",
-    "status": "live",
+    "status": "finished",
     "stage": "round-of-16",
     "teamA": {
       "iso": "mx",
@@ -1733,6 +1733,10 @@
     "teamB": {
       "iso": "gb",
       "name": "England"
+    },
+    "score": {
+      "home": 2,
+      "away": 3
     }
   },
   {
@@ -1825,12 +1829,12 @@
     "status": "scheduled",
     "stage": "quarter-final",
     "teamA": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "no",
+      "name": "Norway"
     },
     "teamB": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "gb",
+      "name": "England"
     }
   },
   {
