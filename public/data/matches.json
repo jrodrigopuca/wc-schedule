@@ -1796,7 +1796,7 @@
   {
     "id": "fd-537382",
     "utcKickoff": "2026-07-07T20:00:00Z",
-    "status": "live",
+    "status": "finished",
     "stage": "round-of-16",
     "teamA": {
       "iso": "ch",
@@ -1805,6 +1805,14 @@
     "teamB": {
       "iso": "co",
       "name": "Colombia"
+    },
+    "score": {
+      "home": 0,
+      "away": 0
+    },
+    "penalties": {
+      "home": 2,
+      "away": 1
     }
   },
   {
