@@ -1760,7 +1760,7 @@
   {
     "id": "fd-537380",
     "utcKickoff": "2026-07-07T00:00:00Z",
-    "status": "live",
+    "status": "finished",
     "stage": "round-of-16",
     "teamA": {
       "iso": "us",
@@ -1769,6 +1769,10 @@
     "teamB": {
       "iso": "be",
       "name": "Belgium"
+    },
+    "score": {
+      "home": 1,
+      "away": 4
     }
   },
   {
@@ -1819,12 +1823,12 @@
     "status": "scheduled",
     "stage": "quarter-final",
     "teamA": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "es",
+      "name": "Spain"
     },
     "teamB": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "be",
+      "name": "Belgium"
     }
   },
   {
