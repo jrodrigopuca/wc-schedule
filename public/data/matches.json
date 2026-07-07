@@ -1778,7 +1778,7 @@
   {
     "id": "fd-537381",
     "utcKickoff": "2026-07-07T16:00:00Z",
-    "status": "live",
+    "status": "finished",
     "stage": "round-of-16",
     "teamA": {
       "iso": "ar",
@@ -1787,6 +1787,10 @@
     "teamB": {
       "iso": "eg",
       "name": "Egypt"
+    },
+    "score": {
+      "home": 3,
+      "away": 2
     }
   },
   {
