@@ -1760,7 +1760,7 @@
   {
     "id": "fd-537380",
     "utcKickoff": "2026-07-07T00:00:00Z",
-    "status": "scheduled",
+    "status": "live",
     "stage": "round-of-16",
     "teamA": {
       "iso": "us",
