@@ -1863,12 +1863,12 @@
     "status": "scheduled",
     "stage": "quarter-final",
     "teamA": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "ar",
+      "name": "Argentina"
     },
     "teamB": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "ch",
+      "name": "Switzerland"
     }
   },
   {
