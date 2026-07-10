@@ -1818,7 +1818,7 @@
   {
     "id": "fd-537383",
     "utcKickoff": "2026-07-09T20:00:00Z",
-    "status": "live",
+    "status": "finished",
     "stage": "quarter-final",
     "teamA": {
       "iso": "fr",
@@ -1827,6 +1827,10 @@
     "teamB": {
       "iso": "ma",
       "name": "Morocco"
+    },
+    "score": {
+      "home": 2,
+      "away": 0
     }
   },
   {
