@@ -1836,7 +1836,7 @@
   {
     "id": "fd-537384",
     "utcKickoff": "2026-07-10T19:00:00Z",
-    "status": "scheduled",
+    "status": "live",
     "stage": "quarter-final",
     "teamA": {
       "iso": "es",
