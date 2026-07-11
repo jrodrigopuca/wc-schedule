@@ -1836,7 +1836,7 @@
   {
     "id": "fd-537384",
     "utcKickoff": "2026-07-10T19:00:00Z",
-    "status": "live",
+    "status": "finished",
     "stage": "quarter-final",
     "teamA": {
       "iso": "es",
@@ -1845,6 +1845,10 @@
     "teamB": {
       "iso": "be",
       "name": "Belgium"
+    },
+    "score": {
+      "home": 2,
+      "away": 1
     }
   },
   {
