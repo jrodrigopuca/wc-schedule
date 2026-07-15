@@ -1925,8 +1925,8 @@
     "status": "scheduled",
     "stage": "third-place",
     "teamA": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "fr",
+      "name": "France"
     },
     "teamB": {
       "iso": "xx",
@@ -1939,8 +1939,8 @@
     "status": "scheduled",
     "stage": "final",
     "teamA": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "es",
+      "name": "Spain"
     },
     "teamB": {
       "iso": "xx",

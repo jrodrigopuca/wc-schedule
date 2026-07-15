@@ -1890,7 +1890,7 @@
   {
     "id": "fd-537387",
     "utcKickoff": "2026-07-14T19:00:00Z",
-    "status": "live",
+    "status": "finished",
     "stage": "semi-final",
     "teamA": {
       "iso": "fr",
@@ -1899,6 +1899,10 @@
     "teamB": {
       "iso": "es",
       "name": "Spain"
+    },
+    "score": {
+      "home": 0,
+      "away": 2
     }
   },
   {
