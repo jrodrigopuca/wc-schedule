@@ -1908,7 +1908,7 @@
   {
     "id": "fd-537388",
     "utcKickoff": "2026-07-15T19:00:00Z",
-    "status": "live",
+    "status": "finished",
     "stage": "semi-final",
     "teamA": {
       "iso": "gb",
@@ -1917,6 +1917,10 @@
     "teamB": {
       "iso": "ar",
       "name": "Argentina"
+    },
+    "score": {
+      "home": 1,
+      "away": 2
     }
   },
   {
