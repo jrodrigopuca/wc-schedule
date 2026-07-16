@@ -1933,8 +1933,8 @@
       "name": "France"
     },
     "teamB": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "gb",
+      "name": "England"
     }
   },
   {
@@ -1947,8 +1947,8 @@
       "name": "Spain"
     },
     "teamB": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "ar",
+      "name": "Argentina"
     }
   }
 ]
