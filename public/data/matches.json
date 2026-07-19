@@ -1944,7 +1944,7 @@
   {
     "id": "fd-537390",
     "utcKickoff": "2026-07-19T19:00:00Z",
-    "status": "live",
+    "status": "finished",
     "stage": "final",
     "teamA": {
       "iso": "es",
@@ -1953,6 +1953,10 @@
     "teamB": {
       "iso": "ar",
       "name": "Argentina"
+    },
+    "score": {
+      "home": 1,
+      "away": 0
     }
   }
 ]

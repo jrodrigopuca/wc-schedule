@@ -1944,7 +1944,7 @@
   {
     "id": "fd-537390",
     "utcKickoff": "2026-07-19T19:00:00Z",
-    "status": "scheduled",
+    "status": "live",
     "stage": "final",
     "teamA": {
       "iso": "es",
