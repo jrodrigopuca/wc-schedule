@@ -1836,7 +1836,7 @@
   {
     "id": "fd-537384",
     "utcKickoff": "2026-07-10T19:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "quarter-final",
     "teamA": {
       "iso": "es",
@@ -1845,12 +1845,16 @@
     "teamB": {
       "iso": "be",
       "name": "Belgium"
+    },
+    "score": {
+      "home": 2,
+      "away": 1
     }
   },
   {
     "id": "fd-537385",
     "utcKickoff": "2026-07-11T21:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "quarter-final",
     "teamA": {
       "iso": "no",
@@ -1859,12 +1863,16 @@
     "teamB": {
       "iso": "gb",
       "name": "England"
+    },
+    "score": {
+      "home": 1,
+      "away": 2
     }
   },
   {
     "id": "fd-537386",
     "utcKickoff": "2026-07-12T01:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "quarter-final",
     "teamA": {
       "iso": "ar",
@@ -1873,48 +1881,60 @@
     "teamB": {
       "iso": "ch",
       "name": "Switzerland"
+    },
+    "score": {
+      "home": 3,
+      "away": 1
     }
   },
   {
     "id": "fd-537387",
     "utcKickoff": "2026-07-14T19:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "semi-final",
     "teamA": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "fr",
+      "name": "France"
     },
     "teamB": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "es",
+      "name": "Spain"
+    },
+    "score": {
+      "home": 0,
+      "away": 2
     }
   },
   {
     "id": "fd-537388",
     "utcKickoff": "2026-07-15T19:00:00Z",
-    "status": "scheduled",
+    "status": "finished",
     "stage": "semi-final",
     "teamA": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "gb",
+      "name": "England"
     },
     "teamB": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "ar",
+      "name": "Argentina"
+    },
+    "score": {
+      "home": 1,
+      "away": 2
     }
   },
   {
     "id": "fd-537389",
     "utcKickoff": "2026-07-18T21:00:00Z",
-    "status": "scheduled",
+    "status": "live",
     "stage": "third-place",
     "teamA": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "fr",
+      "name": "France"
     },
     "teamB": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "gb",
+      "name": "England"
     }
   },
   {
@@ -1923,12 +1943,12 @@
     "status": "scheduled",
     "stage": "final",
     "teamA": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "es",
+      "name": "Spain"
     },
     "teamB": {
-      "iso": "xx",
-      "name": "Por definir"
+      "iso": "ar",
+      "name": "Argentina"
     }
   }
 ]

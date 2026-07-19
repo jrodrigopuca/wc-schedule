@@ -1926,7 +1926,7 @@
   {
     "id": "fd-537389",
     "utcKickoff": "2026-07-18T21:00:00Z",
-    "status": "live",
+    "status": "finished",
     "stage": "third-place",
     "teamA": {
       "iso": "fr",
@@ -1935,6 +1935,10 @@
     "teamB": {
       "iso": "gb",
       "name": "England"
+    },
+    "score": {
+      "home": 4,
+      "away": 6
     }
   },
   {
