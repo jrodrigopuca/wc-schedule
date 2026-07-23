@@ -25,7 +25,8 @@ on:
     # near runs still throttle to 48h, and off-season runs are a complete
     # no-op. (GitHub may delay/skip scheduled runs under load, so treat ~2h
     # as best-case, not a hard guarantee.)
-    - cron: '0 */2 * * *'
+    # DESACTIVADO
+    # - cron: '0 */2 * * *'
   workflow_dispatch:
 
 # Serialize refreshes so two runs never race on the same commit.
